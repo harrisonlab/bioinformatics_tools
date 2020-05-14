@@ -1,7 +1,3 @@
-#!/bin/bash
-
-# Assemble PacBio data using Canu
-
 #!/usr/bin/env bash
 #SBATCH -J canu
 #SBATCH --partition=long
