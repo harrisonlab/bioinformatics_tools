@@ -5,7 +5,7 @@
 
 # Assemble Long read data using SMRTdenovo
 
-Usage="miniasm.sh <rawreads.fastq.qz> <outfile_prefix> <output_directory>"
+Usage="miniasm.sh <read.fa> <outfile_prefix> <output_directory>"
 echo "$Usage"
 
 # ---------------
@@ -17,7 +17,7 @@ RawReads=$1
 Prefix=$2
 OutDir=$3
 echo  "Running miniasm with the following inputs:"
-echo "FastaIn - $FastaIn"
+echo "FastaIn - $RawReads"
 echo "Prefix - $Prefix"
 echo "OutDir - $OutDir"
 
@@ -34,21 +34,27 @@ cp $CurPath/$RawReads $Raw
 # Rename reads
 # ---------------
 
-rename.sh in=$Raw out=$WorkDir prefix=$Prefix
+rename.sh in=$Raw out="$Prefix"_rename.fasta prefix=$Prefix
+
+cp "$Prefix"_rename.fastaq $CurPath
 
 # ---------------
 # Step 3
 # Fast all-against-all overlap of raw reads
 # ---------------
 
-minimap2 -x ava-ont -t8 $Prefix.fasta $Prefix.fasta | gzip -1 > $Prefix.paf.gz
+minimap2 -x ava-ont -t8 "$Prefix"_rename.fasta "$Prefix"_rename.fasta | gzip -1 > $Prefix.paf.gz
+
+cp $Prefix.paf.gz $CurPath
 
 # ---------------
 # Step 4
 # Concatenate pieces of read sequences to generate the final sequences
 # ---------------
 
-miniasm -f $Prefix.fasta $Prefix.paf.gz > reads.gfa
+miniasm -f "$Prefix"_rename.fasta $Prefix.paf.gz > reads.gfa
+
+cp reads.gfa $CurPath
 
 # ---------------
 # Step 5
@@ -57,4 +63,4 @@ miniasm -f $Prefix.fasta $Prefix.paf.gz > reads.gfa
 
 awk '/^S/{print ">"$2"\n"$3}' reads.gfa | fold > $PWD/$OutDir/$Prefix.fa
 
-#rm -r $WorkDir
+rm -r $WorkDir
