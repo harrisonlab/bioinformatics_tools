@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 #SBATCH -J miniasm
 #SBATCH --partition=long
-#SBATCH --mem=36G
+#SBATCH --mem-per-cpu=8G
+#SBATCH --cpus-per-task=24
 
-# Assemble Long read data using SMRTdenovo
+# Assemble Long read data using miniasm
 
 Usage="miniasm.sh <read.fa> <outfile_prefix> <output_directory>"
 echo "$Usage"
@@ -36,7 +37,7 @@ cp $CurPath/$RawReads $Raw
 
 rename.sh in=$Raw out="$Prefix"_rename.fasta prefix=$Prefix
 
-cp "$Prefix"_rename.fastaq $CurPath
+cp "$Prefix"_rename.fasta $CurPath
 
 # ---------------
 # Step 3
@@ -61,6 +62,8 @@ cp reads.gfa $CurPath
 # Convert gfa file to fasta file
 # ---------------
 
-awk '/^S/{print ">"$2"\n"$3}' reads.gfa | fold > $PWD/$OutDir/$Prefix.fa
+awk '/^S/{print ">"$2"\n"$3}' reads.gfa | fold > $Prefix.fa
+
+cp -r $WorkDir/* $CurPath/$OutDir/.
 
 rm -r $WorkDir
