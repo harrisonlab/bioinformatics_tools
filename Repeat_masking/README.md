@@ -52,3 +52,28 @@ rm tmp.txt
   #sbatch $ProgDir/rep_modeling.sh $BestAssembly $OutDir
   sbatch $ProgDir/transposonPSI.sh $BestAssembly $OutDir
 ```
+
+
+The TransposonPSI masked bases were used to mask additional bases from the
+repeatmasker / repeatmodeller softmasked and hardmasked files.
+
+
+```bash
+for File in $(ls repeat_masked/F.venenatum/WT_minion/miniasm/*_contigs_softmasked.fa); do
+OutDir=$(dirname $File)
+TPSI=$(ls $OutDir/*_contigs_unmasked.fa.TPSI.allHits.chains.gff3)
+OutFile=$(echo $File | sed 's/_contigs_softmasked.fa/_contigs_softmasked_repeatmasker_TPSI_appended.fa/g')
+echo "$OutFile"
+bedtools maskfasta -soft -fi $File -bed $TPSI -fo $OutFile
+echo "Number of masked bases:"
+cat $OutFile | grep -v '>' | tr -d '\n' | awk '{print $0, gsub("[a-z]", ".")}' | cut -f2 -d ' '
+done
+# The number of N's in hardmasked sequence are not counted as some may be present within the assembly and were therefore not repeatmasked.
+for File in $(ls repeat_masked/F.venenatum/WT_minion/miniasm/*_contigs_softmasked.fa); do
+OutDir=$(dirname $File)
+TPSI=$(ls $OutDir/*_contigs_unmasked.fa.TPSI.allHits.chains.gff3)
+OutFile=$(echo $File | sed 's/_contigs_softmasked.fa/_contigs_hardmasked_repeatmasker_TPSI_appended.fa/g')
+echo "$OutFile"
+bedtools maskfasta -fi $File -bed $TPSI -fo $OutFile
+done
+```
