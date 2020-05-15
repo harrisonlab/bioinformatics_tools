@@ -1,14 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#SBATCH -J miniasm
+#SBATCH --partition=long
+#SBATCH --mem-per-cpu=16G
+#SBATCH --cpus-per-task=16
+
 #Align RNAseq data with genome using STAR
 
-#$ -S /bin/bash
-#$ -cwd
-#$ -pe smp 16
-#$ -l virtual_free=16G
-#$ -l h=blacklace01.blacklace|blacklace03.blacklace|blacklace05.blacklace|blacklace06.blacklace|blacklace07.blacklace|blacklace08.blacklace|blacklace09.blacklace|blacklace11.blacklace
-
-
-Usage="sub_star.sh InGenome.fa InReadF.fa InReadR.fa Output_directory [GeneLocations.gff]"
+Usage="star.sh InGenome.fa InReadF.fa InReadR.fa Output_directory [GeneLocations.gff]"
 echo $Usage
 
 # ---------------
