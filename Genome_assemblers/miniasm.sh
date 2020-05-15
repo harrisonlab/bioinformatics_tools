@@ -37,8 +37,6 @@ cp $CurPath/$RawReads $Raw
 
 rename.sh in=$Raw out="$Prefix"_rename.fasta prefix=$Prefix
 
-cp "$Prefix"_rename.fasta $CurPath
-
 # ---------------
 # Step 3
 # Fast all-against-all overlap of raw reads
@@ -46,16 +44,12 @@ cp "$Prefix"_rename.fasta $CurPath
 
 minimap2 -x ava-ont -t8 "$Prefix"_rename.fasta "$Prefix"_rename.fasta | gzip -1 > $Prefix.paf.gz
 
-cp $Prefix.paf.gz $CurPath
-
 # ---------------
 # Step 4
 # Concatenate pieces of read sequences to generate the final sequences
 # ---------------
 
 miniasm -f "$Prefix"_rename.fasta $Prefix.paf.gz > reads.gfa
-
-cp reads.gfa $CurPath
 
 # ---------------
 # Step 5
