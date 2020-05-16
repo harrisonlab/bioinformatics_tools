@@ -1,15 +1,22 @@
-#!/bin/bash
-#$ -S /bin/bash
-#$ -cwd
-#$ -pe smp 16
-#$ -l virtual_free=4G
+#!/usr/bin/env bash
+#SBATCH -J braker
+#SBATCH --partition=himem
+#SBATCH --mem-per-cpu=4G
+#SBATCH --cpus-per-task=24
 
-WorkDir=$TMPDIR
+
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 Assembly=$1
 OutDir=$2
 AcceptedHits=$3
 GeneModelName=$4
 CurDir=$PWD
+
+echo "$Assembly"
+echo "$OutDir"
+echo "$AcceptedHits"
+echo "$GeneModelName"
+echo "$CurDir"
 
 mkdir -p $WorkDir
 cd $WorkDir
@@ -17,10 +24,10 @@ cd $WorkDir
 cp $CurDir/$Assembly assembly.fa
 cp $CurDir/$AcceptedHits alignedRNA.bam
 
+
+
 braker.pl \
-  --cores 8 \
-  --GENEMARK_PATH=/home/armita/prog/genemark/2019/gm_et_linux_64/gmes_petap \
-  --BAMTOOLS_PATH=/home/armita/prog/bamtools/bamtools/bin \
+  --GENEMARK_PATH=/home/gomeza/prog/genemark/gmes_linux_64 \
   --overwrite \
   --fungus \
   --gff3 \
