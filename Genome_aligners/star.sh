@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH -J miniasm
+#SBATCH -J STAR
 #SBATCH --partition=long
 #SBATCH --mem-per-cpu=16G
 #SBATCH --cpus-per-task=16
