@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
 #SBATCH --partition=long
-#SBATCH --mem-per-cpu=16G
-#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+
 
 #Align RNAseq data with genome using STAR
 
@@ -28,7 +28,7 @@ fi
 
 # Set working directory
 CurDir=$PWD
-WorkDir=$TMPDIR/star
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 GenomeDir=$WorkDir/index
 mkdir -p $GenomeDir
 
@@ -108,10 +108,12 @@ STAR \
 # --runThreadN 8
 
 
-rm -r $GenomeDir
-rm $InGenome
-rm $InGff
-rm $InReadF
-rm $InReadR
+#rm -r $GenomeDir
+#rm $InGenome
+#rm $InGff
+#rm $InReadF
+#rm $InReadR
 mkdir -p $CurDir/$OutDir
 cp -r $WorkDir/* $CurDir/$OutDir/.
+
+rm -r $WorkDir
