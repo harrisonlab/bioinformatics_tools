@@ -28,6 +28,7 @@ cp $CurDir/$AcceptedHits alignedRNA.bam
 
 braker.pl \
   --GENEMARK_PATH=/home/gomeza/prog/genemark/gmes_linux_64 \
+  --BAMTOOLS_PATH=/home/gomeza/miniconda3/envs/gene_pred/bin \
   --overwrite \
   --fungus \
   --gff3 \
