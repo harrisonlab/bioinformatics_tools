@@ -20,7 +20,7 @@ echo $FileR
 Timepoint=$(echo $FileF | rev | cut -d '/' -f3 | rev)
 echo "$Timepoint"
 Sample_Name=$(echo $FileF | rev | cut -d '/' -f1 | rev | sed 's/_1_trim.fq.gz//g')
-OutDir=alignment_v2/star/$Organism/$Strain
+OutDir=alignment_v2/star/$Organism/$Strain/$Timepoint/$Sample_Name
 ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
 sbatch $ProgDir/star.sh $Assembly $FileF $FileR $OutDir
 done

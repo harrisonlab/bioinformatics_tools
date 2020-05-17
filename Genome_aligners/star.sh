@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
-#SBATCH --partition=long
+#SBATCH --partition=himem
 #SBATCH --mem=64G
 
 
