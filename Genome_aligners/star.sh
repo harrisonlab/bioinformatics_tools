@@ -108,11 +108,11 @@ STAR \
 # --runThreadN 8
 
 
-#rm -r $GenomeDir
-#rm $InGenome
-#rm $InGff
-#rm $InReadF
-#rm $InReadR
+rm -r $GenomeDir
+rm $InGenome
+rm $InGff
+rm $InReadF
+rm $InReadR
 mkdir -p $CurDir/$OutDir
 cp -r $WorkDir/* $CurDir/$OutDir/.
 
