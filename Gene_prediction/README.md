@@ -7,7 +7,6 @@ Tools used in the prediction and annotation of genes
 2. Braker: A pipeline for automated prediction of protein coding genes using GeneMark-ES/ET and AUGUSTUS. This allow ab initio and gene model training predictions.
 
 
-
 ## Busco
 
 Indentification of Benchmarking Universal Single-Copy Orthologs in BUSCO 
@@ -19,8 +18,8 @@ conda activate olc_assemblers # e.g.
 
 conda install busco
 
-
-
+#Busco databases odb9 are in /projects/oldhome/groups/harrisonlab/dbBusco/sordariomyceta_odb9 (recommended)
+#New databases, odb10 will be downloaded in /projects/dbBusco/
 ```
 
 ### Typical run
@@ -144,8 +143,7 @@ Therefore, replace them in your conda installation before running braker.
 cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/USER_ID/miniconda3/USER_ENV/bin
 ```
 
-
-## Typical run
+### Typical run
 
 ```bash
   for Assembly in $(ls path/to/softmasked/assembly/*_contigs_softmasked_repeatmasker_TPSI_appended.fa); do
