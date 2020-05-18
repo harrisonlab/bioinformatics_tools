@@ -1,9 +1,48 @@
+# Gene prediction tools
 
-# Braker
+Tools used in the prediction and annotation of genes
+
+1. BUSCO: Indentification of single-copy orthologs that should be highly conserved among the closely related species. This tool can be used to evaluated genome completeness and for phylogenetic analysis.
+
+2. Braker: A pipeline for automated prediction of protein coding genes using GeneMark-ES/ET and AUGUSTUS. This allow ab initio and gene model training predictions.
+
+
+
+## Busco
+
+Indentification of Benchmarking Universal Single-Copy Orthologs in BUSCO 
+
+### Requirements
+
+```bash
+conda activate olc_assemblers # e.g.
+
+conda install busco
+
+
+
+```
+
+### Typical run
+
+```bash
+  for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/racon_10/WT_miniasm_racon10_renamed.fasta); do
+    Strain=WT_minion
+    Organism=F.venenatum
+    echo "$Organism - $Strain"
+    ProgDir=/home/gomeza/git_repos/tools/gene_prediction/busco
+    BuscoDB=$(ls -d /projects/oldhome/groups/harrisonlab/dbBusco/sordariomyceta_odb9)
+    OutDir=$(dirname $Assembly)/busco_sordariomycetes_obd9
+    sbatch $ProgDir/sub_busco.sh $Assembly $BuscoDB $OutDir
+  done
+```
+
+
+## Braker
 
 Braker is a combination of GeneMark-ET and Augustus used for gene annotation.
 
-## Requirements
+### Requirements
 
 Braker requires the instalation of multiple perl libraries, Augustus and Genemark. There are conda packages for Augustus and Braker. However, these packages are often lagging behing the releasess of AUGUSTUS and BRAKER. Therefore manual installation might be necessary.
 
