@@ -159,3 +159,4 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
   done
 ```
 
+conda install codingquarry
