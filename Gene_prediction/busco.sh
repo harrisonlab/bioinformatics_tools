@@ -18,7 +18,7 @@
 ###
 
 
-Usage="sub_busco.sh [Assembly.fasta] [Eukaryotic/Fungal/Plant/Bacteria or absoulte_path_to_specific_busco_library] [Output_directory]"
+Usage="busco.sh [Assembly.fasta] [Eukaryotic/Fungal/Plant/Bacteria or absoulte_path_to_specific_busco_library] [Output_directory]"
 echo "$Usage"
 
 
