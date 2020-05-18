@@ -9,7 +9,7 @@ Tools used in the prediction and annotation of genes
 
 ## Busco
 
-Indentification of Benchmarking Universal Single-Copy Orthologs in BUSCO 
+Indentification of Benchmarking Universal Single-Copy Orthologs in the genome usgin BUSCO databases.
 
 ### Requirements
 
