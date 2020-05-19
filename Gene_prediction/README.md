@@ -160,17 +160,18 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
 ```
 
 
-## CodingQuarry
+## Genome-guided assembly and CodingQuarry
 
+### Requirements
 
 ### Conda installation
 
 ```bash
-# A conda environment with python 2.7 is required
+# CodingQuarry requires a conda environment with python 2.7
 # e.g. conda create --name gene_pred_py27 python=2.7
 
+conda install stringtie
 conda install codingquarry
-
 
 nano ~/.profile
 # The environmental variable QUARRY_PATH is set in your profile adding
@@ -180,6 +181,9 @@ export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingqu
 ```
 
 ### Typical run
+
+
+stringtie -o short_reads.out.gtf concatenated.bam
 
 ```bash
   for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
