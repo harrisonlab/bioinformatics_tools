@@ -159,4 +159,37 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
   done
 ```
 
+
+## CodingQuarry
+
+
+### Conda installation
+
+```bash
+# A conda environment with python 2.7 is required
+# e.g. conda create --name gene_pred_py27 python=2.7
+
 conda install codingquarry
+
+
+nano ~/.profile
+# The environmental variable QUARRY_PATH is set in your profile adding
+export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles"
+
+. ~/.profile # Refresh your profile
+```
+
+### Typical run
+
+```bash
+  for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
+    Strain=$(echo $Assembly| rev | cut -d '/' -f5 | rev) # Edit to set your ouput directory
+    Organism=$(echo $Assembly| rev | cut -d '/' -f6 | rev) # Edit to set your ouput directory
+    echo "$Organism - $Strain"
+    OutDir=gene_pred/codingquary/$Organism/$Strain/
+    mkdir -p $OutDir
+    GTF=path/to/RNAseq/alignment/assembly/*.gtf # GFT file from stringtie/cufflinks output. See Genome-guided_assemblers scripts
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    sbatch $ProgDir/codingquarry.sh $Assembly $GTF $OutDir
+  done
+```
