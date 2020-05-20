@@ -182,8 +182,6 @@ export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingqu
 PATH=${PATH}:/home/gomeza/prog/signalp-5.0b
 
 . ~/.profile # Refresh your profile
-
-
 ```
 
 ### Typical run
