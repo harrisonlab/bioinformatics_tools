@@ -20,6 +20,10 @@ InReadF=$(basename $2)
 InReadR=$(basename $3)
 OutDir=$4
 
+echo $InGenome
+echo $InReadF
+echo $InReadR
+
 # determine if optional file for genemodels has been provided
 if [ $5 ]; then
   GffProvided="Y"
@@ -28,8 +32,9 @@ fi
 
 # Set working directory
 CurDir=$PWD
-WorkDir=/tmp/gomeza/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
+echo $WorkDir
 GenomeDir=$WorkDir/index
 mkdir -p $GenomeDir
 
@@ -85,7 +90,7 @@ STAR \
 --outFileNamePrefix star_aligment \
 --readFilesCommand zcat \
 --readFilesIn $InReadF $InReadR \
---outSAMtype BAM SortedByCoordinate \
+--outSAMtype BAM Unsorted \
 --outSAMstrandField intronMotif \
 --runThreadN 16
 
@@ -110,6 +115,7 @@ STAR \
 # --outSAMstrandField intronMotif \
 # --runThreadN 8
 
+samtools sort star_aligmentAligned.out.bam > star_aligmentAligned.sorted.out.bam
 
 rm -r $GenomeDir
 rm $InGenome
