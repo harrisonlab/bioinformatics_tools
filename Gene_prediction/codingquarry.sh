@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH -J braker
+#SBATCH -J codingquarry
 #SBATCH --partition=long
 #SBATCH --mem-per-cpu=4G
 #SBATCH --cpus-per-task=8
