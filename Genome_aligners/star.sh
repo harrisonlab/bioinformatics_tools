@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
 #SBATCH --partition=himem
-#SBATCH --mem-per-cpu=24G
-#SBATCH --cpus-per-task=8
+#SBATCH --mem-per-cpu=30G
+#SBATCH --cpus-per-task=16
 
 #Align RNAseq data with genome using STAR
 
@@ -28,7 +28,8 @@ fi
 
 # Set working directory
 CurDir=$PWD
-WorkDir=$PWD/$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=/tmp/gomeza/${SLURM_JOB_USER}_${SLURM_JOBID}
+mkdir -p $WorkDir
 GenomeDir=$WorkDir/index
 mkdir -p $GenomeDir
 
@@ -59,7 +60,7 @@ STAR \
 --genomeSAindexNbases 11 \
 --genomeDir $GenomeDir \
 --genomeFastaFiles $InGenome \
---runThreadN 8
+--runThreadN 16
 elif [ $GffProvided == "Y" ]; then
 STAR \
 --runMode genomeGenerate \
@@ -86,7 +87,7 @@ STAR \
 --readFilesIn $InReadF $InReadR \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMstrandField intronMotif \
---runThreadN 8
+--runThreadN 16
 
 
 #STAR \
@@ -118,4 +119,4 @@ rm $InReadR
 mkdir -p $CurDir/$OutDir
 cp -r $WorkDir/* $CurDir/$OutDir/.
 
-#rm -r $WorkDir
+rm -r $WorkDir
