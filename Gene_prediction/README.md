@@ -164,20 +164,26 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
 
 ### Requirements
 
-### Conda installation
-
 ```bash
+# Conda installation
+
 # CodingQuarry requires a conda environment with python 2.7
 # e.g. conda create --name gene_pred_py27 python=2.7
 
 conda install stringtie
 conda install codingquarry
 
+# The environmental variable QUARRY_PATH is set in your profile (needed for CodingQuarry)
+
 nano ~/.profile
-# The environmental variable QUARRY_PATH is set in your profile adding
-export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles"
+export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles" #Add
+
+# SignalP is needed. Add this path to your profile or 
+PATH=${PATH}:/home/gomeza/prog/signalp-5.0b
 
 . ~/.profile # Refresh your profile
+
+
 ```
 
 ### Typical run
