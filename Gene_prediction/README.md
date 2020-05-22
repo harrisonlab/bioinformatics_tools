@@ -162,6 +162,8 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
 
 ## Genome-guided assembly and CodingQuarry
 
+CodingQuarry in pathogen mode is used to predict aditional genes and added to braker predictions
+
 ### Requirements
 
 ```bash
@@ -187,7 +189,22 @@ PATH=${PATH}:/home/gomeza/prog/signalp-5.0b
 ### Typical run
 
 
-stringtie -o short_reads.out.gtf concatenated.bam
+#### Stringtie RNA-seq alignments assembler
+
+```bash
+  for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
+    Strain=$(echo $Assembly| rev | cut -d '/' -f5 | rev) # Edit to set your ouput directory
+    Organism=$(echo $Assembly| rev | cut -d '/' -f6 | rev) # Edit to set your ouput directory
+    echo "$Organism - $Strain"
+    OutDir=gene_pred/stringtie/$Organism/$Strain/concatenated_prelim
+    mkdir -p $OutDir
+    AcceptedHits=path/to/your/spliced/aligments/files.bam
+    ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/RNAseq
+    qbatch $ProgDir/stringties.sh $AcceptedHits $OutDir
+   done
+```
+
+#### CodinQuarry 
 
 ```bash
   for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
@@ -201,3 +218,5 @@ stringtie -o short_reads.out.gtf concatenated.bam
     sbatch $ProgDir/codingquarry.sh $Assembly $GTF $OutDir
   done
 ```
+
+
