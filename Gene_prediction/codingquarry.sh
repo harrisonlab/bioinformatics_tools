@@ -31,9 +31,10 @@ CufflinksGTF_to_CodingQuarryGFF3.py $GTF > transcripts.gff3
 cp $Assembly assembly.fa
 
 
-/home/gomeza/miniconda3/envs/antismash_py27/bin/run_CQ-PM_stranded.sh assembly.fa transcripts.gff3 $Threads 2>&1 | tee codingquaryPM_log.txt
+/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction/run_CQ-PM_stranded.sh assembly.fa transcripts.gff3 $Threads 2>&1 | tee codingquaryPM_log.txt
 
 mkdir -p $OutDir/out
 mv codingquaryPM_log.txt $OutDir
+mv Secretome.txt $OutDir
 mv out/* $OutDir/out/.
-#rm -r $WorkDir
+rm -r $WorkDir
