@@ -206,6 +206,8 @@ PATH=${PATH}:/home/gomeza/prog/signalp-5.0b
 
 #### CodinQuarry 
 
+Note: run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts are included in cndigquarry scripts are used to run CQ pathogen mode using signalp 4.1. The script in this folder was edited to use signalp5. 
+
 ```bash
   for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
     Strain=$(echo $Assembly| rev | cut -d '/' -f5 | rev) # Edit to set your ouput directory
