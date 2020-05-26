@@ -10,7 +10,13 @@ Tools used in the prediction and annotation of genes
 
 4. CodinQuarry: Generalised hidden Markov models gene prediction tool. This tool is highly accurate predicting fungal genes, using "pathogen mode".
 
-5. 
+Additional tools in this folder
+
+- add_CodingQuarry_features.pl
+- gene_list_to_gff.pl
+- gff_rename_genes.py
+- gff2fasta.pl
+- remove_dup_features.py
 
 ## Busco
 
