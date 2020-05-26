@@ -293,3 +293,29 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
     echo "";
 	done
   ```
+
+  #### Remove duplicate and rename genes.
+
+  ```bash
+  for GffAppended in $(ls $FinalDir/final_genes_appended.gff3);
+  do
+    Strain=$(echo $GffAppended | rev | cut -d '/' -f3 | rev)
+    Organism=$(echo $GffAppended | rev | cut -d '/' -f4 | rev)
+    echo "$Organism - $Strain"
+    FinalDir=path/to/final/gene/predction/folder #/final
+    # Remove duplicated genes
+    GffFiltered=$FinalDir/filtered_duplicates.gff
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    $ProgDir/remove_dup_features.py --inp_gff $GffAppended --out_gff $GffFiltered
+    # Rename genes
+    GffRenamed=$FinalDir/final_genes_appended_renamed.gff3
+    LogFile=$FinalDir/final_genes_appended_renamed.log
+    $ProgDir/gff_rename_genes.py --inp_gff $GffFiltered --conversion_log $LogFile > $GffRenamed
+    rm $GffFiltered
+    # Create renamed fasta files from each gene feature   
+    Assembly=$(ls assembly_vAG/canu_1step/N.ditissima/R0905/polished/repeat_masked/filtered_contigs/*_contigs_softmasked_repeatmasker_TPSI_appended.fa)
+    $ProgDir/gff2fasta.pl $Assembly $GffRenamed $FinalDir/final_genes_appended_renamed
+    # The proteins fasta file contains * instead of Xs for stop codons, these should be changed
+    sed -i 's/\*/X/g' $FinalDir/final/final_genes_appended_renamed.pep.fasta
+  done 
+```
