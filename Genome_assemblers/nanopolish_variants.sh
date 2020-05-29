@@ -56,8 +56,8 @@ nanopolish variants \
   --min-candidate-frequency 0.2 \
   --reads $Reads \
   --bam $Aligned \
-  --genome $Assembly \
-  > "$Prefix"_variants.txt
+  --genome $Assembly
+  #> "$Prefix"_variants.txt
 
 mkdir -p $CurDir/$OutDir
 cp "$Prefix"* $CurDir/$OutDir/.
