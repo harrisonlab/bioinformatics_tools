@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J racon
 #SBATCH --partition=long
-#SBATCH --mem=400G
+#SBATCH --mem-per-cpu=8G
+#SBATCH --cpus-per-task=8
 
 # Alignment of minion reads to a minion assembly prior to running nanopolish variants
 
@@ -46,9 +47,10 @@ minimap2 \
 current-assembly.fa \
 $Reads \
 > racon_round_$i.reads_mapped.paf
-racon -t 16 $Reads racon_round_$i.reads_mapped.paf current-assembly.fa > $WorkDir/racon_round_$i.fasta
+
+racon $Reads racon_round_$i.reads_mapped.paf current-assembly.fa > $WorkDir/racon_round_$i.fasta
 cp racon_round_$i.fasta current-assembly.fa
 cp racon_round_$i.fasta $CurDir/$OutDir/"$Prefix"_racon_round_$i.fasta
 done
 
-#rm -r $WorkDir
+rm -r $WorkDir
