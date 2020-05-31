@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #SBATCH -J nanopolish_variants
 #SBATCH --partition=medium
-#SBATCH --mem-per-cpu=2G
-#SBATCH --cpus-per-task=8
+#SBATCH --mem-per-cpu=10G
+#SBATCH --cpus-per-task=40
 
 # nanopolish variants: detect SNPs and indels with respect to a reference genome
 # nanopolish variants --consensus: calculate an improved consensus sequence for a draft genome assembly
 
-Usage="nanopolish_variants.sh <assembly.fa> <reads.fa.gz> <aligned_ONTreads.sam> <ploidy[e.g.1]> <region> <output_directory>"
+Usage="nanopolish_variants.sh <assembly.fa> <reads.fa.gz> <aligned_ONTreads.sam> <ploidy[e.g.1]> <output_directory>"
 echo "$Usage"
 
 # ---------------
@@ -19,18 +19,18 @@ AssemblyIn=$1
 ReadsIn=$2
 AlignedIn=$3
 Ploidy=$4
-Region=$5
-OutDir=$6
-Prefix=$(echo $Region | sed -e "s/ /_/g")
+#Region=$5
+OutDir=$5
+#Prefix=$(echo $Region | sed -e "s/ /_/g")
 
 echo "Assembly - $AssemblyIn"
 echo "Fasta reads - $ReadsIn"
 echo "Aligned reads - $AlignedIn"
 echo "OutDir - $OutDir"
 
-
 CurDir=$PWD
-WorkDir=$TMPDIR/nanopolish
+WorkDir=$CurDir/${SLURM_JOB_USER}_${SLURM_JOBID}
+
 mkdir -p $WorkDir
 cd $WorkDir
 
@@ -46,18 +46,30 @@ cp $CurDir/$ReadsIn* .
 echo "Files in the folder are:"
 ls
 
-nanopolish variants \
-  -t 8 \
-  --ploidy $Ploidy \
-  -w $Region \
-  --consensus \
-  --max-haplotypes 100000 \
-  --fix-homopolymers \
-  --min-candidate-frequency 0.2 \
-  --reads $Reads \
-  --bam $Aligned \
-  --genome $Assembly
+nanopolish_makerange.py $Assembly | parallel --results nanopolish.results -P 8 \
+nanopolish variants --consensus -o polished.{1}.vcf -w {1} -r $Reads \
+--ploidy $Ploidy \
+--max-haplotypes 100000 \
+--fix-homopolymers \
+--min-candidate-frequency 0.2 \
+-b $Aligned \
+-g $Assembly -t 4
+
+#nanopolish variants \
+  #-t 8 \
+  #--ploidy $Ploidy \
+  #-w $Region \
+  #--consensus \
+  #--max-haplotypes 100000 \
+  #--fix-homopolymers \
+  #--min-candidate-frequency 0.2 \
+  #--reads $Reads \
+  #--bam $Aligned \
+  #--genome $Assembly
   #> "$Prefix"_variants.txt
 
 mkdir -p $CurDir/$OutDir
-cp "$Prefix"* $CurDir/$OutDir/.
+#cp "$Prefix"* $CurDir/$OutDir/.
+
+cp -r $WorkDir/* $CurDir/$OutDir/.
+rm -r $WorkDir
