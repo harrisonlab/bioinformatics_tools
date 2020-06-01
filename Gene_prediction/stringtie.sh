@@ -24,7 +24,7 @@ mkdir -p $CurDir/$OutDir
 
 cp $CurDir/$AcceptedHits accepted_hits.bam
 
-stringtie -o out.gtf -C cov_refs.gtf -p 8 accepted_hits.bam
+stringtie -o out.gtf -p 8 accepted_hits.bam
 
 sed -i 1,2d out.gtf
 
