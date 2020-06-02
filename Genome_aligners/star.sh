@@ -94,7 +94,6 @@ STAR \
 --outSAMstrandField intronMotif \
 --runThreadN 16
 
-
 #STAR \
 #--genomeDir $GenomeDir \
 #--outFileNamePrefix star_aligment \
@@ -108,12 +107,8 @@ STAR \
 #--outReadsUnmapped Fastx \
 #--runThreadN 8
 
-# --genomeDir $GenomeDir \
-# --outFileNamePrefix star_aligment \
-# --readFilesIn $InReadF $InReadR \
-# --outSAMtype BAM SortedByCoordinate \
-# --outSAMstrandField intronMotif \
-# --runThreadN 8
+# STAR produces sorted output files using the --outSAMtype BAM SortedByCoordinate option.
+# This process requires lots of RAM. Samtools sort is used instead.
 
 samtools sort star_aligmentAligned.out.bam > star_aligmentAligned.sorted.out.bam
 

@@ -42,7 +42,7 @@ If multiple RNAseq samples are used, alignment outputs can be concatenated using
   Organism="Organism name"
   mkdir -p alignment/star/$Organism/$Strain/$Timepoint/concatenated # e.g.
   samtools merge -f alignment/star/$Organism/$Strain/$Timepoint/concatenated/concatenated.bam \
-  alignment/star/$Organism/$Strain/$Timepoint/"Sample_1"/star_aligmentAligned.sortedByCoord.out.bam \
-  alignment/star/$Organism/$Strain/$Timepoint/"Sample_2"/star_aligmentAligned.sortedByCoord.out.bam \
-  alignment/star/$Organism/$Strain/$Timepoint/"Sample_3"/star_aligmentAligned.sortedByCoord.out.bam
+  alignment/star/$Organism/$Strain/$Timepoint/"Sample_1"/star_aligmentAligned.sorted.out.bam \
+  alignment/star/$Organism/$Strain/$Timepoint/"Sample_2"/star_aligmentAligned.sorted.out.bam \
+  alignment/star/$Organism/$Strain/$Timepoint/"Sample_3"/star_aligmentAligned.sorted.out.bam
 ```
