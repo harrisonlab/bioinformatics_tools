@@ -102,7 +102,19 @@ sbatch $ProgDir/pred_signalP.sh $File signalp-5.0
 done
 done
 ```
+```bash
+for Proteome in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_combined.pep.fasta); do
+Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
+Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+$ProgDir/sub_signalP.sh $Proteome
+done
 
+for File in $(ls $SplitDir/*_final_preds_*); do
+sbatch $ProgDir/pred_signalP.sh $File signalp-5.0
+done
+done
+```
 
 
 
@@ -231,19 +243,27 @@ done
 ### B) From Augustus gene models - Effector identification using EffectorP
 
 Required programs:
+
+conda install -c bioconda emboss
+
+/usr/lib/x86_64-linux-gnu/libpq.so.5
+
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libpq.so.5
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libpq.so.5:$LD_LIBRARY_PATH
+
+
  * EffectorP.py
 
 ```bash
-for Strain in Ag02 Ag05 ND8 R37-15; do
-	for Proteome in $(ls gene_pred/codingquary/N.*/$Strain/*/final_genes_combined.pep.fasta); do
-		Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
-		Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
-		BaseName="$Organism"_"$Strain"_EffectorP
-		OutDir=analysis/effectorP/$Organism/$Strain
-		ProgDir=~/git_repos/emr_repos/tools/seq_tools/feature_annotation/fungal_effectors
-		qsub $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
-	done
+for Proteome in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_combined.pep.fasta); do
+Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
+Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
+BaseName="$Organism"_"$Strain"_EffectorP
+OutDir=analysis/effectorP/$Organism/$Strain
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
 done
+
 ```
 
 ```bash
