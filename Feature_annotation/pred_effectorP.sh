@@ -1,10 +1,8 @@
-#!/bin/bash
-#$ -S /bin/bash
-#$ -cwd
-#$ -pe smp 1
-#$ -l virtual_free=1G
-#$ -l h=blacklace01.blacklace|blacklace05.blacklace|blacklace06.blacklace
-
+#!/usr/bin/env bash
+#SBATCH -J effectorP
+#SBATCH --partition=short
+#SBATCH --mem-per-cpu=1G
+#SBATCH --cpus-per-task=4
 
 CurPath=$PWD
 InFile="$1"
@@ -26,3 +24,4 @@ EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
 rm proteins.fa
 mkdir -p $OutDir
 cp $WorkDir/* $OutDir/.
+rm -r $WorkDir
