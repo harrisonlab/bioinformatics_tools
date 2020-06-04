@@ -2,7 +2,7 @@
 #SBATCH -J pilon
 #SBATCH --partition=himem
 #SBATCH --mem-per-cpu=16G
-#SBATCH --cpus-per-task=30
+#SBATCH --cpus-per-task=16
 
 # Align raw reads to a pacbio assembly and then use this alignmeant to correct
 # indels and substitutions in the assembly.
