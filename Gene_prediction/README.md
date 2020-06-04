@@ -192,7 +192,7 @@ nano ~/.profile
 export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles" #Add
 
 # SignalP is needed. Add this path to your profile or 
-PATH=${PATH}:/home/gomeza/prog/signalp-5.0b
+PATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin
 
 . ~/.profile # Refresh your profile
 ```
