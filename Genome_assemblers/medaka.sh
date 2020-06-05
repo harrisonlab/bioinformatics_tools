@@ -39,6 +39,6 @@ mkdir -p $CurDir/$OutDir
 
 medaka_consensus -i $Reads -d $Assembly -t 8
 
-cp $WorkDir/* $CurDir/$OutDir
+cp -r $WorkDir/* $CurDir/$OutDir/.
 
 rm -r $WorkDir
