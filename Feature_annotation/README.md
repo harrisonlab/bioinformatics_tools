@@ -1,36 +1,48 @@
 # Gene feature annotation tools
 
+1. Interproscan. Provides functional analysis of proteins by classifying them into families and predicting domains.
+
+2. Swissprot
+
+3. SignalP
+
+4. EffectorP
+
 ## Interproscan
 
 Interproscan was used to give gene models functional annotations.
 
-Note: This is a long-running script. As such, these commands were run using 'screen' to allow jobs to be submitted and monitored in the background. This allows the session to be disconnected and reconnected over time.
-
-Screen ouput detailing the progress of submission of interproscan jobs was redirected to a temporary output file named interproscan_submission.log.
-
+### Requirements
 
 ```bash
-screen -a
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-for Genes in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
-echo $Genes
-$ProgDir/interproscan.sh $Genes
-done 2>&1 | tee -a interproscan_submisison.log
+# The lastest versions of interproscan are installed in /data/scratch/gomeza/prog/Interproscan and used by in the run_interproscan.sh script.
+# The current version of interproscan only works with Java version 11. The next line has to be added to your profile.
+PATH=/data/scratch/gomeza/prog/java/jdk-11.0.4/bin:${PATH}
 
+. ~/.profile # Refresh your profile
+```
+
+```bash
+# This command will split your gene fasta file and run multiple interproscan jobs.
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  for Genes in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
+    echo $Genes
+    $ProgDir/interproscan.sh $Genes
+  done 2>&1 | tee -a interproscan_submisison.log
+```
 
 Following interproscan annotation split files were combined using the following commands:
 
-
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-for Proteins in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
-Strain=$(echo $Proteins | rev | cut -d '/' -f3 | rev)
-Organism=$(echo $Proteins | rev | cut -d '/' -f4 | rev)
-echo "$Organism - $Strain"
-echo $Strain
-InterProRaw=gene_pred/interproscan/$Organism/$Strain/raw
-$ProgDir/append_interpro.sh $Proteins $InterProRaw
-done
-
+```bash
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  for Proteins in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
+    Strain=$(echo $Proteins | rev | cut -d '/' -f3 | rev)
+    Organism=$(echo $Proteins | rev | cut -d '/' -f4 | rev)
+    echo "$Organism - $Strain"
+    echo $Strain
+    InterProRaw=gene_pred/interproscan/$Organism/$Strain/raw
+    $ProgDir/append_interpro.sh $Proteins $InterProRaw
+  done
 ```
 
 
