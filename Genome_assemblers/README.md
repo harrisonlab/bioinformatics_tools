@@ -167,3 +167,19 @@ for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/racon_10/WT_minion_r
 done
 rm tmp.txt
 ```
+
+Medaka
+
+
+conda create -n medaka -c conda-forge -c bioconda medaka
+
+
+```bash
+for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/WT_minion_miniasm.fa); do
+ReadsFq=$(ls qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz)
+OutDir=$(dirname $Assembly)/medaka3
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
+sbatch $ProgDir/medaka.sh $Assembly $ReadsFq $OutDir
+done
+```
+medaka_consensus -i qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz -d assembly/miniasm/F.venenatum/WT_minion/WT_minion_miniasm.fa -o medaka2 -t 8
