@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --partition=medium
+#SBATCH --partition=short
 #SBATCH --time=24:00:00
 #SBATCH --mem=4G
 #SBATCH --cpus-per-task=8

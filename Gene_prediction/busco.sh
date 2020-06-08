@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J busco
-#SBATCH --partition=himem
+#SBATCH --partition=medium
 #SBATCH --mem-per-cpu=6G
-#SBATCH --cpus-per-task=24
+#SBATCH --cpus-per-task=20
 
 ### BUSCO analysis to identify single copy genes conserved in Fungi in all genomes in the study. Sample submission script for one genome.
 ### NOTE: use the genome mode for the transcriptome contigs, otherwise get all contigs re-named as Transcript 1 in the output!
