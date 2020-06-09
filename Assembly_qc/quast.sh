@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
+#SBATCH -J quast
 #SBATCH --partition=short
-#SBATCH --time=24:00:00
 #SBATCH --mem=4G
 #SBATCH --cpus-per-task=8
 
