@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #SBATCH -J medaka
-#SBATCH --partition=medium
-#SBATCH --mem-per-cpu=8G
+#SBATCH --partition=short
+#SBATCH --mem-per-cpu=10G
 #SBATCH --cpus-per-task=8
 
-# Alignment of minion reads to a minion assembly prior to running nanopolish variants
+# create a consensus sequence from racon corrected assemblies 
 
 Usage="medaka.sh <assembly.fa> <corrected_reads.fq.gz> <output_directory>"
 echo "$Usage"
@@ -28,7 +28,6 @@ mkdir -p $WorkDir
 cd $WorkDir
 
 Assembly=$(basename $AssemblyIn)
-#Assembly=$(echo $Assembly | sed 's/.utg/.fa/g')
 Reads=$(basename $ReadsIn)
 cp $CurDir/$AssemblyIn $Assembly
 cp $CurDir/$ReadsIn $Reads
