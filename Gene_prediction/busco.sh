@@ -26,24 +26,24 @@ Assembly=$1
 DatabaseOpt=$2
 OutDir=$3
 
-if [ "$DatabaseOpt" = "Eukaryotic" ]
-then
-    db=/projects/dbBusco/eukaryota_odb9
-elif [ "$DatabaseOpt" = "Fungal" ]
-then
-    db=/projects/dbBusco/fungi_odb9
-elif [ "$DatabaseOpt" = "Plant" ]
-then
-    db=/projects/dbBusco/embryophyta_odb9
-elif [ "$DatabaseOpt" = "Bacteria" ]
-then
-    db=/projects/dbBusco/bacteria_odb9
-elif [ -e $DatabaseOpt ]
-then
-    db=$DatabaseOpt
-else
-    exit
-fi
+#if [ "$DatabaseOpt" = "Eukaryotic" ]
+#then
+    #db=/projects/dbBusco/eukaryota_odb9
+#elif [ "$DatabaseOpt" = "Fungal" ]
+#then
+    #db=/projects/dbBusco/fungi_odb9
+#elif [ "$DatabaseOpt" = "Plant" ]
+#then
+    #db=/projects/dbBusco/embryophyta_odb9
+#elif [ "$DatabaseOpt" = "Bacteria" ]
+#then
+    #db=/projects/dbBusco/bacteria_odb9
+#elif [ -e $DatabaseOpt ]
+#then
+    #db=$DatabaseOpt
+#else
+    #exit
+#fi
 
 
 ### Output folder
@@ -52,7 +52,7 @@ Prefix="${Filename%.*}"
 
 ### Setting variables
 CurDir=$PWD
-WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 
 ### Prep
@@ -61,7 +61,8 @@ cp $Assembly $WorkDir
 cd $WorkDir
 
 ### Execute
-run_BUSCO.py -o $Prefix -i $Filename -l $db -m geno -c 8 -sp fusarium_graminearum
+#run_BUSCO.py -o $Prefix -i $Filename -l $db -m geno -c 8 -sp fusarium_graminearum
+busco -o $Prefix -i $Filename -l $DatabaseOpt -m geno -c 8 --augustus_species fusarium_graminearum
 
 ### Cleanup
 rm $Filename
