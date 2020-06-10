@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J transposonPSI
-#SBATCH --partition=long
-#SBATCH --mem-per-cpu=12G
-#SBATCH --cpus-per-task=4
+#SBATCH --partition=short
+#SBATCH --mem-per-cpu=6G
+#SBATCH --cpus-per-task=60
 
 Usage="sbatch transposonPSI.sh <assembled_contigs.fa> [<output_directory>]"
 
