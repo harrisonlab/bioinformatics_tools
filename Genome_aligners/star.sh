@@ -88,11 +88,12 @@ echo "Aligning RNAseq reads"
 STAR \
 --genomeDir $GenomeDir \
 --outFileNamePrefix star_aligment \
---readFilesCommand zcat \
 --readFilesIn $InReadF $InReadR \
 --outSAMtype BAM Unsorted \
 --outSAMstrandField intronMotif \
 --runThreadN 16
+
+#--readFilesCommand zcat \
 
 #STAR \
 #--genomeDir $GenomeDir \
