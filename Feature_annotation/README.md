@@ -25,7 +25,7 @@ PATH=/data/scratch/gomeza/prog/java/jdk-11.0.4/bin:${PATH}
 ```bash
 # This command will split your gene fasta file and run multiple interproscan jobs.
   ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-  for Genes in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
+  for Genes in $(ls path/to/the/final_genes_appended_renamed.pep.fasta); do
     echo $Genes
     $ProgDir/interproscan.sh $Genes
   done 2>&1 | tee -a interproscan_submisison.log
@@ -35,7 +35,7 @@ Following interproscan annotation split files were combined using the following 
 
 ```bash
   ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-  for Proteins in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
+  for Proteins in $(ls path/to/the/final_genes_appended_renamed.pep.fasta); do
     Strain=$(echo $Proteins | rev | cut -d '/' -f3 | rev)
     Organism=$(echo $Proteins | rev | cut -d '/' -f4 | rev)
     echo "$Organism - $Strain"
