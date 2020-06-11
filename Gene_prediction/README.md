@@ -25,12 +25,13 @@ Indentification of Benchmarking Universal Single-Copy Orthologs in the genome us
 ### Requirements
 
 ```bash
-conda activate olc_assemblers # e.g.
+# The latest version of BUSCO might be incompatible with some dependencies already installed in your env.
+# Create a new env for BUSCO.
+conda create -n BUSCO -c bioconda -c conda-forge busco=4.0.6 # This takes time
+conda activate BUSCO
 
-conda install busco
-
-#Busco databases odb9 are in /projects/oldhome/groups/harrisonlab/dbBusco/sordariomyceta_odb9 (recommended)
-#New databases, odb10 will be downloaded in /projects/dbBusco/
+# The latest BUSCO databases, odb10, are in /projects/dbBusco/
+# Busco databases odb9 are in /projects/oldhome/groups/harrisonlab/dbBusco/sordariomyceta_odb9
 ```
 
 ### Typical run
@@ -41,9 +42,9 @@ conda install busco
     Organism=F.venenatum
     echo "$Organism - $Strain"
     ProgDir=/home/gomeza/git_repos/tools/gene_prediction/busco
-    BuscoDB=$(ls -d /projects/oldhome/groups/harrisonlab/dbBusco/sordariomyceta_odb9)
+    BuscoDB=$(ls -d /projects/dbBusco/sordariomyceta_odb10)
     OutDir=$(dirname $Assembly)/busco_sordariomycetes_obd9
-    sbatch $ProgDir/sub_busco.sh $Assembly $BuscoDB $OutDir
+    sbatch $ProgDir/busco.sh $Assembly $BuscoDB $OutDir
   done
 ```
 
