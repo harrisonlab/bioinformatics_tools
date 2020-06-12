@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH -J stringtie
-#SBATCH --partition=long
-#SBATCH --mem-per-cpu=1G
+#SBATCH --partition=himem
+#SBATCH --mem-per-cpu=4G
 #SBATCH --cpus-per-task=16
 
 # Aligned transcripts assembly using a reference genome.
