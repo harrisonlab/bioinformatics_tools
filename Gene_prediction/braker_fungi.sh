@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J braker
-#SBATCH --partition=himem
-#SBATCH --mem-per-cpu=4G
-#SBATCH --cpus-per-task=24
+#SBATCH --partition=medium
+#SBATCH --mem-per-cpu=8G
+#SBATCH --cpus-per-task=60
 
 
 WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
