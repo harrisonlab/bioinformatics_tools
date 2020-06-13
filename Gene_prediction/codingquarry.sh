@@ -2,7 +2,7 @@
 #SBATCH -J codingquarry
 #SBATCH --partition=himem
 #SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task=16
 
 Usage="codingquarry.sh InGenome.fa StringTie/Cufflinks.gtf Output_directory"
 echo $Usage
