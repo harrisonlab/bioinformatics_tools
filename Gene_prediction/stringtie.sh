@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #SBATCH -J stringtie
-#SBATCH --partition=himem
-#SBATCH --mem-per-cpu=4G
-#SBATCH --cpus-per-task=16
+#SBATCH --partition=medium
+#SBATCH --mem-per-cpu=6G
+#SBATCH --cpus-per-task=8
 
 # Aligned transcripts assembly using a reference genome.
 
 CurDir=$PWD
-WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 AcceptedHits=$1
 OutDir=$2
