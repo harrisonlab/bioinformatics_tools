@@ -37,13 +37,13 @@ conda activate BUSCO
 ### Typical run
 
 ```bash
-  for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/racon_10/WT_miniasm_racon10_renamed.fasta); do
-    Strain=WT_minion
-    Organism=F.venenatum
+  for Assembly in $(ls path/to/genome/assembly/*.fasta); do
+    Strain=$(echo $Assembly| rev | cut -d '/' -f5 | rev) # Edit to set your ouput directory
+    Organism=$(echo $Assembly | rev | cut -d '/' -f6 | rev) # Edit to set your ouput directory
     echo "$Organism - $Strain"
-    ProgDir=/home/gomeza/git_repos/tools/gene_prediction/busco
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
     BuscoDB=$(ls -d /projects/dbBusco/sordariomyceta_odb10)
-    OutDir=$(dirname $Assembly)/busco_sordariomycetes_obd9
+    OutDir=$(dirname $Assembly)/busco_sordariomycetes_obd10
     sbatch $ProgDir/busco.sh $Assembly $BuscoDB $OutDir
   done
 ```
