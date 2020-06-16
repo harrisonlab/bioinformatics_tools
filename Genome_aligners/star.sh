@@ -86,32 +86,16 @@ fi
 echo "Aligning RNAseq reads"
 
 STAR \
+--winAnchorMultimapNmax 200 \
+--outSAMstrandField intronMotif \
 --genomeDir $GenomeDir \
 --outFileNamePrefix star_aligment \
 --readFilesIn $InReadF $InReadR \
---outSAMtype BAM Unsorted \
---outSAMstrandField intronMotif \
+--seedSearchStartLmax 30 \
+--outReadsUnmapped Fastx \
+--outSAMtype BAM SortedByCoordinate \
+--limitBAMsortRAM 180000000000 \
 --runThreadN 16
-
-#--readFilesCommand zcat \
-
-#STAR \
-#--genomeDir $GenomeDir \
-#--outFileNamePrefix star_aligment \
-#--readFilesCommand zcat \
-#--readFilesIn $InReadF $InReadR \
-#--outSAMtype BAM SortedByCoordinate \
-#--outSAMstrandField intronMotif \
-#--winAnchorMultimapNmax 200 \
-#--seedSearchStartLmax 30 \
-#--quantMode TranscriptomeSAM GeneCounts \
-#--outReadsUnmapped Fastx \
-#--runThreadN 8
-
-# STAR produces sorted output files using the --outSAMtype BAM SortedByCoordinate option.
-# This process requires lots of RAM. Samtools sort is used instead.
-
-samtools sort star_aligmentAligned.out.bam > star_aligmentAligned.sorted.out.bam
 
 rm -r $GenomeDir
 rm $InGenome
