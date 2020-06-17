@@ -42,7 +42,7 @@ conda activate BUSCO
     Organism=$(echo $Assembly | rev | cut -d '/' -f6 | rev) # Edit to set your ouput directory
     echo "$Organism - $Strain"
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
-    BuscoDB=$(ls -d /projects/dbBusco/sordariomyceta_odb10)
+    BuscoDB=$(ls -d /projects/dbBusco/sordariomycetes_odb10)
     OutDir=$(dirname $Assembly)/busco_sordariomycetes_obd10
     sbatch $ProgDir/busco.sh $Assembly $BuscoDB $OutDir
   done
