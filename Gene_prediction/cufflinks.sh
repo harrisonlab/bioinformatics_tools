@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH -J stringtie
+#SBATCH -J cufflinks
 #SBATCH --partition=medium
 #SBATCH --mem-per-cpu=6G
 #SBATCH --cpus-per-task=40
