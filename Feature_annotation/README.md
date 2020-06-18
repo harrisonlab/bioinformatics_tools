@@ -90,10 +90,11 @@ gene models using a number of approaches:
 ### Requirements
 
 ```
-# SignalP is needed. Add these path to your profile (if not done before)
+# SignalP and TMHMM needed. Add these path to your profile (if not done before)
 
 PATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin
 PATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-4.1
+PATH=${PATH}:/data/scratch/gomeza/prog/tmhmm-2.0c/bin
 
 . ~/.profile # Refresh your profile
 ```
