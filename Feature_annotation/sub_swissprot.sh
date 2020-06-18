@@ -9,7 +9,7 @@
  # charcaterised gene models.
 
 CurDir=$PWD
-WorkDir=$TMPDIR/swissprot
+WorkDir=$CurDir/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 Proteome=$1
 OutDir=$2
@@ -45,7 +45,7 @@ ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
 $ProgDir/swissprot_parser.py --blast_tbl swissprot_vJun2020_10_hits.tbl --blast_db_fasta db/"$SwissDB_Name".fasta > swissprot_vJun2020_tophit_parsed.tbl
 
 mkdir -p $CurDir/$OutDir
-cp -r $WorkDir/swissprot_vMar2018_10_hits.tbl $CurDir/$OutDir/.
-cp -r $WorkDir/swissprot_vMar2018_tophit_parsed.tbl $CurDir/$OutDir/.
-rm -r $WorkDir
+cp -r $WorkDir/*hits.tbl $CurDir/$OutDir/.
+cp -r $WorkDir/*parsed.tbl $CurDir/$OutDir/.
+#rm -r $WorkDir
 
