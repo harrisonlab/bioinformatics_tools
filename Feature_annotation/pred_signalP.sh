@@ -19,16 +19,14 @@ Strain=$(echo $InFile | rev | cut -d "/" -f2 | rev)
 InName=$(echo $InFile | rev | cut -d "/" -f1 | rev)
 OutFile=$(echo $InName | sed s/.aa//)
 
-# WorkDir=$TMPDIR/"${Strain}_${InName}"
 if [ -z $SigP_Version ]; then
-  WorkDir=/tmp/$USER/sigp/"${Strain}_${InName}_2"
+  WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_2"
 elif [ $SigP_Version == signalp-3.0 ]; then
-  # WorkDir=/tmp/sigp/"${Strain}_${InName}_3_I_am_a_very_long_name_blah_blah_blah"
-  WorkDir=/tmp/$USER/sigp/"${Strain}_${InName}_3"
+  WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_3"
 elif [ $SigP_Version == signalp-4.1 ]; then
-  WorkDir=/tmp/$USER/sigp/"${Strain}_${InName}_4"
+  WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_4"
 elif [ $SigP_Version == signalp-5.0 ]; then
-  WorkDir=/tmp/$USER/sigp/"${Strain}_${InName}_5"
+  WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_5"
 fi
 
 mkdir -p $WorkDir
@@ -65,7 +63,7 @@ if [ -z $SigP_Version ]; then
   tail -n +5 "$OutFile"_sp.tmp > "$OutFile"_sp.txt
   echo '----------------------------------------------------------------------' >> "$OutFile"_sp.txt
   rm "$OutFile"_sp.tmp
-  PathToAnnotateSigP=/home/armita/git_repos/emr_repos/tools/pathogen/rxlr
+  PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/annotate_signalP2hmm3_v3.pl "$OutFile"_sp.txt "$OutFile"_sp.tab "$OutFile"_sp.aa "$OutFile"_sp_neg.aa "proteins.fa"
   OutDir=$CurPath/gene_pred_vAG/"$Source"_sigP/$Organism/$Strain/split
 elif [ $SigP_Version == signalp-3.0 ]; then
@@ -86,16 +84,16 @@ elif [ $SigP_Version == signalp-3.0 ]; then
   rm -r signalp-3.0
   # $SigP_Version -t euk -f short -trunc 70 "proteins.fa" > "$OutFile"_sp.txt
   echo '----------------------------------------------------------------------' >> "$OutFile"_sp.txt
-  PathToAnnotateSigP=/home/armita/git_repos/emr_repos/tools/seq_tools/feature_annotation/signal_peptides
+  PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/sigP_3.0_parser.py --inp_sigP "$OutFile"_sp.txt --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
-  OutDir=$CurPath/gene_pred_vAG/"${Source}_${SigP_Version}"/$Organism/$Strain/split
+  OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
 elif [ $SigP_Version == signalp-4.1 ]; then
   echo "Running using SignalP version: $SigP_Version"
   $SigP_Version -t euk -f summary -c 70 "proteins.fa" > "$OutFile"_sp.txt
   echo '----------------------------------------------------------------------' >> "$OutFile"_sp.txt
-  PathToAnnotateSigP=/home/armita/git_repos/emr_repos/tools/seq_tools/feature_annotation/signal_peptides
+  PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/sigP_4.1_parser.py --inp_sigP "$OutFile"_sp.txt --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
-  OutDir=$CurPath/gene_pred_vAG/"${Source}_${SigP_Version}"/$Organism/$Strain/split
+  OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
   elif [ $SigP_Version == signalp-5.0 ]; then
   echo "Running using SignalP version: $SigP_Version"
   signalp -org euk -format short -fasta "proteins.fa" -verbose -prefix "$OutFile"
