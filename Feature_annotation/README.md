@@ -157,13 +157,12 @@ Some proteins that are incorporated into the cell membrane require secretion. Th
 Proteins containing a transmembrane domain were identified:
 
  ```bash
- #for Strain in Ag02 Ag05 ND8 R37-15; do
-	for Strain in RS305p RS324p; do
- 	for Proteome in $(ls gene_pred/codingquary/N.*/$Strain/*/final_genes_combined.pep.fasta); do
+ for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
+ 	for Proteome in $(ls gene_pred/codingquary/*/$Strain/*/final_genes_combined.pep.fasta); do
  		Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
  		Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
- 		ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/feature_annotation/transmembrane_helices
- 		qsub $ProgDir/submit_TMHMM.sh $Proteome
+ 		ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+ 		qsub $ProgDir/TMHMM.sh $Proteome
  	done
 done
  ```
