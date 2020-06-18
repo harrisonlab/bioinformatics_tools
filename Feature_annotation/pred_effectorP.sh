@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J effectorP
-#SBATCH --partition=short
-#SBATCH --mem-per-cpu=1G
-#SBATCH --cpus-per-task=4
+#SBATCH --partition=medium
+#SBATCH --mem-per-cpu=4G
+#SBATCH --cpus-per-task=8
 
 CurPath=$PWD
 InFile="$1"
@@ -13,7 +13,7 @@ Organism=$(echo $InFile | rev | cut -d "/" -f3 | rev)
 Strain=$(echo $InFile | rev | cut -d "/" -f2 | rev)
 InName=$(echo $InFile | rev | cut -d "/" -f1 | rev)
 
-WorkDir=$TMPDIR/"$Strain"_"$InName"
+WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 
