@@ -46,35 +46,37 @@ Following interproscan annotation split files were combined using the following 
 ```
 
 
-
-
-
-
 ## B) SwissProt
+
+
+### Requirements
+
+```bash
+# No requirements to run Swissprot
+# Uniprot databases are downloaded to /projects/dbUniprot
+
+# Intructions to create a database if needed.
+dbFasta=$(ls /projects/dbUniprot/swissprot_2020_June/uniprot_sprot.fasta)
+dbType="prot"
+Prefix="uniprot_sprot"
+makeblastdb -in $dbFasta -input_type fasta -dbtype $dbType -title $Prefix.db -parse_seqids -out $OutDir/$Prefix.db
+```
+
+### Typical run
+
 
 ```bash
 for Proteome in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
 Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
 Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
 OutDir=gene_pred/swissprot/$Organism/$Strain
-SwissDbDir=/projects/dbUniprot/swissprot_2020_June
+SwissDbDir=../dbUniprot/swissprot_2020_June
 SwissDbName=uniprot_sprot
 ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
 sbatch $ProgDir/sub_swissprot.sh $Proteome $OutDir $SwissDbDir $SwissDbName
 done
-
 ```
 
-```bash
-	for SwissTable in $(ls gene_pred/swissprot/*/*/*_hits.tbl); do
-		Strain=$(echo $SwissTable | rev | cut -f2 -d '/' | rev)
-		Organism=$(echo $SwissTable | rev | cut -f3 -d '/' | rev)
-		echo "$Organism - $Strain"
-		OutTable=gene_pred/swissprot/$Organism/$Strain/swissprot_v2017_tophit_parsed.tbl
-		ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/feature_annotation/swissprot
-		$ProgDir/swissprot_parser.py --blast_tbl $SwissTable --blast_db_fasta ../../uniprot/swissprot/uniprot_sprot.fasta > $OutTable
-	done
-```
 
 ## Effector genes
 
@@ -206,6 +208,7 @@ mv "$BaseName".fa $OutDir
 #ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
 #sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
 done
+
 ```
 
 
@@ -229,3 +232,22 @@ for File in $(ls analysis/effectorP/*/*/*_EffectorP.txt); do
   cat $EffectorP_Gff | grep -w 'gene' | wc -l
 done > tmp.txt
 ```
+
+
+
+## C) CAZY proteins
+Carbohydrte active enzymes were idnetified using CAZYfollowing recomendations at http://csbl.bmb.uga.edu/dbCAN/download/readme.txt :
+
+#for Strain in Ag02 Ag05 ND8 R37-15; do
+	for Strain in RS305p RS324p; do
+  for Proteome in $(ls gene_pred/codingquary/N.*/$Strain/*/final_genes_combined.pep.fasta); do
+    Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
+    Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
+    OutDir=gene_pred/CAZY/$Organism/$Strain
+    mkdir -p $OutDir
+    Prefix="$Strain"_CAZY
+    CazyHmm=dbCAN/dbCAN-fam-HMMs.txt
+    ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/feature_annotation/HMMER
+    qsub $ProgDir/sub_hmmscan.sh $CazyHmm $Proteome $Prefix $OutDir
+  done
+done
