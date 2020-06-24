@@ -6,9 +6,11 @@ Tools used in the prediction and annotation of genes
 
 2. Braker: A pipeline for automated prediction of protein coding genes using GeneMark-ES/ET and AUGUSTUS. This allow ab initio and gene model training predictions.
 
-3. Stringtie: Fast and high efficient assembler of RNA-Seq alignments (e.g STAR output) into transcripts.
+3. Cufflinks: Assembles transcripts, estimates their abundances, and tests for differential expression and regulation in RNA-Seq samples.
 
-4. CodinQuarry: Generalised hidden Markov models gene prediction tool. This tool is highly accurate predicting fungal genes, using "pathogen mode".
+4. Stringtie: Fast and high efficient assembler of RNA-Seq alignments (e.g STAR output) into transcripts.
+
+5. CodinQuarry: Generalised hidden Markov models gene prediction tool. This tool is highly accurate predicting fungal genes, using "pathogen mode".
 
 Additional tools in this folder
 
@@ -172,36 +174,43 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
 ```
 
 
-## Genome-guided assembly and CodingQuarry
+## Transcriptome assembly
 
-CodingQuarry in pathogen mode is used to predict aditional genes and added to braker predictions
+Cufflinks is older and has not been updated in years. It accepts aligned RNA-Seq reads.
+
+Stringtie is faster but might struggle with large alignment files.
 
 ### Requirements
 
 ```bash
-# Conda installation
-
-# CodingQuarry requires a conda environment with python 2.7
-# e.g. conda create --name gene_pred_py27 python=2.7
+# Conda installation for stringtie
 
 conda install stringtie
-conda install codingquarry
 
-# The environmental variable QUARRY_PATH is set in your profile (needed for CodingQuarry)
+# Cufflinks is installed in the oldhome directory. 
 
-nano ~/.profile
-export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles" #Add
-
-# SignalP is needed. Add this path to your profile or 
-vPATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin
-
+nano ~/.profile # Edit profile
+PATH=${PATH}:/projects/oldhome/armita/prog/cufflinks/cufflinks-2.2.1.Linux_x86_64 # Add to profile and save
 . ~/.profile # Refresh your profile
 ```
 
-### Typical run
 
+### Cufflinks typical run
 
-#### Stringtie RNA-seq alignments assembler
+```bash
+  for Assembly in $(ls path/to/*_contigs_unmasked.fa); do
+    Strain=$(echo $Assembly| rev | cut -d '/' -f2 | rev) # Edit to set your ouput directory
+    Organism=$(echo $Assembly| rev | cut -d '/' -f3 | rev) # Edit to set your ouput directory
+    echo "$Organism - $Strain"
+    OutDir=gene_pred/cufflinks/$Organism/$Strain/concatenated_prelim
+    mkdir -p $OutDir
+    AcceptedHits=path/to/your/spliced/aligments/files.bam
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    sbatch $ProgDir/cufflinks.sh $AcceptedHits $OutDir
+  done
+```
+
+### Stringtie typical run
 
 ```bash
   for Assembly in $(ls path/to/unmasked/genome/*_contigs_unmasked.fa); do
@@ -216,8 +225,30 @@ vPATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin
    done
 ```
 
+## CodingQuarry
 
-#### CodinQuarry 
+CodingQuarry in pathogen mode is used to predict aditional genes and added to braker predictions
+
+### Requirements
+
+```bash
+# Conda installation
+
+# CodingQuarry requires a conda environment with python 2.7
+# e.g. conda create --name gene_pred_py27 python=2.7
+conda install codingquarry
+
+# The environmental variable QUARRY_PATH is set in your profile (needed for CodingQuarry)
+nano ~/.profile # Edit profile
+export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles" # Add to profile and save
+
+# SignalP is needed. Add this path to your profile or 
+PATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin # Add to profile and save
+
+. ~/.profile # Refresh your profile
+```
+
+### Typical run
 
 Note: run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts are included in cndigquarry scripts are used to run CQ pathogen mode using signalp 4.1. The script in this folder was edited to use signalp5. 
 
@@ -234,7 +265,7 @@ Note: run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts are included in 
   done
 ```
 
-#### Add additional transcripts to Braker gene models.
+### Add additional transcripts to Braker gene models.
 
 
 Additional transcripts predicted by CodingQuarry are added to the final gene models.
@@ -301,7 +332,7 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
 	done
   ```
 
-  #### Remove duplicate and rename genes.
+  ### Remove duplicate and rename genes.
 
   ```bash
   for GffAppended in $(ls $FinalDir/final_genes_appended.gff3);
