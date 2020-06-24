@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
-#SBATCH --partition=himem
-#SBATCH --mem-per-cpu=12G
-#SBATCH --cpus-per-task=16
+#SBATCH --partition=medium
+#SBATCH --mem-per-cpu=8G
+#SBATCH --cpus-per-task=8
 
 #Align RNAseq data with genome using STAR
 
