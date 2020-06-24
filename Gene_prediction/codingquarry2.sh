@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 #SBATCH -J codingquarry
-#SBATCH --partition=himem
-#SBATCH --mem-per-cpu=16G
+#SBATCH --partition=medium
+#SBATCH --mem-per-cpu=10G
 #SBATCH --cpus-per-task=20
+
+# This script of Codingquarry will use signalp 4.1
 
 Usage="codingquarry.sh InGenome.fa StringTie/Cufflinks.gtf Output_directory"
 echo $Usage
@@ -36,4 +38,4 @@ cp $Assembly assembly.fa
 mkdir -p $OutDir/out
 mv codingquaryPM_log.txt $OutDir
 mv out/* $OutDir/out/.
-#rm -r $WorkDir
+rm -r $WorkDir
