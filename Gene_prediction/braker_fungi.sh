@@ -2,10 +2,10 @@
 #SBATCH -J braker
 #SBATCH --partition=medium
 #SBATCH --mem-per-cpu=6G
-#SBATCH --cpus-per-task=80
+#SBATCH --cpus-per-task=16
 
 
-WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 Assembly=$1
 OutDir=$2
 AcceptedHits=$3
@@ -40,4 +40,4 @@ braker.pl \
 mkdir -p $CurDir/$OutDir
 cp -r braker/* $CurDir/$OutDir/.
 
-#rm -r $WorkDir
+rm -r $WorkDir
