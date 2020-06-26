@@ -25,7 +25,7 @@ sed -i -r 's/\*/X/g' $IN_NAME
 
 /data/scratch/gomeza/prog/Interproscan/interproscan-5.44-79.0/interproscan.sh -goterms -iprlookup -pa -i $IN_NAME
 
-OUT_DIR=$CUR_PATH/gene_pred/interproscan/raw
+OUT_DIR=$CUR_PATH/gene_pred/interproscan/$ORGANISM/$STRAIN/raw
 mkdir -p $OUT_DIR
 cp *.gff3 $OUT_DIR/.
 cp *.tsv $OUT_DIR/.
