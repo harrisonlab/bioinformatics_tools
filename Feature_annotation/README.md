@@ -329,4 +329,9 @@ cat "$Prefix"_secmet_genes.txt | wc -l
 printf "Number of predicted genes in secondary metabolite clusters:\t"
 cat "$Prefix"_secmet_genes.gff | grep -w 'gene' | wc -l
 done
+
+# Antismash output correction. Some gene names contain ;. Remove manually with the following command.
+# First sed removes ;. Second and Third removes cluster kind information (optional)
+cat "Strain"_antismash_results_secmet_genes.tsv | sed 's/;//p' | sed 's/;.*//p' | sed 's/Kin.*//p' > "Strain"_antismash_results_secmet_genes_corrected.tsv
  ```
+
