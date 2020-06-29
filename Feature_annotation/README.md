@@ -264,16 +264,69 @@ C) Identification of MIMP-flanking genes
 ## C) CAZY proteins
 Carbohydrte active enzymes were idnetified using CAZYfollowing recomendations at http://csbl.bmb.uga.edu/dbCAN/download/readme.txt :
 
-#for Strain in Ag02 Ag05 ND8 R37-15; do
-	for Strain in RS305p RS324p; do
-  for Proteome in $(ls gene_pred/codingquary/N.*/$Strain/*/final_genes_combined.pep.fasta); do
+```bash
+for Strain in Strain1 Strain2; do # List of isolates
+  for Proteome in $(ls path/to/pep/fasta/final_genes_combined.pep.fasta); do
     Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
     Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
     OutDir=gene_pred/CAZY/$Organism/$Strain
     mkdir -p $OutDir
     Prefix="$Strain"_CAZY
-    CazyHmm=dbCAN/dbCAN-fam-HMMs.txt
-    ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/feature_annotation/HMMER
-    qsub $ProgDir/sub_hmmscan.sh $CazyHmm $Proteome $Prefix $OutDir
+    CazyHmm=/projects/dbCAN/dbCAN-HMMdb-V8.txt
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+    sbatch $ProgDir/hmmscan.sh $CazyHmm $Proteome $Prefix $OutDir
   done
 done
+```
+```bash
+ for File in $(ls path/to/*CAZY.out.dm); do
+  Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
+  Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
+  OutDir=$(dirname $File)
+  echo "$Organism - $Strain"
+  ProgDir=/projects/dbCAN # Script from dbCAN tools
+  $ProgDir/hmmscan-parser.sh $OutDir/"$Strain"_CAZY.out.dm > $OutDir/"$Strain"_CAZY.out.dm.ps
+  CazyHeaders=$(echo $File | sed 's/.out.dm/_headers.txt/g')
+  cat $OutDir/"$Strain"_CAZY.out.dm.ps | cut -f3 | sort | uniq > $CazyHeaders
+  echo "Number of CAZY genes identified:"
+  cat $CazyHeaders | wc -l
+  Gff=$(ls path/to/final/gff3/file/final_genes_appended_renamed.gff3)
+  CazyGff=$OutDir/"$Strain"_CAZY.gff
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  $ProgDir/extract_gff_for_sigP_hits.pl $CazyHeaders $Gff CAZyme ID > $CazyGff
+  
+  SecretedProts=$(ls path/to/secreted/proteins/*signalp-4.1/$Organism/$Strain/"$Strain"_final_sp_no_trans_mem.aa)
+  SecretedHeaders=$(echo $SecretedProts | sed 's/.aa/_headers.txt/g')
+  cat $SecretedProts | grep '>' | tr -d '>' > $SecretedHeaders
+  CazyGffSecreted=$OutDir/"$Strain"_CAZY_secreted.gff
+  $ProgDir/extract_gff_for_sigP_hits.pl $SecretedHeaders $CazyGff Secreted_CAZyme ID > $CazyGffSecreted
+  echo "Number of Secreted CAZY genes identified:"
+  cat $CazyGffSecreted | grep -w 'gene' | cut -f9 | tr -d 'ID=' | wc -l
+  done
+  ```
+
+# Antismash
+
+  ```bash
+for AntiSmash in $(ls path/to/antismash/output/gbk/file/*appended.gbk); do
+Organism=$(echo $AntiSmash | rev | cut -f3 -d '/' | rev)
+Strain=$(echo $AntiSmash | rev | cut -f2 -d '/' | rev)
+echo "$Organism - $Strain"
+OutDir=analysis/secondary_metabolites/antismash/$Organism/$Strain
+Prefix=$OutDir/"Strain"_antismash_results
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+# Antismash v5 output to gff file
+$ProgDir/antismash2gffv5.py --inp_antismash $AntiSmash --out_prefix $Prefix 
+# Identify secondary metabolites within predicted clusters
+printf "Number of secondary metabolite detected:\t"
+cat "$Prefix"_secmet_clusters.gff | wc -l
+GeneGff=path/to/final/gff3/file/final_genes_appended_renamed.gff3
+bedtools intersect -u -a $GeneGff -b "$Prefix"_secmet_clusters.gff > "$Prefix"_secmet_genes.gff
+cat "$Prefix"_secmet_genes.gff | grep -w 'mRNA' | cut -f9 | cut -f2 -d '=' | cut -f1 -d ';' > "$Prefix"_antismash_secmet_genes.txt
+bedtools intersect -wo -a $GeneGff -b "$Prefix"_secmet_clusters.gff | grep 'mRNA' | cut -f9,10,12,18 | sed "s/ID=//g" | perl -p -e "s/;Parent=g\w+//g" | perl -p -e "s/;Notes=.*//g" > "$Prefix"_secmet_genes.tsv
+printf "Number of predicted proteins in secondary metabolite clusters:\t"
+cat "$Prefix"_secmet_genes.txt | wc -l
+printf "Number of predicted genes in secondary metabolite clusters:\t"
+cat "$Prefix"_secmet_genes.gff | grep -w 'gene' | wc -l
+done
+ ```
