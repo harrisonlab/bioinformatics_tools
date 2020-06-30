@@ -8,6 +8,8 @@
 
 4. EffectorP
 
+7. Antismash
+
 ## 1.Interproscan
 
 Interproscan was used to give gene models functional annotations.
@@ -340,3 +342,21 @@ done
 cat "Strain"_antismash_results_secmet_genes.tsv | sed 's/;//p' | sed 's/;.*//p' | sed 's/Kin.*//p' > "Strain"_antismash_results_secmet_genes_corrected.tsv
  ```
 
+## 8. Blast pipe searches
+
+### Requirements
+
+```bash
+conda activate perly_env
+```
+
+```bash
+for Assembly in $(ls path/to/assembly/or/genes/file/*.fasta); do # Use files with nucleotides
+  Strain=$(echo $Assembly| rev | cut -d '/' -f4 | rev)
+  Organism=$(echo $Assembly | rev | cut -d '/' -f5 | rev)
+  echo "$Organism - $Strain"
+  Query=path/to/query/fasta
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  sbatch $ProgDir/blast_pipe.sh $Query protein $Assembly
+done
+```
