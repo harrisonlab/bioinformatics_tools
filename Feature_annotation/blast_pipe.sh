@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J blast_pipe
-#SBATCH --partition=medium
+#SBATCH --partition=long
 #SBATCH --mem-per-cpu=1G
 #SBATCH --cpus-per-task=4
 
@@ -83,4 +83,4 @@ mkdir -p $OutDir
 
 cp -r $WORK_DIR/"$OUTNAME"_homologs.csv $OutDir/.
 
-#rm -r $WORK_DIR/
+rm -r $WORK_DIR/
