@@ -8,7 +8,7 @@
 
 4. EffectorP
 
-## Interproscan
+## 1.Interproscan
 
 Interproscan was used to give gene models functional annotations.
 
@@ -46,7 +46,7 @@ Following interproscan annotation split files were combined using the following 
 ```
 
 
-## B) SwissProt
+## 2.SwissProt
 
 
 ### Requirements
@@ -87,7 +87,9 @@ gene models using a number of approaches:
  * B) From Augustus gene models - Effector identification using EffectorP
 
 
-### A) From Augustus gene models - Identifying secreted proteins
+## 3. SignalP and TMHMM
+
+From Augustus gene models - Identifying secreted proteins
 
 ### Requirements
 
@@ -101,7 +103,7 @@ PATH=${PATH}:/data/scratch/gomeza/prog/tmhmm-2.0c/bin
 . ~/.profile # Refresh your profile
 ```
 
-Proteins that were predicted to contain signal peptides were identified using the following commands:
+Proteins that were predicted to contain signal peptides were identified using signalP
 
 ```bash
 for Strain in Strain1 Strain2 Strain3; do # Add your strains name
@@ -124,11 +126,9 @@ for Strain in Strain1 Strain2 Strain3; do # Add your strains name
 done
 ```
 
- The batch files of predicted secreted proteins needed to be combined into a
- single file for each strain. This was done with the following commands:
+ The batch files of predicted secreted proteins needed to be combined into a single file for each strain. This was done with the following commands:
 
  ```bash
- 
  for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
 	for SplitDir in $(ls -d gene_pred/final_genes_split/*/$Strain); do
 		Strain=$(echo $SplitDir | rev |cut -d '/' -f1 | rev)
@@ -151,16 +151,12 @@ done
 	done
 done
  ```
-
-
-
- 
 Some proteins that are incorporated into the cell membrane require secretion. Therefore proteins with a transmembrane domain are not likely to represent cytoplasmic or apoplastic effectors.
 
 Proteins containing a transmembrane domain were identified:
 
  ```bash
- for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
+for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
  	for Proteome in $(ls gene_pred/codingquary/*/$Strain/final/final_genes_combined.pep.fasta); do
  		Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
  		Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
@@ -173,7 +169,7 @@ done
  Those proteins with transmembrane domains were removed from lists of Signal peptide containing proteins
 
  ```bash
- for File in $(ls gene_pred/trans_mem/$Organism/$Strain/*_TM_genes_neg.txt); do
+for File in $(ls gene_pred/trans_mem/$Organism/$Strain/*_TM_genes_neg.txt); do
   Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
   Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
   echo "$Organism - $Strain"
@@ -184,12 +180,13 @@ done
   ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   $ProgDir/extract_from_fasta.py --fasta $SigP --headers $TmHeaders > $OutDir/"$Strain"_final_sp_no_trans_mem.aa
   cat $OutDir/"$Strain"_final_sp_no_trans_mem.aa | grep '>' | wc -l
- done
+done
 ```
 
 
+## 4. EffectorP
 
-## B) From Augustus gene models - Effector identification using EffectorP
+From Augustus gene models - Effector identification using EffectorP
 
 ### Requirements
 ```
@@ -198,17 +195,16 @@ PATH=${PATH}:/scratch/software/EffectorP-2.0/Scripts
 ```
 ```bash
 for Proteome in $(ls path/to/final/final_genes_appended_renamed.pep.fasta); do
-Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
-Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
-BaseName="$Organism"_"$Strain"_EffectorP
-OutDir=analysis/effectorP/$Organism/$Strain
-EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i $Proteome
-mv "$BaseName".txt $OutDir
-mv "$BaseName".fa $OutDir
-#ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-#sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
+  Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
+  Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
+  BaseName="$Organism"_"$Strain"_EffectorP
+  OutDir=analysis/effectorP/$Organism/$Strain
+  EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i $Proteome
+  mv "$BaseName".txt $OutDir
+  mv "$BaseName".fa $OutDir
+  #ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  #sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
 done
-
 ```
 
 
@@ -233,7 +229,9 @@ for File in $(ls analysis/effectorP/*/*/*_EffectorP.txt); do
 done > tmp.txt
 ```
 
-C) Identification of MIMP-flanking genes
+## 5. Identification of MIMP-flanking genes
+
+Miniature impala (mimp) sequeces are found in promotor regions of SIX genes in fusarium.
 
 ```bash
   for Assembly in $(ls path/to/*_contigs_unmasked.fa); do
@@ -261,8 +259,9 @@ C) Identification of MIMP-flanking genes
 ```
 
 
-## C) CAZY proteins
-Carbohydrte active enzymes were idnetified using CAZYfollowing recomendations at http://csbl.bmb.uga.edu/dbCAN/download/readme.txt :
+## 6. CAZY proteins
+
+Carbohydrte active enzymes were identified from the CAZy database
 
 ```bash
 for Strain in Strain1 Strain2; do # List of isolates
@@ -272,7 +271,7 @@ for Strain in Strain1 Strain2; do # List of isolates
     OutDir=gene_pred/CAZY/$Organism/$Strain
     mkdir -p $OutDir
     Prefix="$Strain"_CAZY
-    CazyHmm=/projects/dbCAN/dbCAN-HMMdb-V8.txt
+    CazyHmm=../dbCAN/dbCAN-HMMdb-V8.txt # databases are in /projects
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
     sbatch $ProgDir/hmmscan.sh $CazyHmm $Proteome $Prefix $OutDir
   done
@@ -285,53 +284,59 @@ done
   OutDir=$(dirname $File)
   echo "$Organism - $Strain"
   ProgDir=/projects/dbCAN # Script from dbCAN tools
-  $ProgDir/hmmscan-parser.sh $OutDir/"$Strain"_CAZY.out.dm > $OutDir/"$Strain"_CAZY.out.dm.ps
+  $ProgDir/hmmscan-parser.sh $OutDir/"$Strain"_CAZY.out.dm > $OutDir/"$Strain"_CAZY.out.dm.ps # Creates a file with CAZy module and gene
+
   CazyHeaders=$(echo $File | sed 's/.out.dm/_headers.txt/g')
-  cat $OutDir/"$Strain"_CAZY.out.dm.ps | cut -f3 | sort | uniq > $CazyHeaders
+  cat $OutDir/"$Strain"_CAZY.out.dm.ps | cut -f3 | sort | uniq > $CazyHeaders # Extract gene names
   echo "Number of CAZY genes identified:"
   cat $CazyHeaders | wc -l
+
   Gff=$(ls path/to/final/gff3/file/final_genes_appended_renamed.gff3)
   CazyGff=$OutDir/"$Strain"_CAZY.gff
   ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-  $ProgDir/extract_gff_for_sigP_hits.pl $CazyHeaders $Gff CAZyme ID > $CazyGff
+  $ProgDir/extract_gff_for_sigP_hits.pl $CazyHeaders $Gff CAZyme ID > $CazyGff # Creates a gff for all CAZymes
   
   SecretedProts=$(ls path/to/secreted/proteins/*signalp-4.1/$Organism/$Strain/"$Strain"_final_sp_no_trans_mem.aa)
   SecretedHeaders=$(echo $SecretedProts | sed 's/.aa/_headers.txt/g')
   cat $SecretedProts | grep '>' | tr -d '>' > $SecretedHeaders
   CazyGffSecreted=$OutDir/"$Strain"_CAZY_secreted.gff
-  $ProgDir/extract_gff_for_sigP_hits.pl $SecretedHeaders $CazyGff Secreted_CAZyme ID > $CazyGffSecreted
+  $ProgDir/extract_gff_for_sigP_hits.pl $SecretedHeaders $CazyGff Secreted_CAZyme ID > $CazyGffSecreted # Creates a gff for secreted CAZymes
   echo "Number of Secreted CAZY genes identified:"
   cat $CazyGffSecreted | grep -w 'gene' | cut -f9 | tr -d 'ID=' | wc -l
   done
   ```
 
-# Antismash
+## 7. Antismash
 
-  ```bash
+Antismash was run to identify clusters of secondary metabolite genes within the genome. Antismash was run using the webserver at: http://antismash.secondarymetabolites.org.
+
+Results of web-annotation of gene clusters within the assembly were downloaded to the following directories
+
+```bash
 for AntiSmash in $(ls path/to/antismash/output/gbk/file/*appended.gbk); do
-Organism=$(echo $AntiSmash | rev | cut -f3 -d '/' | rev)
-Strain=$(echo $AntiSmash | rev | cut -f2 -d '/' | rev)
-echo "$Organism - $Strain"
-OutDir=analysis/secondary_metabolites/antismash/$Organism/$Strain
-Prefix=$OutDir/"Strain"_antismash_results
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-# Antismash v5 output to gff file
-$ProgDir/antismash2gffv5.py --inp_antismash $AntiSmash --out_prefix $Prefix 
-# Identify secondary metabolites within predicted clusters
-printf "Number of secondary metabolite detected:\t"
-cat "$Prefix"_secmet_clusters.gff | wc -l
-GeneGff=path/to/final/gff3/file/final_genes_appended_renamed.gff3
-bedtools intersect -u -a $GeneGff -b "$Prefix"_secmet_clusters.gff > "$Prefix"_secmet_genes.gff
-cat "$Prefix"_secmet_genes.gff | grep -w 'mRNA' | cut -f9 | cut -f2 -d '=' | cut -f1 -d ';' > "$Prefix"_antismash_secmet_genes.txt
-bedtools intersect -wo -a $GeneGff -b "$Prefix"_secmet_clusters.gff | grep 'mRNA' | cut -f9,10,12,18 | sed "s/ID=//g" | perl -p -e "s/;Parent=g\w+//g" | perl -p -e "s/;Notes=.*//g" > "$Prefix"_secmet_genes.tsv
-printf "Number of predicted proteins in secondary metabolite clusters:\t"
-cat "$Prefix"_secmet_genes.txt | wc -l
-printf "Number of predicted genes in secondary metabolite clusters:\t"
-cat "$Prefix"_secmet_genes.gff | grep -w 'gene' | wc -l
+  Organism=$(echo $AntiSmash | rev | cut -f3 -d '/' | rev)
+  Strain=$(echo $AntiSmash | rev | cut -f2 -d '/' | rev)
+  echo "$Organism - $Strain"
+  OutDir=analysis/secondary_metabolites/antismash/$Organism/$Strain
+  Prefix=$OutDir/"Strain"_antismash_results
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  # Antismash v5 output to gff file
+  $ProgDir/antismash2gffv5.py --inp_antismash $AntiSmash --out_prefix $Prefix 
+  #$ProgDir/antismash2gff.py --inp_antismash $AntiSmash --out_prefix $Prefix # Use only for antismash v4.2 output
+  printf "Number of secondary metabolite detected:\t"
+  cat "$Prefix"_secmet_clusters.gff | wc -l
+  GeneGff=path/to/final/gff3/file/final_genes_appended_renamed.gff3
+  bedtools intersect -u -a $GeneGff -b "$Prefix"_secmet_clusters.gff > "$Prefix"_secmet_genes.gff
+  cat "$Prefix"_secmet_genes.gff | grep -w 'mRNA' | cut -f9 | cut -f2 -d '=' | cut -f1 -d ';' > "$Prefix"_antismash_secmet_genes.txt
+  bedtools intersect -wo -a $GeneGff -b "$Prefix"_secmet_clusters.gff | grep 'mRNA' | cut -f9,10,12,18 | sed "s/ID=//g" | perl -p -e "s/;Parent=g\w+//g" | perl -p -e "s/;Notes=.*//g" > "$Prefix"_secmet_genes.tsv
+  printf "Number of predicted proteins in secondary metabolite clusters:\t"
+  cat "$Prefix"_secmet_genes.txt | wc -l
+  printf "Number of predicted genes in secondary metabolite clusters:\t"
+  cat "$Prefix"_secmet_genes.gff | grep -w 'gene' | wc -l
 done
 
 # Antismash output correction. Some gene names contain ;. Remove manually with the following command.
-# First sed removes ;. Second and Third removes cluster kind information (optional)
+# First sed command removes ;. Second and Third remove the cluster kind information (optional)
 cat "Strain"_antismash_results_secmet_genes.tsv | sed 's/;//p' | sed 's/;.*//p' | sed 's/Kin.*//p' > "Strain"_antismash_results_secmet_genes_corrected.tsv
  ```
 
