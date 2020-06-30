@@ -50,7 +50,7 @@ $blast_fac = Bio::Tools::Run::StandAloneBlastPlus->new(
 												'-create' => 1,
 												'-overwrite' => 1,
 												'-db_data' => $database,
-												'-no_throw_on_crash' => 1
+												'-no_throw_on_crash' => 1,
 												);
 
 $blast_fac->make_db;
