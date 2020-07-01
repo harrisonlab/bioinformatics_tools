@@ -28,7 +28,7 @@ All programs are already installed in the /scratch directory
 
 ```
 # Add these lines to profile
-PATH=${PATH}:/scratch/software/orthomclSoftware-v2.0.9/bin
+PATH=${PATH}:/scratch/software/OrthoFinder-2.3.3
 PATH=${PATH}:/scratch/software/diamond-0.9.27
 PATH=${PATH}:/scratch/software/fastme-2.1.5/bin/bin
 PATH=${PATH}:/scratch/software/orthomclSoftware-v2.0.9/bin
@@ -67,6 +67,7 @@ Using orthofinder
 
 ```bash
 for IN_DIR in in $(ls -d $WorkDir/formatted) ; do
-sbatch orthofinder.sh $IN_DIR $IsolateAbrv
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_analysis
+sbatch $ProgDir/orthofinder.sh $IN_DIR $IsolateAbrv
 done
 ```
