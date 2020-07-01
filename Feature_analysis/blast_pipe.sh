@@ -27,7 +27,7 @@ cd $WORK_DIR
 cp $CUR_PATH/$IN_GENOME $GENOME
 cp $CUR_PATH/$IN_QUERY $QUERY
 OUTNAME="$STRAIN"_"$QUERY"
-SCRIPT_DIR=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+SCRIPT_DIR=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_analysis
 
 echo "Running blast_pipe.sh"
 echo "Usage = $USAGE"
