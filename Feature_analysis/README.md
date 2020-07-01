@@ -66,8 +66,7 @@ mv "$Taxon_code".fasta $WorkDir/formatted/"$Taxon_code".fasta
 Using orthofinder
 
 ```bash
-screen -a
-srun --partition long --mem 200G --cpus-per-task 8 --pty bash # Change according your needs
-
-cd $WorkDir
-orthofinder -f formatted -t 8 -a 6
+for IN_DIR in in $(ls -d $WorkDir/formatted) ; do
+sbatch orthofinder.sh $IN_DIR $IsolateAbrv
+done
+```
