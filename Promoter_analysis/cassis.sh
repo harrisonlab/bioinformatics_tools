@@ -2,7 +2,7 @@
 #SBATCH -J cassis
 #SBATCH --partition=short
 #SBATCH --mem=4G
-#SBATCH --cpus-per-task=12
+#SBATCH --cpus-per-task=4
 
 
 
