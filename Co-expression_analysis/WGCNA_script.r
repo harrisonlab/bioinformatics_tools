@@ -16,17 +16,17 @@ opt_list <- list(
   help = "Input file of RNA-Seq data"),
   make_option("--out_dir", type = "character",
   help = "Directory for plots to be written to"),
-  make_option("--FPKM_start", type = "integer",
-  help = "Column number for the start of FPKM values"),
-  make_option("--FPKM_end", type = "integer",
-  help = "Column number for the end of FPKM values")
+  make_option("--column_start", type = "integer",
+  help = "Column number for the start of normalized values"),
+  make_option("--column_end", type = "integer",
+  help = "Column number for the end of normalized values")
   )
 
 opt <- parse_args(OptionParser(option_list = opt_list))
 inp <- opt$gene_table
 outdir <- opt$out_dir
-FPKM_start <- opt$FPKM_start
-FPKM_end <- opt$FPKM_end
+column_start <- opt$column_start
+column_end <- opt$column_end
 
 # Load input file
 
@@ -34,9 +34,9 @@ exp_data <- read.csv(inp, sep = "\t")
 
 # Parse data as WGCNA tutorial recommends
 
-datexpr0 <- as.data.frame(t(exp_data[, c(FPKM_start:FPKM_end)]))
-names(datexpr0) <- exp_data$transcript_id
-rownames(datexpr0) <- names(exp_data)[c(FPKM_start:FPKM_end)]
+datexpr0 <- as.data.frame(t(exp_data[, c(column_start:column_end)]))
+names(datexpr0) <- exp_data$ID # trancript_ID column
+rownames(datexpr0) <- names(exp_data)[c(column_start:column_end)]
 
 # Check for excessive missing values and ID outliers
 
