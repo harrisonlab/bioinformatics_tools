@@ -37,7 +37,7 @@ lnames <- load(file = lfile)
 
 powers <- c(c(1:max_SFT))
 
-sft <- pickSoftThreshold(datexpr, powerVector = powers, verbose = 5)
+sft <- pickSoftThreshold(datexpr0, powerVector = powers, verbose = 5)
 
 # Draw a plot to allow manual picking of sft value
 
