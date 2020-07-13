@@ -74,15 +74,31 @@ plot(sampletree, main = "Sample clustering to detect outliers", sub = "",
 xlab = "", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
 
 # Remove outlier samples, the height may need changing so be sure to check
-
 abline(h = 30000, col = "red")
+
+# Determine clusters under the line.
 clust <- cutreeStatic(sampletree, cutHeight = 30000, minSize = 10)
 table(clust)
-keepsamples <- (clust == 0)
-datexpr <- datexpr0[keepsamples, ]
-ngenes <- ncol(datexpr)
-nsamples <- nrow(datexpr)
+
+# Clusters under the line are labelled with numbers. The largest cluster is labeled 1
+keepsamples_clust1 <- (clust == 1)
+datexpr1 <- datexpr0[keepsamples_clust1, ]
+ngenes <- ncol(datexpr1)
+nsamples <- nrow(datexpr1)
+
+keepsamples_clust2 <- (clust == 2)
+datexpr2 <- datexpr0[keepsamples_clust2, ]
+ngenes <- ncol(datexpr2)
+nsamples <- nrow(datexpr2)
 dev.off()
 
+# Save a table with the expression data of all the samples
 Rfile <- paste(outdir, "Cleaned_data.RData", sep = "/")
-save(datexpr, file = Rfile)
+save(datexpr0, file = Rfile)
+
+# Save the expression data of different clusters
+Rfile <- paste(outdir, "Cleaned_cluster1.RData", sep = "/")
+save(datexpr1, file = Rfile)
+Rfile <- paste(outdir, "Cleaned_cluster2.RData", sep = "/")
+save(datexpr2, file = Rfile)
+
