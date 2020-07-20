@@ -27,16 +27,16 @@ Assembly=$(ls $ProjDir/repeat_masked/$Organism/$Strain/*_contigs_softmasked_repe
 Genes=$(ls $ProjDir/gene_pred/codingquarry/$Organism/$Strain/final/final_genes_appended_renamed.gff3) # Final gff3 file
 Interpro=$(ls $ProjDir/gene_pred/interproscan/$Organism/$Strain/*_interproscan.tsv) # Interproscan annotation tsv
 
-# Extract gene name, contigs and coordinates
+# Extract all gene name, contigs and coordinates
 cat $Genes | grep 'mRNA' | sed 's/ID=//g' | sed "s/;.*//g" | awk '{ print $9 "\t" $1 "\t" $4 "\t" $5 "\t" $7}' > cassis.tsv
 CassisTSV=cassis.tsv
 
 # Run cassis
 
 for Cluster in $(cat $AnnotTab | cut -f13 | grep 'contig' | sort -n -k3 -t'_' | sed 's/;.*//p' | uniq); do
-    echo $Cluster
+    echo $Cluster # List of secmet clusters
     mkdir $WorkDir/$Cluster
-    cat $AnnotTab | cut -f1,13 | grep -w "$Cluster" | cut -f1 | grep '.t1' > $WorkDir/$Cluster/headers.txt
+    cat $AnnotTab | cut -f1,13 | grep -w "$Cluster" | cut -f1 | grep '.t1' > $WorkDir/$Cluster/headers.txt # List gene names in every cluster
 for GeneID in $(cat $WorkDir/$Cluster/headers.txt); do
     echo $GeneID
     mkdir -p $WorkDir/$Cluster/$GeneID
@@ -55,11 +55,6 @@ done
 ```
 
 
-
-
-
-
-  
 
 ```bash
 ProjDir=$(ls -d /projects/fusarium_venenatum)
