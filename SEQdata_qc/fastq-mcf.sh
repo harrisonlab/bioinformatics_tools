@@ -22,6 +22,7 @@ F_IN=$CUR_PATH/$1
 R_IN=$CUR_PATH/$2
 ILLUMINA_ADAPTERS=$3
 SEQ_TYPE=$4
+OutDir=$5
 
 
 LIBRARY_TYPE=$(echo $F_IN | rev | cut -d "/" -f5 | rev)
