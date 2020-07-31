@@ -91,6 +91,7 @@ STAR \
 --genomeDir $GenomeDir \
 --outFileNamePrefix star_aligment \
 --readFilesIn $InReadF $InReadR \
+--readFilesCommand gunzip -c
 --seedSearchStartLmax 30 \
 --outReadsUnmapped Fastx \
 --outSAMtype BAM SortedByCoordinate \
