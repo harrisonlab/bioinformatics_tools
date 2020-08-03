@@ -2,7 +2,7 @@
 
 Genome assemblers
 
-1. 
+1. Flye: de novo assembler for single molecule sequencing read using repeat graphs.
 
 2. 
 
@@ -14,7 +14,6 @@ Genome assemblers
 
 ## Flye
 
-De novo assembler for single molecule sequencing reads using repeat graphs
 
 ### Requirements
 
@@ -36,6 +35,10 @@ conda install flye
     sbatch $ProgDir/flye.sh $TrimReads $Prefix $OutDir $Size
   done
 ```
+  
+
+
+
   
 ## Racon
 
