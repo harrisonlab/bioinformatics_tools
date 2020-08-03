@@ -51,12 +51,22 @@ for DataDir in $(ls -d raw_dna/paired/$Organism/$Strain); do
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
     sbatch $ProgDir/count_nucl.sh $F_Read $R_Read 45 #Estimated genome size
 done
+
+# Estimate coverage long read data
+for RawData in $(ls -d raw_dna/minion/$Organism/$Strain/*fq.gz); do
+    echo $RawData
+    GenomeSize=45 #Estimated genome size
+    OutDir=$(dirname $RawData)
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
+    sbatch $ProgDir/count_nucl_single.sh $RawData $GenomeSize $OutDir
+done
 ```
+
 
 ```bash
 # Adapter removal ONT reads
     RawReads=path/to/ONT/raw/reads/*.fastq.gz
     OutDir=qc_dna/minion/$Organism/$Strain #e.g.
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
-    sbatch $ProgDir/sub_porechop.sh $RawReads $OutDir 
+    sbatch $ProgDir/porechop.sh $RawReads $OutDir 
 ```
