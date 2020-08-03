@@ -48,5 +48,5 @@ Sub2=*R2*.fastq
 /data/scratch/gomeza/prog/count_nucl.pl -i $Sub1 -i $Sub2 -g $3 > estimated_coverage.log
 
 cp -r $WorkDir/estimated_coverage.log $CurDir/$DATA_TYPE/$READ_TYPE/$ORGANISM/$STRAIN/.
-#rm -r $WorkDir
+rm -r $WorkDir
 
