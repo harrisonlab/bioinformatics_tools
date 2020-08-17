@@ -27,6 +27,8 @@ Quast, BUSCO and Kat can be used to evaluate the quality of the assemblies.
 
 ```bash
 conda activate olc_assemblers
+# Canu
+conda install canu
 # Flye
 conda install flye
 # SMARTdenovo
