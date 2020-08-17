@@ -13,7 +13,9 @@
 conda activate qc_tools
 conda install fastqc
 conda install ea-utils
-conda install porechop
+# Porechop is installed in /scratch/software/. Add this line to your profile.
+PATH=${PATH}:/scratch/software/Porechop-0.2.3
+. ~/.profile # Refresh profile
 ```
 
 ### Typical run
