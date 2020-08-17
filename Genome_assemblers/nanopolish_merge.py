@@ -1,9 +1,8 @@
 #!/usr/bin/python
 import sys
 import glob
-
-import SeqIO
-import pairwise2
+from Bio import SeqIO
+from Bio import pairwise2
 
 def merge_into_consensus(consensus, incoming, overlap_length):
 
