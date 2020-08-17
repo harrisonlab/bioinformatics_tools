@@ -14,9 +14,12 @@ Genome assemblers and correction tools.
 
 6. Nanopolish: Correction of assembled nanopore reads, detection of base modification and sequence variants with respect to a reference genome. 
 
-7. Pilon
+7. Pilon: Polish genome assemblies using read aligments to identify inconsistencies between reads and input genome.
 
 7. Canu
+
+
+Quast, BUSCO and Kat can be used to evaluate the quality of the assemblies.
 
 
 
@@ -36,6 +39,10 @@ conda install minimap2 # all-vs-all mappings
 conda install racon
 # Medaka. This will create an env for medaka only.
 conda create -n medaka -c conda-forge -c bioconda medaka
+# Nanopolish. Medaka is recommended.
+conda install nanopolish 
+# Pilon
+conda install pilon
 ```
 
 ## Typical run
@@ -194,3 +201,28 @@ Since Medaka is recommended over Nanopolish for assembly correction, the next co
 ```
 
 ## Pilon 
+
+
+```bash
+  for Assembly in $(ls path/to/genome/assembly/*_renamed.fasta); do
+  Organism=$(echo $Assembly | rev | cut -f4 -d '/' | rev)
+  Strain=$(echo $Assembly | rev | cut -f3 -d '/' | rev)
+  IlluminaDir=$(ls -d path/to/qc_dna/paired/$Organism/$Strain)
+  echo $Strain
+  echo $Organism
+  TrimF1_Read=$(ls $IlluminaDir/F/*_trim.fq.gz | head -n2 | tail -n1);
+  TrimR1_Read=$(ls $IlluminaDir/R/*_trim.fq.gz | head -n2 | tail -n1);
+  TrimF2_Read=$(ls $IlluminaDir/F/*_trim.fq.gz | head -n3 | tail -n1);
+  TrimR2_Read=$(ls $IlluminaDir/R/*_trim.fq.gz | head -n3 | tail -n1);
+  echo $TrimF1_Read
+  echo $TrimR1_Read
+  echo $TrimF2_Read
+  echo $TrimR2_Read
+  OutDir=$(dirname $Assembly)
+  Iterations=10
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers/pilon # Scripts for 1,2 or 3 libraries
+  sbatch $ProgDir/sub_pilon_2_libs.sh $Assembly $TrimF1_Read $TrimR1_Read $TrimF2_Read $TrimR2_Read $OutDir $Iterations
+  done
+  # You might rename your contigs at this point using remove_contaminants.py
+```
+
