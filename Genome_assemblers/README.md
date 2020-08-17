@@ -1,32 +1,47 @@
 # Genome assemblers
 
-Genome assemblers
+Genome assemblers and correction tools.
 
 1. Flye: de novo assembler for single molecule sequencing read using repeat graphs.
 
-2. 
+2. SMARTdenovo: OLC-based de novo assembler for uncorrected long reads using a single perl script.
 
-3. 
+3. Miniasm: OLC-based de novo assembler for uncorrected long reads. Minimap2 is needed to perform the all-vs-all read self-mapping.
 
-4. 
+4. Racon: Correct raw contigs from rapid assembly methods, such as Flye, SMARTdenovo and Miniasm.
 
+5. Medaka
 
+6. Nanopolish
 
-## Flye
+7. Canu
+
 
 
 ### Requirements
 
 ```bash
+conda activate olc_assemblers
+# Flye
 conda install flye
+# SMARTdenovo
+conda install smartdenovo
+# Miniasm
+conda install miniasm
+conda install bbmap
+conda install minimap2
+# Racon
+conda install racon
 ```
 
-### Typical run
+## Typical run
+
+### Flye
 
 ```bash
   for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
-    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev)
-    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev)
+    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev) # Edit to set your ouput directory
+    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev) # Edit to set your ouput directory
     Prefix="$Strain"_flye
     OutDir=assembly/flye/$Organism/$Strain
     mkdir -p $OutDir
@@ -36,22 +51,57 @@ conda install flye
   done
 ```
   
-
-
-
-  
-## Racon
-
+### SMARTdenovo
 
 ```bash
-for Assembly in $(ls flye/assembly.fasta); do
-ReadsFq=$(ls qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz)
-Iterations=10
-OutDir=$(dirname $Assembly)"/racon_$Iterations"
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
-sbatch $ProgDir/racon.sh $Assembly $ReadsFq $Iterations $OutDir
-done
+  for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
+    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev) # Edit to set your ouput directory
+    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev) # Edit to set your ouput directory
+    Prefix="$Strain"_smartdenovo
+    OutDir=assembly/SMARTdenovo/$Organism/$Strain
+    mkdir -p $OutDir
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools
+    sbatch $ProgDir/SMARTdenovo.sh $TrimReads $Prefix $OutDir
+  done
 ```
+
+### Miniasm
+
+```bash
+  for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
+    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev) # Edit to set your ouput directory
+    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev) # Edit to set your ouput directory
+    Prefix="$Strain"_miniasm
+    OutDir=assembly/miniasm/$Organism/$Strain
+    mkdir -p $OutDir
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools
+    sbatch $ProgDir/miniasm.sh $TrimReads $Prefix $OutDir
+  done
+```
+
+## Racon
+
+Consensus module for raw de novo DNA assembly
+
+```bash
+  for Assembly in $(ls path/to/raw/assembled/contigs/*.fasta); do
+    ReadsFq=$(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz)
+    Iterations=10
+    OutDir=$(dirname $Assembly)"/racon_$Iterations"
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
+    sbatch $ProgDir/racon.sh $Assembly $ReadsFq $Iterations $OutDir
+  done
+```
+
+
+
+
+
+
+
+
+
+
 
 minimap2 \
 -x map-ont \
