@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J miniasm
-#SBATCH --partition=long
+#SBATCH --partition=medium
 #SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=24
+#SBATCH --cpus-per-task=16
 
 # Assemble Long read data using miniasm
 
