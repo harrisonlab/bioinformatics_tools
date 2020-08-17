@@ -10,9 +10,11 @@ Genome assemblers and correction tools.
 
 4. Racon: Correct raw contigs from rapid assembly methods, such as Flye, SMARTdenovo and Miniasm.
 
-5. Medaka
+5. Medaka: Quick and accurate assembly correction using graph-based method.
 
-6. Nanopolish
+6. Nanopolish: Correction of assembled nanopore reads, detection of base modification and sequence variants with respect to a reference genome. 
+
+7. Pilon
 
 7. Canu
 
@@ -28,10 +30,12 @@ conda install flye
 conda install smartdenovo
 # Miniasm
 conda install miniasm
-conda install bbmap
-conda install minimap2
+conda install bbmap # Rename reads with unique ID
+conda install minimap2 # all-vs-all mappings
 # Racon
 conda install racon
+# Medaka. This will create an env for medaka only.
+conda create -n medaka -c conda-forge -c bioconda medaka
 ```
 
 ## Typical run
@@ -91,39 +95,25 @@ Consensus module for raw de novo DNA assembly
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
     sbatch $ProgDir/racon.sh $Assembly $ReadsFq $Iterations $OutDir
   done
+# You might rename your contigs at this point using remove_contaminants.py
 ```
 
+## Medaka
 
 
+```bash
+  for Assembly in $(ls path/to/corrected/consensus/reads/racon_10/*racon10_renamed.fasta); do
+    ReadsFq=$(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz)
+    OutDir=$(dirname $Assembly)/medaka
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
+    sbatch $ProgDir/medaka.sh $Assembly $ReadsFq $OutDir
+  done
+```
 
+## Nanopolish
 
+Since Medaka is recommended over Nanopolish for assembly correction, the next commands might not be necessary. 
 
-
-
-
-
-
-minimap2 \
--x map-ont \
--t16 \
-racon_round_9.fasta \
-qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz \
-> racon_round_10.reads_mapped.paf
-
-racon -t 16 qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz racon_round_10.reads_mapped.paf racon_round_9.fasta > racon_round_10.fasta
-cp racon_round_$i.fasta current-assembly.fa
-cp racon_round_$i.fasta $CurDir/$OutDir/"$Prefix"_racon_round_$i.fasta
-
-
-Assembly correction using nanopolish
-Fast5 files are very large and need to be stored as gzipped tarballs. These needed temporarily unpacking but must be deleted after nanpolish has finished running.
-
-
-faidx -d '|' final_genes_appended_renamed.cdna.fasta $(tr '\n' ' ' < Tri5_genelist.txt) > selected_genes.fasta
-
-
-
-## Assembly correction with nanopolish
 
 ```bash
   ReadDir=rawdata4nanopolish/$Organism/$Strain
@@ -161,7 +151,7 @@ faidx -d '|' final_genes_appended_renamed.cdna.fasta $(tr '\n' ' ' < Tri5_geneli
     Organism=$(echo $Assembly | rev | cut -f4 -d '/' | rev)
     echo "$Organism - $Strain"
     ReadDir=rawdata4nanopolish/$Organism/$Strain # Path to fastq reads
-    OutDir=nanopolish_bwa # Output directory
+    OutDir=$(dirname $Assembly)/nanopolish_bwa # Output directory
     mkdir -p $OutDir
     ProgDir=/home/gomeza/git_repos/tools/seq_tools/assemblers/nanopolish
     sbatch $ProgDir/bwa_nanopolish.sh $Assembly $ReadDir/"$Strain"_concatenated_reads_filtered.fastq $OutDir/nanopolish
@@ -185,63 +175,22 @@ faidx -d '|' final_genes_appended_renamed.cdna.fasta $(tr '\n' ' ' < Tri5_geneli
 ```
 
 
-
-
-
+### Merge nanopolish results 
 
 ```bash
-
-
-
-for Assembly in $(ls assembly/SMARTdenovo/*/*/racon/racon_min_500bp_renamed.fasta | grep 'WT' | grep 'albacore'); do
-Strain=$(echo $Assembly | rev | cut -f3 -d '/' | rev)
-Organism=$(echo $Assembly | rev | cut -f4 -d '/' | rev)
-OutDir=assembly/SMARTdenovo/$Organism/$Strain/nanopolish
-mkdir -p $OutDir
-# cat "" > $OutDir/"$Strain"_nanoplish.fa
-InDir=$(dirname $Assembly)
-NanoPolishDir=/home/armita/prog/nanopolish/nanopolish/scripts
-python $NanoPolishDir/nanopolish_merge.py $InDir/*:*-*/*.fa > $OutDir/"$Strain"_nanoplish.fa
-
-echo "" > tmp.txt
-ProgDir=~/git_repos/emr_repos/tools/seq_tools/assemblers/assembly_qc/remove_contaminants
-$ProgDir/remove_contaminants.py --keep_mitochondria --inp $OutDir/"$Strain"_nanoplish.fa --out $OutDir/"$Strain"_nanoplish_min_500bp_renamed.fasta --coord_file tmp.txt > $OutDir/log.txt
-done
-Quast and busco were run to assess the effects of nanopolish on assembly quality:
-
-
-
-```bash
-ProgDir=/home/gomeza/git_repos/tools/seq_tools/assemblers/assembly_qc/remove_contaminants
-touch tmp.txt
-for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/racon_10/WT_minion_racon_round_10.fasta); do
-  OutDir=$(dirname $Assembly)
-  $ProgDir/remove_contaminants.py --inp $Assembly --out $OutDir/WT_miniasm_racon10_renamed.fasta --coord_file tmp.txt > $OutDir/log.txt
-done
-rm tmp.txt
+  for Assembly in $(ls path/to/consensus/assembly/*_racon_round_10_renamed.fasta); do
+    Strain=$(echo $Assembly | rev | cut -f3 -d '/' | rev)
+    Organism=$(echo $Assembly | rev | cut -f4 -d '/' | rev)
+    OutDir=$(dirname $Assembly)/nanopolish_final
+    mkdir -p $OutDir
+    InDir=$(dirname $Assembly)
+    NanoPolishDir=/home/gomeza/miniconda3/envs/olc_assemblers/bin # Path to your conda installation path
+    python $NanoPolishDir/nanopolish_merge.py $InDir/*:*-*/*.fa > $OutDir/"$Strain"_nanoplish.fa
+    echo "" > tmp.txt
+    # Rename contigs
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Assembly_qc
+    $ProgDir/remove_contaminants.py --keep_mitochondria --inp $OutDir/"$Strain"_nanoplish.fa --out $OutDir/"$Strain"_nanoplish_min_500bp_renamed.fasta --coord_file tmp.txt > $OutDir/log.txt
+  done
 ```
 
-Medaka
-
-
-conda create -n medaka -c conda-forge -c bioconda medaka
-
-
-```bash
-for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/WT_minion_miniasm.fa); do
-ReadsFq=$(ls qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz)
-OutDir=$(dirname $Assembly)/medaka3
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
-sbatch $ProgDir/medaka.sh $Assembly $ReadsFq $OutDir
-done
-```
-medaka_consensus -i qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz -d assembly/miniasm/F.venenatum/WT_minion/WT_minion_miniasm.fa -o medaka2 -t 8
-
-```bash
-for Assembly in $(ls assembly/miniasm/F.venenatum/WT_minion/racon_10/WT_miniasm_racon10_renamed.fasta); do
-ReadsFq=$(ls qc_dna/minion/F.venenatum/WT/WT_minion_allfiles.fastq.gz)
-OutDir=$(dirname $Assembly)/medaka
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
-sbatch $ProgDir/medaka.sh $Assembly $ReadsFq $OutDir
-done
-```
+## Pilon 
