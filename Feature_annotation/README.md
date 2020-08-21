@@ -342,3 +342,21 @@ done
 cat "Strain"_antismash_results_secmet_genes.tsv | sed 's/;//p' | sed 's/;.*//p' | sed 's/Kin.*//p' > "Strain"_antismash_results_secmet_genes_corrected.tsv
  ```
 
+## 8. Looking for Transcription factors
+
+```bash
+  for Interpro in $(ls gene_pred/interproscan/$Organism/$Strain/*_interproscan.tsv); do
+    Organism=$(echo $Interpro | rev | cut -f3 -d '/' | rev)
+    Strain=$(echo $Interpro | rev | cut -f2 -d '/' | rev)
+    echo "$Organism - $Strain"
+    OutDir=analysis/transcription_factors/$Organism/$Strain
+    mkdir -p $OutDir
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+    $ProgDir/interpro2TFs.py --InterPro $Interpro > $OutDir/"$Strain"_TF_domains.tsv
+    echo "total number of transcription factors"
+    cat $OutDir/"$Strain"_TF_domains.tsv | cut -f1 | sort | uniq > $OutDir/"$Strain"_TF_gene_headers.txt
+    cat $OutDir/"$Strain"_TF_gene_headers.txt | wc -l
+    # Gene ID rather than transcript ID
+    cat $OutDir/"$Strain"_TF_gene_headers.txt | sed -e "s/.t.*//g" > $OutDir/"$Strain"_TF_geneid_headers.txt
+  done
+```
