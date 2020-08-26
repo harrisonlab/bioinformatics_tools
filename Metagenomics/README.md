@@ -1,5 +1,29 @@
 # Metagenomics analysis tools
 
+## Kraken
+
+### Requirements 
+
+```bash
+# Conda installation
+#conda create --name Meta
+#conda activate Meta
+#conda install kraken2
+```
+ 
+```bash
+# This is not needed unless you are using a different database
+# If you do, log into any long node
+screen -a
+srun --partition long --mem 20G --cpus-per-task 10 --pty bash
+# Download NCBI taxonomy
+kraken2-build --download-taxonomy --db plantvirusesDB/
+# Add sequences to library. See manual for the installation of other databases.
+kraken2-build --add-to-library plantviruses.fasta --db plantvirusesDB
+```
+
+
+
 ## Centrifuge
 
 Classification of DNA sequences from microbial samples. 
