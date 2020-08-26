@@ -48,12 +48,13 @@ srun --partition long --mem 20G --cpus-per-task 10 --pty bash
 # Run centrifuge
 OutDir=path/to/output/dir
 centrifuge -p 4 -x /data/scratch/gomeza/prog/centrifuge/plantvirus -t -q -1 path/to/unmapped/mate1 -2 path/to/unmapped/mate2 --phred33 --report-file $OutDir/centrifuge_report.tsv -S $OutDir/centrifuge_results.txt 
+# --min-hitlen <integer> option can be used to set a minimum length of partial hits. Default 22.
 
 # Create a Kraken-style report
 centrifuge-kreport -x /data/scratch/gomeza/prog/centrifuge/plantvirus centrifuge_results.txt > centrifuge_krakened.txt
+# --min-score <integer> option set minimum score for reads to be counted
+# --min-length <integer> option set minimum alignment length to the read
 ```
 
 Results can be visualised using Pavian. https://fbreitwieser.shinyapps.io/pavian/
-
-
 
