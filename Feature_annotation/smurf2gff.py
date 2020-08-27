@@ -15,7 +15,7 @@ import sys,argparse
 import re
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from sets import Set
+#from sets import Set
 from collections import defaultdict
 from operator import itemgetter
 
@@ -75,7 +75,7 @@ for line in cluster_lines:
         cluster_start = min(coordinate_set)
         cluster_end = max(coordinate_set)
         cluster_func = "".join(["ID=", "Cluster_", str(i), ";Notes=",  product, ";"])
-        print ("\t").join([contig, program, product, str(cluster_start), str(cluster_end), '.', strand, '.', cluster_func])
+        print ("\t".join([contig, program, product, str(cluster_start), str(cluster_end), '.', strand, '.', cluster_func]))
         cluster_lines = []
         coordinate_set = set([])
     elif line.startswith("Backbone_gene_id") or line == "":
