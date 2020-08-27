@@ -20,9 +20,21 @@ srun --partition long --mem 20G --cpus-per-task 10 --pty bash
 kraken2-build --download-taxonomy --db plantvirusesDB/
 # Add sequences to library. See manual for the installation of other databases.
 kraken2-build --add-to-library plantviruses.fasta --db plantvirusesDB
+# Build database
+kraken2-build --build --db plantvirusesDB/
 ```
 
+### Run kraken2
 
+```bash
+# Log into an interactive session and working node
+screen -a
+srun --partition long --mem 20G --cpus-per-task 10 --pty bash
+
+# Run kraken2
+OutDir=path/to/output/dir
+kraken2 --db /data/scratch/gomeza/prog/kraken2/plantvirusesDB --threads 4 --paired --classified-out $OutDir/cseqs#.fq path/to/unmapped/mate1 path/to/unmapped/mate2 --output $OutDir/KrakenResults.txt
+```
 
 ## Centrifuge
 
