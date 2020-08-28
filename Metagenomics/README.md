@@ -49,7 +49,7 @@ srun --partition long --mem 20G --cpus-per-task 10 --pty bash
 
 # Run kraken2
 OutDir=path/to/output/dir
-kraken2 --db /data/scratch/gomeza/prog/kraken2/plantvirusesDB --threads 4 --paired --classified-out $OutDir/cseqs#.fq path/to/unmapped/mate1 path/to/unmapped/mate2 --output $OutDir/KrakenResults.txt
+kraken2 --db /data/scratch/gomeza/prog/kraken2/plantvirusesDB --threads 4 --paired --classified-out cseqs#.fq path/to/unmapped/mate1 path/to/unmapped/mate2 --output $OutDir/KrakenResults.txt
 ```
 
 ## Centrifuge
