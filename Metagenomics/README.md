@@ -5,10 +5,12 @@
 ### Requirements 
 
 ```bash
-# Conda installation
-#conda create --name Meta
-#conda activate Meta
-#conda install kraken2
+# Add centrifuge to your PATH environment variable.
+nano ~/.profile
+# Copy the following path
+PATH=${PATH}:/scratch/software/kraken2/kraken2-master
+# Save and refresh your profile using
+. ~/.profile
 ```
  
 ```bash
@@ -24,7 +26,21 @@ kraken2-build --add-to-library plantviruses.fasta --db plantvirusesDB
 kraken2-build --build --db plantvirusesDB/
 ```
 
-### Run kraken2
+### Run centrifuge
+
+
+```bash
+for Read1 in $(ls alignment/star/*/star_aligmentUnmapped.out.mate1); do
+    Read2=$(echo $Read1 | sed 's/mate1/mate2/g')
+    echo $Read1
+    echo $Read2
+    Sample=$(echo $Read1 | rev | cut -f2 -d '/' | rev)
+    Database=plantvirus
+    OutDir=analysis/Centrifuge/$Sample
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+    sbatch $ProgDir/centrifuge.sh $Database $Read1 $Read2 $OutDir
+done
+```
 
 ```bash
 # Log into an interactive session and working node
@@ -51,7 +67,7 @@ PATH=${PATH}:/scratch/software/centrifuge
 . ~/.profile
 ```
 
-Build index instructions
+##### Build index instructions
 
 ```bash
 # This is not needed unless you are using a different database
@@ -85,8 +101,26 @@ for Read1 in $(ls alignment/star/*/star_aligmentUnmapped.out.mate1); do
     Database=plantvirus
     OutDir=analysis/Centrifuge/$Sample
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
-    sbatch $ProgDir/centrifuge.sh $Database $Read1 $Read2 $OutDir
+    sbatch $ProgDir/centrifuge.sh $Read1 $Read2 $Database $OutDir
 done
 ```
 
 Results can be visualised using Pavian. https://fbreitwieser.shinyapps.io/pavian/
+
+
+
+### Run centrifuge
+
+
+```bash
+for Read1 in $(ls Charlotte/star_aligmentUnmapped.out.mate1); do
+Read2=$(echo $Read1 | sed 's/mate1/mate2/g')
+echo $Read1
+echo $Read2
+Sample=$(echo $Read1 | rev | cut -f2 -d '/' | rev)
+Database=plantvirusesDB
+OutDir=analysis/Kraken/$Sample
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+sbatch $ProgDir/kraken.sh $Read1 $Read2 $Database $OutDir
+done
+```
