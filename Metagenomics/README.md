@@ -77,20 +77,16 @@ centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonom
 
 
 ```bash
-# Log into an interactive session and working node
-screen -a
-srun --partition long --mem 20G --cpus-per-task 10 --pty bash
-
-# Run centrifuge
-OutDir=path/to/output/dir
-centrifuge -p 4 -x /data/scratch/gomeza/prog/centrifuge/plantvirus -t -q -1 path/to/unmapped/mate1 -2 path/to/unmapped/mate2 --phred33 --report-file $OutDir/centrifuge_report.tsv -S $OutDir/centrifuge_results.txt 
-# --min-hitlen <integer> option can be used to set a minimum length of partial hits. Default 22.
-
-# Create a Kraken-style report
-centrifuge-kreport -x /data/scratch/gomeza/prog/centrifuge/plantvirus centrifuge_results.txt > centrifuge_krakened.txt
-# --min-score <integer> option set minimum score for reads to be counted
-# --min-length <integer> option set minimum alignment length to the read
+for Read1 in $(ls alignment/star/*/star_aligmentUnmapped.out.mate1); do
+    Read2=$(echo $Read1 | sed 's/mate1/mate2/g')
+    echo $Read1
+    echo $Read2
+    Sample=$(echo $Read1 | rev | cut -f2 -d '/' | rev)
+    Database=plantvirus
+    OutDir=analysis/Centrifuge/$Sample
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+    sbatch $ProgDir/centrifuge.sh $Database $Read1 $Read2 $OutDir
+done
 ```
 
 Results can be visualised using Pavian. https://fbreitwieser.shinyapps.io/pavian/
-
