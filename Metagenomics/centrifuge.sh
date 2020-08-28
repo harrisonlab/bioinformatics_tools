@@ -7,17 +7,19 @@
 #Classification of DNA sequences using centrifuge
 
 Usage="centrifuge.sh Database star_aligmentUnmapped.out.mate1 star_aligmentUnmapped.out.mate2 Output_directory"
-echo $Usage
+#echo $Usage
 
 # ---------------
 # Step 1
 # Collect inputs
 # ---------------
 
-Database=$1
-ReadMate1=$(basename $2)
-ReadMate2=$(basename $3)
+ReadMate1=$(basename $1)
+ReadMate2=$(basename $2)
+Database=$3
 OutDir=$4
+
+mkdir -p $OutDir
 
 echo $ReadMate1
 echo $ReadMate2
@@ -31,8 +33,8 @@ echo $WorkDir
 # Copy over input files
 cd $WorkDir
 
-cp $CurDir/$2 $ReadMate1
-cp $CurDir/$3 $ReadMate1
+cp $CurDir/$1 $ReadMate1
+cp $CurDir/$2 $ReadMate2
 
 # ---------------
 # Step 2
@@ -41,20 +43,34 @@ cp $CurDir/$3 $ReadMate1
 
 centrifuge -p 4 \
 -x /data/scratch/gomeza/prog/centrifuge/$Database \
--t -q -1 $ReadMate1 -2 $ReadMate2 \
+-t -1 $ReadMate1 -2 $ReadMate2 \
 --phred33 \
 --report-file centrifuge_report.tsv \
 -S centrifuge_results.txt 
+
+# --min-hitlen <integer> option can be used to set a minimum length of partial hits. 
+# Default 22.
 
 # ---------------
 # Step 3
 # Create a Kraken-style report
 # ---------------
 
+echo "Creating Kraken-style report for visualisation"
 centrifuge-kreport \
 -x  /data/scratch/gomeza/prog/centrifuge/$Database \
 centrifuge_results.txt > centrifuge_krakened.txt
 
-cp -r $WorkDir/* $CurDir/$OutDir/.
+# --min-score <integer> option set minimum score for reads to be counted
+# --min-length <integer> option set minimum alignment length to the read
+
+# ---------------
+# Step 4
+# Copy results
+# ---------------
+
+cp -r $WorkDir/centrifuge* $CurDir/$OutDir/.
 
 rm -r $WorkDir
+
+echo "Done"
