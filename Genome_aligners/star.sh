@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
-#SBATCH --partition=medium
+#SBATCH --partition=long
 #SBATCH --mem-per-cpu=8G
 #SBATCH --cpus-per-task=8
 
