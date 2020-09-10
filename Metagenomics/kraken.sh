@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J kraken2
-#SBATCH --partition=medium
+#SBATCH --partition=short
 #SBATCH --mem-per-cpu=8G
 #SBATCH --cpus-per-task=8
 
