@@ -43,10 +43,7 @@ out="$Prefix"reads_rename.fasta \
 prefix=$Prefix
 
 
-flye --nano-raw miniasm_test/OutDir/Hg199_miniasm_rename.fasta  \
---out-dir flye/OutDir --genome-size 37m --threads 8
-
-  # Run Flyr
+# Run Flye
 
   if [ $type == "pacbioraw" ]; then
    flye --pacbio-raw "$Prefix"reads_rename.fasta --out-dir $WorkDir --genome-size $Size
