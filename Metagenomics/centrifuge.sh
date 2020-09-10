@@ -42,7 +42,7 @@ cp $CurDir/$2 $ReadMate2
 # ---------------
 
 centrifuge -p 4 \
--x /data/scratch/gomeza/prog/centrifuge/$Database \
+-x /data/scratch/gomeza/prog/centrifuge_v2/$Database \
 -t -1 $ReadMate1 -2 $ReadMate2 \
 --phred33 \
 --report-file centrifuge_report.tsv \
@@ -58,7 +58,7 @@ centrifuge -p 4 \
 
 echo "Creating Kraken-style report for visualisation"
 centrifuge-kreport \
--x  /data/scratch/gomeza/prog/centrifuge/$Database \
+-x  /data/scratch/gomeza/prog/centrifuge_v2/$Database \
 centrifuge_results.txt > centrifuge_krakened.txt
 
 # --min-score <integer> option set minimum score for reads to be counted
