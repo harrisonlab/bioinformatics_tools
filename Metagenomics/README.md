@@ -87,7 +87,40 @@ centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonom
 
 # You can download only genome of interest from the NCBI website using the different filter options. This was done for plant viruses only.
 centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonomy/nodes.dmp --name-table taxonomy/names.dmp plantvirus_sequences.fasta plantvirus
+
+centrifuge-download -o library -m -t "NC_024710	" refseq > seqid2taxid.map
+dustmasker -in plantvirus_sequences.fasta -infmt fasta -out sequences -outfmt fasta
+centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonomy/nodes.dmp --name-table taxonomy/names.dmp plantvirus_masked.fasta plantvirus
+
 ```
+```bash
+ProgDir=/home/gomeza/git_repos/tools/seq_tools/repeat_masking
+BestAssembly=plantvirus_sequences.fasta
+OutDir=repeat_masked/
+sbatch $ProgDir/rep_modeling.sh $BestAssembly $OutDir
+sbatch $ProgDir/transposonPSI.sh $BestAssembly $OutDir
+```
+
+```bash
+for File in $(ls repeat_masked/*_contigs_softmasked.fa); do
+OutDir=$(dirname $File)
+TPSI=$(ls $OutDir/*_contigs_unmasked.fa.TPSI.allHits.chains.gff3)
+OutFile=$(echo $File | sed 's/_contigs_softmasked.fa/_contigs_softmasked_repeatmasker_TPSI_appended.fa/g')
+echo "$OutFile"
+bedtools maskfasta -soft -fi $File -bed $TPSI -fo $OutFile
+echo "Number of masked bases:"
+cat $OutFile | grep -v '>' | tr -d '\n' | awk '{print $0, gsub("[a-z]", ".")}' | cut -f2 -d ' '
+done
+# The number of N's in hardmasked sequence are not counted as some may be present within the assembly and were therefore not repeatmasked.
+for File in $(ls repeat_masked/*_contigs_softmasked.fa); do
+OutDir=$(dirname $File)
+TPSI=$(ls $OutDir/*_contigs_unmasked.fa.TPSI.allHits.chains.gff3)
+OutFile=$(echo $File | sed 's/_contigs_softmasked.fa/_contigs_hardmasked_repeatmasker_TPSI_appended.fa/g')
+echo "$OutFile"
+bedtools maskfasta -fi $File -bed $TPSI -fo $OutFile
+done
+```
+centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonomy/nodes.dmp --name-table taxonomy/names.dmp repeat_masked/plantvirus_sequences.fasta_contigs_hardmasked.fa plantvirushard
 
 ### Run centrifuge
 
