@@ -1,8 +1,10 @@
 # Genome alignment tools
 
-1. Star: Align sequence reads to the reference genome
+1. Star: Spliced transcripts alignment to a reference sequence
 
-2. Bowtie2:
+2. Bowtie2: fast and sensitive read alignment
+
+3. Bwa: Burrows-Wheeler Aligner for mapping low-divergent sequences against a large reference genom
 
 ## Star
 
@@ -87,3 +89,32 @@ qsub $ProgDir/bowtie/sub_bowtie.sh $Reference $F_Read $R_Read $OutDir
 done
 done
 done
+```
+
+## Bwa
+
+### Requirements
+
+```bash
+conda install bwa
+# Add path to profile
+PATH=${PATH}:/scratch/software/bowtie2/bowtie2-2.3.5.1-linux-x86_64
+```
+### Typical run
+
+```bash
+for Reads in $(ls -d path/to/reads/$Organism/$Strain)
+  do
+    Strain=$(echo $Reads | rev | cut -f1 -d '/' | rev)
+    Organism=$(echo $Reads | rev | cut -f2 -d '/' | rev)
+      echo "$Organism - $Strain"
+      FRead=$Reads/F/*.fq.gz
+      RRead=$Reads/R/*.fq.gz
+      Reference=path/to/genome/sequence/*.fasta
+      OutDir=alignment/bwa/vs_Ref 
+      mkdir -p $OutDir
+      ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
+      sbatch $ProgDir/bwa.sh $Strain $Reference $FRead $RRead $OutDir
+  done
+done
+```
