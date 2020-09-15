@@ -29,8 +29,6 @@ Quast, BUSCO and Kat can be used to evaluate the quality of the assemblies.
 conda activate olc_assemblers
 # Canu
 conda install canu
-# Flye
-conda install flye
 # SMARTdenovo
 conda install smartdenovo
 # Miniasm
@@ -45,6 +43,10 @@ conda create -n medaka -c conda-forge -c bioconda medaka
 conda install nanopolish 
 # Pilon
 conda install pilon
+
+conda activate dbg_assemblers_py27
+# Flye (requires python2.7)
+conda install flye
 ```
 
 ## Typical run
@@ -52,15 +54,43 @@ conda install pilon
 ### Flye
 
 ```bash
+# Flye only
   for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
     Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev) # Edit to set your ouput directory
     Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev) # Edit to set your ouput directory
     Prefix="$Strain"_flye
+    TypeSeq=nanocorrected #e.g.
     OutDir=assembly/flye/$Organism/$Strain
     mkdir -p $OutDir
     Size=37m # Expected genome size
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools
-    sbatch $ProgDir/flye.sh $TrimReads $Prefix $OutDir $Size
+    sbatch $ProgDir/flye.sh $TrimReads $Prefix $OutDir $Size $TypeSeq
+  done
+
+# Mosaic only 
+  for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
+    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev)
+    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev)
+    Draftgenome=path/to/flye/assembly/*.fasta 
+    Prefix="$Strain"_flye
+    OutDir=assembly/mosaicFlye/$Organism/$Strain
+    mkdir -p $OutDir
+    Size=45m 
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
+    sbatch $ProgDir/mosaic.sh $TrimReads $Draftgenome $Prefix $OutDir $Size
+  done
+
+# Flye + mosaic
+  for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
+    Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev)
+    Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev) 
+    Prefix="$Strain"_flye
+    TypeSeq=nanocorrected
+    OutDir=assembly/mosaicFlye/$Organism/$Strain
+    mkdir -p $OutDir
+    Size=45m 
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
+    sbatch $ProgDir/flyemosaic.sh $TrimReads $Prefix $OutDir $Size $TypeSeq
   done
 ```
   
