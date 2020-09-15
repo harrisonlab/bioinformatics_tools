@@ -18,6 +18,8 @@ RawReads=$1
 Prefix=$2
 OutDir=$3
 Size=$4
+type=$5
+
 echo  "Running flye with the following inputs:"
 echo "Raw Reads In - $RawReads"
 echo "Prefix - $Prefix"
