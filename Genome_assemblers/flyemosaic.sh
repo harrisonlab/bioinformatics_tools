@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J mosaicflye
-#SBATCH --partition=himem
+#SBATCH --partition=long
 #SBATCH --mem-per-cpu=8G
 #SBATCH --cpus-per-task=24
 
