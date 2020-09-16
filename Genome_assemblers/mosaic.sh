@@ -50,7 +50,7 @@ prefix=$Prefix
 # Run Mosaic
 # ---------------
 
-mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir --genome-size $Size --flye-dir /home/gomeza/miniconda3/envs/dbg_assemblers_py27/bin/flye --contigs $Genome
+mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir --genome-size $Size --flye-dir /home/gomeza/miniconda3/envs/dbg_assemblers_py27/bin --contigs $Genome
 
 cp -r $WorkDir/* $CurPath/$OutDir/.
 
