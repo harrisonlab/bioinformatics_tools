@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J mosaicflye
 #SBATCH --partition=long
-#SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=10G
+#SBATCH --cpus-per-task=10
 
 # Assemble Long read data using flye
 
@@ -70,7 +70,7 @@ prefix=$Prefix
 # Run Mosaic
 # ---------------
 
-mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir --genome-size $Size --flye-dir /home/gomeza/miniconda3/envs/dbg_assemblers_py27/bin/flye --contigs assembly.fasta
+mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir --genome-size 45000000 --flye-dir /home/gomeza/miniconda3/envs/dbg_assemblers_py27/bin/flye --contigs assembly.fasta
 
 
 cp -r $WorkDir/* $CurPath/$OutDir/.
