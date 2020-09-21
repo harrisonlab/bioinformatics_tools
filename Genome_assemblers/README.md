@@ -71,13 +71,12 @@ conda install flye
   for TrimReads in $(ls path/to/single/molecule/sequencing/reads/*_allfiles.fastq.gz); do
     Organism=$(echo $TrimReads | rev | cut -f3 -d '/' | rev)
     Strain=$(echo $TrimReads | rev | cut -f2 -d '/' | rev)
-    Draftgenome=path/to/flye/assembly/*.fasta 
+    FlyeDir=assembly/flye/$Organism/$Strain #path/to/flye/directory
     Prefix="$Strain"_flye
     OutDir=assembly/mosaicFlye/$Organism/$Strain
-    mkdir -p $OutDir
-    Size=45m 
+    mkdir -p $OutDir 
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_assemblers
-    sbatch $ProgDir/mosaic.sh $TrimReads $Draftgenome $Prefix $OutDir $Size
+    sbatch $ProgDir/mosaic.sh $TrimReads $FlyeDir $Prefix $OutDir
   done
 
 # Flye + mosaic
