@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J fye
 #SBATCH --partition=long
-#SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=24
+#SBATCH --mem-per-cpu=16G
+#SBATCH --cpus-per-task=40
 
 # Assemble Long read data using flye
 
