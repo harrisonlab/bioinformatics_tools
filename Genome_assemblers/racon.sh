@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J racon
-#SBATCH --partition=long
+#SBATCH --partition=himem
 #SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=16
 
 # Alignment of minion reads to a minion assembly prior to running nanopolish variants
 
