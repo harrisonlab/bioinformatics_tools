@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J busco
-#SBATCH --partition=medium
+#SBATCH --partition=short
 #SBATCH --mem-per-cpu=6G
 #SBATCH --cpus-per-task=20
 
@@ -52,7 +52,7 @@ Prefix="${Filename%.*}"
 
 ### Setting variables
 CurDir=$PWD
-WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 
 ### Prep
