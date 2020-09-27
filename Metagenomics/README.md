@@ -92,6 +92,12 @@ centrifuge-download -o library -m -t "NC_024710	" refseq > seqid2taxid.map
 dustmasker -in plantvirus_sequences.fasta -infmt fasta -out sequences -outfmt fasta
 centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonomy/nodes.dmp --name-table taxonomy/names.dmp plantvirus_masked.fasta plantvirus
 
+# Database with all fungal genomes on NCBI
+centrifuge-download -o library -m -a Any -d "fungi" genbank > seqid2taxid.map
+centrifuge-download -o taxonomy taxonomy
+cat library/fungi/*.fna > input-fungal-sequences.fna
+centrifuge-build -p 4 --conversion-table seqid2taxid.map --taxonomy-tree taxonomy/nodes.dmp --name-table taxonomy/names.dmp input-fungal-sequences.fna fungi
+
 ```
 ```bash
 ProgDir=/home/gomeza/git_repos/tools/seq_tools/repeat_masking
