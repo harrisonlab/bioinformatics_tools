@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J fye
 #SBATCH --partition=long
-#SBATCH --mem-per-cpu=16G
-#SBATCH --cpus-per-task=40
+#SBATCH --mem-per-cpu=5G
+#SBATCH --cpus-per-task=16
 
 # Assemble Long read data using flye
 
@@ -42,6 +42,7 @@ cp $CurPath/$RawReads $Raw
 /home/gomeza/miniconda3/envs/olc_assemblers/bin/rename.sh \
 in=$Raw \
 out="$Prefix"reads_rename.fasta \
+qin=33 \
 prefix=$Prefix
 
 
