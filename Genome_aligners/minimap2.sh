@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J minimap2
-#SBATCH --partition=long
-#SBATCH --mem=30G
+#SBATCH --partition=medium
+#SBATCH --mem=5G
 #SBATCH --cpus-per-task=20
 
 # Align ONT reads to an assembly.
