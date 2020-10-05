@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J centrifuge
 #SBATCH --partition=short
-#SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=8
+#SBATCH --mem-per-cpu=6G
+#SBATCH --cpus-per-task=60
 
 #Classification of DNA sequences using centrifuge
 
@@ -14,15 +14,14 @@ Usage="centrifuge.sh Database star_aligmentUnmapped.out.mate1 star_aligmentUnmap
 # Collect inputs
 # ---------------
 
-ReadMate1=$(basename $1)
-ReadMate2=$(basename $2)
-Database=$3
-OutDir=$4
+Database=$1
+OutDir=$2
+Reads=$(basename $3)
+
+echo $Reads
 
 mkdir -p $OutDir
 
-echo $ReadMate1
-echo $ReadMate2
 
 # Set working directory
 CurDir=$PWD
@@ -33,20 +32,33 @@ echo $WorkDir
 # Copy over input files
 cd $WorkDir
 
-cp $CurDir/$1 $ReadMate1
-cp $CurDir/$2 $ReadMate2
+cp $CurDir/$3 $Reads
+if [ $4 ]; then
+ReadMate=$(basename $4)
+cp $CurDir/$4 $ReadMate
+echo $ReadMate
+fi
 
 # ---------------
 # Step 2
 # Run centrifure
 # ---------------
 
+if [ $4 ]; then
 centrifuge -p 4 \
--x /data/scratch/gomeza/prog/centrifuge_v2/$Database \
--t -1 $ReadMate1 -2 $ReadMate2 \
+-x /data/scratch/gomeza/prog/centrifuge/$Database \
+-t -1 $Reads -2 $ReadMate \
 --phred33 \
 --report-file centrifuge_report.tsv \
 -S centrifuge_results.txt 
+else
+centrifuge -p 4 \
+-x /data/scratch/gomeza/prog/centrifuge/$Database \
+-U $Reads \
+--phred33 \
+--report-file centrifuge_report.tsv \
+-S centrifuge_results.txt 
+fi
 
 # --min-hitlen <integer> option can be used to set a minimum length of partial hits. 
 # Default 22.
@@ -58,7 +70,7 @@ centrifuge -p 4 \
 
 echo "Creating Kraken-style report for visualisation"
 centrifuge-kreport \
--x  /data/scratch/gomeza/prog/centrifuge_v2/$Database \
+-x  /data/scratch/gomeza/prog/centrifuge/$Database \
 centrifuge_results.txt > centrifuge_krakened.txt
 
 # --min-score <integer> option set minimum score for reads to be counted
