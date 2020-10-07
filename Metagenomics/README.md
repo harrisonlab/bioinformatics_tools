@@ -26,6 +26,10 @@ kraken2-build --add-to-library plantviruses.fasta --db plantvirusesDB
 kraken2-build --build --db plantvirusesDB/
 ```
 
+kraken2-build --download-taxonomy --db fungiDB
+kraken2-build --add-to-library input-fungal-sequences.fna --db fungiDB
+kraken2-build --build --db fungiDB/
+
 ### Run centrifuge
 
 
@@ -137,7 +141,7 @@ for Read1 in $(ls alignment/star/*/star_aligmentUnmapped.out.mate1); do
     echo $Read1
     echo $Read2
     Sample=$(echo $Read1 | rev | cut -f2 -d '/' | rev)
-    Database=plantvirus
+    Database=fungi
     OutDir=analysis/Centrifuge/$Sample
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
     sbatch $ProgDir/centrifuge.sh $Read1 $Read2 $Database $OutDir
