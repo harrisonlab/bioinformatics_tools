@@ -6,8 +6,6 @@
 conda activate SNP_calling
 
 conda install picard
-# version 0.1.18 needed
-conda install samtools=0.1.18
 ```
 
 ## Rename input mapping files in each folder by prefixing with the strain ID.
