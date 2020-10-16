@@ -58,8 +58,8 @@ samtools faidx $reference
 
 ```bash
 for Strain in Ag02 Ag04 Ag05 Ag06 Ag08; do
-  Index=REFERENCE/Hg199_contigs_unmasked.fa.fai
-  Directory=analysis/genome_alignment/bowtie/N.*/$Strain
+  Index=repeat_masked/filtered_contigs/R0905_contigs_unmasked.fa.fai
+  Directory=analysis/genome_alignment/bowtie/$Organism/$Strain
   cp $Index $Directory
 done
 ```
