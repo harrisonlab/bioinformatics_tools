@@ -34,35 +34,39 @@ cd $WorkDir
 ### Get rid of multimapping reads by filtering out on the XS:i: tag
 grep -v "XS:i" $filename >temp && mv temp $filename
 samtools view -bS -o $name.bam $filename
-samtools sort $name.bam $name\_sorted
-samtools index $name\_sorted.bam
+samtools sort $name.bam -o $name\_nomulti\_sorted.bam
+#For samtools older versions (0.1.18) use: 
+#samtools sort $name.bam $name\_nomulti\_sorted
+samtools index $name\_nomulti\_sorted.bam
 
 ### Keep only reads with "paired reads" and "properly paired reads" flags.
-samtools view -b -h -f 3 -o $name\_proper.bam $name\_sorted.bam
+samtools view -b -h -f 3 -o $name\_nomulti\_proper.bam $name\_nomulti\_sorted.bam
 ### Sort for downstream analyses
-samtools sort $name\_proper.bam $name\_proper\_sorted
-samtools index $name\_proper\_sorted.bam
+samtools sort $name\_nomulti\_proper.bam -o $name\_nomulti\_proper\_sorted.bam
+#For samtools older versions (0.1.18) use: 
+#samtools sort $name\_proper.bam $name\_proper\_sorted
+samtools index $name\_nomulti\_proper\_sorted.bam
 
 ### Remove PCR and optical duplicates
 #picard=/home/sobczm/bin/picard-tools-2.5.0/picard.jar
 #java -jar $picard MarkDuplicates \
 picard MarkDuplicates \
-INPUT=$name\_proper\_sorted.bam \
-OUTPUT=$name\_proper\_sorted\_nodup.bam \
-METRICS_FILE=$name\_proper\_sorted\_nodup.txt \
+INPUT=$name\_nomulti\_proper\_sorted.bam \
+OUTPUT=$name\_nomulti\_proper\_sorted\_nodup.bam \
+METRICS_FILE=$name\_nomulti\_proper\_sorted\_nodup.txt \
 REMOVE_DUPLICATES=TRUE ASSUME_SORTED=TRUE MAX_RECORDS_IN_RAM=500000000 \
 MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 VALIDATION_STRINGENCY=LENIENT
 ### Add group and sample name (prefix)
 #java -jar $picard AddOrReplaceReadGroups \
 picard AddOrReplaceReadGroups \
-INPUT=$name\_proper\_sorted\_nodup.bam \
-OUTPUT=$name\_proper\_sorted\_nodup_rg.bam \
+INPUT=$name\_nomulti\_proper\_sorted\_nodup.bam \
+OUTPUT=$name\_nomulti\_proper\_sorted\_nodup_rg.bam \
 SORT_ORDER=coordinate CREATE_INDEX=true RGID=$prefix  RGSM=$prefix \
 RGPL=Illumina RGLB=library RGPU=barcode VALIDATION_STRINGENCY=LENIENT
-samtools index $name\_proper\_sorted\_nodup_rg.bam
+samtools index $name\_nomulti\_proper\_sorted\_nodup_rg.bam
 
 ### Cleanup
-mv $name\_proper\_sorted\_nodup.txt $CurPath/$OutDir/.
-mv $name\_proper\_sorted\_nodup_rg.bam $CurPath/$OutDir/.
-mv $name\_proper\_sorted\_nodup_rg.bam.bai $CurPath/$OutDir/.
+mv $name\_nomulti\_proper\_sorted\_nodup.txt $CurPath/$OutDir/.
+mv $name\_nomulti\_proper\_sorted\_nodup_rg.bam $CurPath/$OutDir/.
+mv $name\_nomulti\_proper\_sorted\_nodup_rg.bam.bai $CurPath/$OutDir/.
 rm -rf $WorkDir
