@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J centrifuge
-#SBATCH --partition=short
-#SBATCH --mem-per-cpu=6G
-#SBATCH --cpus-per-task=60
+#SBATCH --partition=himem
+#SBATCH --mem-per-cpu=20G
+#SBATCH --cpus-per-task=20
 
 #Classification of DNA sequences using centrifuge
 
