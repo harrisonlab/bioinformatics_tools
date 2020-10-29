@@ -4,6 +4,11 @@
 #SBATCH --mem-per-cpu=8G
 #SBATCH --cpus-per-task=24
 
+#export LD_LIBRARY_PATH=$HOME/install/glibc-2.27/lib:$HOME/install/glibc-2.27/lib/ld-linux-x86-64.so.2:$LD_LIBRARY_PATH
+
+LD_PRELOAD="/home/gomeza/install/glibcpath/glibc-2.27/lib/libc.so.6 /home/gomeza/install/glibcpath/glibc-2.27/lib/libpthread.so.0  /home/gomeza/install/glibcpath/glibc-2.27/lib/ld-linux-x86-64.so.2"
+export LD_PRELOAD
+
 # Resolve repeats with mosaic
 
 Usage="mosaic.sh <reads.fastq.gz> <flyegenome.fasta> <outfile_prefix> <output_directory> <genomesize>"
@@ -15,25 +20,26 @@ echo "$Usage"
 # ---------------
 
 RawReads=$1
-DraftGenome=$2
+FlyeDir=$2
 Prefix=$3
 OutDir=$4
-Size=$5
+
 echo  "Running mosaic with the following inputs:"
 echo "Raw Reads In - $RawReads"
-echo "Genome In - $DraftGenome"
+echo "Genome In - $FlyeDir"
 echo "Prefix - $Prefix"
 echo "OutDir to - $OutDir"
-echo "Estimated genome size - $Size"
+
 
 CurPath=$PWD
 WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 
-Raw=$(basename $RawReads)
+Reads=$(basename $RawReads)
+Genome=$(basename $FlyeDir)
 cp $CurPath/$RawReads $Reads
-cp $CurPath/$DraftGenome $Genome
+cp $CurPath/$FlyeDir $Genome
 
 # ---------------
 # Step 2
@@ -50,7 +56,7 @@ prefix=$Prefix
 # Run Mosaic
 # ---------------
 
-mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir --genome-size $Size --flye-dir /home/gomeza/miniconda3/envs/dbg_assemblers_py27/bin --contigs $Genome
+mosaic --reads "$Prefix"reads_rename.fasta -o $WorkDir  --contigs $Genome
 
 cp -r $WorkDir/* $CurPath/$OutDir/.
 
