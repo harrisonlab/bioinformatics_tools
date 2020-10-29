@@ -51,7 +51,7 @@ for DataDir in $(ls -d raw_dna/paired/$Organism/$Strain); do
     echo $F_Read
     echo $R_Read
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
-    sbatch $ProgDir/count_nucl.sh $F_Read $R_Read 45 #Estimated genome size
+    sbatch $ProgDir/count_nucl.sh $F_Read $R_Read 45 $DataDir #Estimated genome size and DataDir as output directory
 done
 
 # Estimate coverage long read data
