@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J STAR
-#SBATCH --partition=long
-#SBATCH --mem-per-cpu=8G
-#SBATCH --cpus-per-task=8
+#SBATCH --partition=himem
+#SBATCH --mem-per-cpu=30G
+#SBATCH --cpus-per-task=12
 
 #Align RNAseq data with genome using STAR
 
@@ -19,15 +19,17 @@ InGenome=$(basename $1)
 InReadF=$(basename $2)
 InReadR=$(basename $3)
 OutDir=$4
+#length (bases) of the SA pre-indexing string. Tipically between 10-15
+Preindex=$5 
 
 echo $InGenome
 echo $InReadF
 echo $InReadR
 
 # determine if optional file for genemodels has been provided
-if [ $5 ]; then
+if [ $6 ]; then
   GffProvided="Y"
-  InGff=$(basename $5)
+  InGff=$(basename $6)
 fi
 
 # Set working directory
@@ -62,14 +64,14 @@ ParentFeature="Parent"
 if [ $GffProvided == "N" ]; then
 STAR \
 --runMode genomeGenerate \
---genomeSAindexNbases 11 \
+--genomeSAindexNbases $Preindex \
 --genomeDir $GenomeDir \
 --genomeFastaFiles $InGenome \
 --runThreadN 16
 elif [ $GffProvided == "Y" ]; then
 STAR \
 --runMode genomeGenerate \
---genomeSAindexNbases 11 \
+--genomeSAindexNbases $Preindex \
 --genomeDir $GenomeDir \
 --genomeFastaFiles $InGenome \
 --sjdbGTFtagExonParentTranscript $ParentFeature \
