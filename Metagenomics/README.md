@@ -25,11 +25,11 @@ kraken2-build --add-to-library plantviruses.fasta --db plantvirusesDB
 # Build database
 kraken2-build --build --db plantvirusesDB/
 ```
-
+```
 kraken2-build --download-taxonomy --db fungiDB
 kraken2-build --add-to-library input-fungal-sequences.fna --db fungiDB
 kraken2-build --build --db fungiDB/
-
+```
 ### Run centrifuge
 
 
