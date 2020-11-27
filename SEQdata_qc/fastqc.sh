@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J fastqc
-#SBATCH --partition=short
+#SBATCH --partition=long
 #SBATCH --mem-per-cpu=4G
 #SBATCH --cpus-per-task=1
 

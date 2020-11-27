@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J fastq-mcf
 #SBATCH --partition=long
-#SBATCH --mem-per-cpu=4G
-#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=10G
+#SBATCH --cpus-per-task=4
 
 # Script to prepare rna for downstream applications.
 # Will filter poor quality reads, perform trimming and
