@@ -1,0 +1,99 @@
+# MINIMUM CIRCOS CONFIGURATION
+
+
+
+# Defines unit length for ideogram and tick spacing, referenced
+# using "u" prefix, e.g. 10u
+#chromosomes_units           = 1000000
+
+# Show all chromosomes in karyotype file. By default, this is
+# true. If you want to explicitly specify which chromosomes
+# to draw, set this to 'no' and use the 'chromosomes' parameter.
+chromosomes_display_default = yes
+
+# Chromosome name, size and color definition
+karyotype = analysis/circos/Hg_vs_R9_vAG/Hg199_R0905_genome.txt
+
+<ideogram>
+  <spacing>
+    # spacing between ideograms is 0.5% of the image
+    default = 0.005r
+    # <pairwise Fus2_contig_1_pilon 4287_CM000589.1>
+      # spacing between contig1 and 4287_chromosome_1 is 4x of 0.5% (2%) of image
+      # The angle of the ideogram is also edited in <image> below.
+    #   spacing = 4r
+    # </pairwise>
+    <pairwise Fus2_contig_17_pilon Fus2_contig_5_pilon>
+      spacing = 0r
+    </pairwise>
+    <pairwise Fus2_contig_13_pilon Fus2_contig_15_pilon>
+      spacing = 0r
+    </pairwise>
+    <pairwise Fus2_contig_15_pilon Fus2_contig_18_pilon>
+      spacing = 0r
+    </pairwise>
+    <pairwise Fus2_contig_12_pilon Fus2_contig_11_pilon>
+      spacing = 0r
+    </pairwise>
+  </spacing>
+
+  # ideogram position, thickness and fill
+  radius           = 0.90r
+  thickness        = 30p
+  fill             = yes
+
+  stroke_thickness = 3
+  stroke_color     = black
+
+  # ideogram labels
+  # <<include ideogram.label.conf>>
+  show_label        = no
+
+  # show labels only for contigs 1-16 and
+  # use the chromosome name as the label, but replace "contig" with "FoC"
+  label_format     = eval( var(idx) < 16? replace(var(chr),"contig_","FoC") : "")
+
+  # 5% of inner radius outside outer ideogram radius
+  label_radius = dims(ideogram,radius_outer) + 0.15r
+  label_size        = 40
+  label_font        = bold
+  label_parallel    = yes
+
+
+  # ideogram cytogenetic bands, if defined in the karyotype file
+  # <<include bands.conf>>
+</ideogram>
+
+# image size, background color, angular position
+# of first ideogram, transparency levels, output
+# file and directory
+#
+# it is best to include these parameters from etc/image.conf
+# and override any using param* syntax
+#
+# e.g.
+#<image>
+# <<include etc/image.conf>>
+# radius* = 500
+# </image>
+<image>
+  # override the default angle_offset of -90 defined in etc/image.conf
+  angle_offset* = -90
+  #radius* = 500
+  <<include etc/image.conf>> # included from Circos distribution
+
+</image>
+
+# Specify which chromosomes will be drawn and their orientation
+
+# RGB/HSV color definitions, color lists, location of fonts,
+# fill patterns
+<<include etc/colors_fonts_patterns.conf>> # included from Circos distribution
+
+# debugging, I/O an dother system parameters
+<<include etc/housekeeping.conf>> # included from Circos distribution
+
+# Include ticks
+<<include /home/gomeza/git_repos/emr_repos/scripts/neonectria_ditissima/Pathogen/Circos/Hg_vs_R9/Hg_vs_R9_ticks.conf>>
+# Include a 2D plot
+<<include /home/gomeza/git_repos/emr_repos/scripts/neonectria_ditissima/Pathogen/Circos/Hg_vs_R9/Hg_vs_R9_2D_plot.conf>>

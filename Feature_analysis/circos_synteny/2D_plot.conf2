@@ -1,0 +1,47 @@
+<links>
+  <link>
+    ribbon           = yes
+    color            = grey
+    thickness        = 2
+    radius           = 0.93r
+    bezier_radius    = 0r
+    crest                = 0.1
+    bezier_radius_purity = 0.5
+  </link>
+
+   file = analysis/circos/Hg_vs_R9_vAG/Hg_vs_R9_links_edited.txt
+</links>
+
+# -----
+# Telomere locations
+# -----
+#
+#<plots>
+#<plot>
+#  show  = no
+#  type  = tile
+#  layers      = 1
+#  margin      = 0.02u
+#  orientation = in
+#  layers_overflow=collapse
+  # type  = scatter
+#  thickness   = 20
+#  padding     = 10
+
+#  file  = analysis/circos/Hg_vs_R9_vAG/Hg_vs_R9_telomere_hits.txt
+#  r1    = 0.99r
+#  r0    = 0.90r
+#  <rules>
+#    <rule>
+#    condition  = var(value) < 4
+#    show = no
+#    </rule>
+#  </rules>
+
+
+#  glyph            = cross
+#  glyph_size       = 30
+#  stroke_color     = vdpurple
+#  stroke_thickness = 8
+#</plot>
+#</plots>
