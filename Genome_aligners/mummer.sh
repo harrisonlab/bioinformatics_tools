@@ -42,15 +42,15 @@ cp $CurDir/$2 $QueryGenome
 # ---------------
 #
 
-nucmer -t 8 -p $Prefix $SubjectGenome $QueryGenome > $Prefix.txt
+/scratch/software/mummer/mummer-4.0.0rc1/nucmer -t 8 -p $Prefix $SubjectGenome $QueryGenome > $Prefix.txt
 
-delta-filter -i 70 -l 5000 -r -q $Prefix.delta > "$Prefix"_filtered.delta
+/scratch/software/mummer/mummer-4.0.0rc1/delta-filter -i 70 -l 5000 -r -q $Prefix.delta > "$Prefix"_filtered.delta
 
-show-tiling -p ${Prefix}_tiled_pseudomolecules.fa "$Prefix"_filtered.delta > "$Prefix".tiling
+/scratch/software/mummer/mummer-4.0.0rc1/show-tiling -p ${Prefix}_tiled_pseudomolecules.fa "$Prefix"_filtered.delta > "$Prefix".tiling
 
-mummerplot -p $Prefix "$Prefix"_filtered.delta
+/scratch/software/mummer/mummer-4.0.0rc1/mummerplot -p $Prefix "$Prefix"_filtered.delta
 
-show-coords -c -l -b -T "$Prefix"_filtered.delta > "$Prefix"_coords.tsv
+/scratch/software/mummer/mummer-4.0.0rc1/show-coords -c -l -b -T "$Prefix"_filtered.delta > "$Prefix"_coords.tsv
 
 # ---------------
 # Step 5
