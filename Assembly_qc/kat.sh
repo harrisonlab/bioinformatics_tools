@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -J kat
-#SBATCH --partition=medium
-#SBATCH --mem=4G
-#SBATCH --cpus-per-task=8
+#SBATCH --partition=short
+#SBATCH --mem-per-cpu=10G
+#SBATCH --cpus-per-task=24
 
 # Assess assembly quality by plotting occurence of kmers in a genome assembly
 # vs their occurence in illumina data.
