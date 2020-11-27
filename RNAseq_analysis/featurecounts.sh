@@ -1,12 +1,6 @@
-#$ -S /bin/bash
-#$ -cwd
-#$ -pe smp 4
-#$ -l virtual_free=1.2G
-#$ -l h=blacklace02.blacklace|blacklace03.blacklace|blacklace04.blacklace|blacklace05.blacklace|blacklace06.blacklace|blacklace07.blacklace|blacklace08.blacklace|blacklace09.blacklace|blacklace10.blacklace
-
 #!/usr/bin/env bash
-#SBATCH -J STAR
-#SBATCH --partition=long
+#SBATCH -J featureCounts
+#SBATCH --partition=himem
 #SBATCH --mem-per-cpu=8G
 #SBATCH --cpus-per-task=8
 
@@ -39,7 +33,7 @@ cp $CurDir/$2 $InGff
 # ---------------
 
 featureCounts \
-  -p -B -R \
+  -p -B -R BAM \
   -M --fraction \
   -T 4 \
   -a $InGff \
