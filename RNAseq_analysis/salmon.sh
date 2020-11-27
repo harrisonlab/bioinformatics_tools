@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J salmon
-#SBATCH --partition=short
+#SBATCH --partition=long
 #SBATCH --mem=10G
 #SBATCH -o salmon_"%j".out
 
