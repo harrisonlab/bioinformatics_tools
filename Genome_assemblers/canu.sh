@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 #SBATCH -J canu
 #SBATCH --partition=long
-#SBATCH --mem=400G
 #SBATCH --mem-per-cpu=16G
 #SBATCH --cpus-per-task=24
 
 # Assemble PacBio data using Canu
 
-Usage="submit_canu.sh <reads.fq> <Genome_size[e.g.45m]> <outfile_prefix> <output_directory> [<specification_file.txt>]"
+Usage="canu.sh <reads.fq> <Genome_size[e.g.45m]> <outfile_prefix> <output_directory> [<specification_file.txt>]"
 echo "$Usage"
 
 # ---------------
