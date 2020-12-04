@@ -149,7 +149,7 @@ cpan install Math::Utils
 
 ### Important configuration
 
-Current version of AUGUSTUS and Braker are the same installed using conda packages (braker version 2.1.5 and AUGUSTUS 3.3.3). However, some perl scripts in the conda package of AUGUSTUS are incompatible with this version of braker, producing unexpected output files. These were updated but not included in the conda package yet.
+Current version of AUGUSTUS and Braker can be installed using conda packages (braker version 2.1.5 and AUGUSTUS 3.3.3). However, some perl scripts in the conda package of AUGUSTUS are incompatible with this version of braker, producing unexpected output files. These were updated but not included in the conda package yet.
 
 Therefore, replace them in your conda installation before running braker.
 
