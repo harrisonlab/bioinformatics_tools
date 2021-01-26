@@ -46,5 +46,5 @@ $ProgDir/swissprot_parser.py --blast_tbl swissprot_vJun2020_10_hits.tbl --blast_
 mkdir -p $CurDir/$OutDir
 cp -r $WorkDir/*hits.tbl $CurDir/$OutDir/.
 cp -r $WorkDir/*parsed.tbl $CurDir/$OutDir/.
-rm -r $WorkDir
+#rm -r $WorkDir
 

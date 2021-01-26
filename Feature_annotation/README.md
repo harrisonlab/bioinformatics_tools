@@ -61,7 +61,7 @@ Following interproscan annotation split files were combined using the following 
 dbFasta=$(ls /projects/dbUniprot/swissprot_2020_June/uniprot_sprot.fasta)
 dbType="prot"
 Prefix="uniprot_sprot"
-makeblastdb -in $dbFasta -input_type fasta -dbtype $dbType -title $Prefix.db -parse_seqids -out $OutDir/$Prefix.db
+makeblastdb -in $dbFasta -input_type fasta -dbtype $dbType -title $Prefix.db -parse_seqids -out $OutDir/$Prefix 
 ```
 
 ### Typical run
