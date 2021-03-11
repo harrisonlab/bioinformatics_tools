@@ -2,6 +2,10 @@
 
 RepeatMasker screens DNA sequences for interspersed repeats and low complexity sequences.
 
+1. RepeatModeler. de novo transposable element (TE) family identification. Uses RECON, RepeatScout and LtrHarves/Ltr_retriever (optional).
+
+2. TransposonPSI: PSI-Blast is used with a collection of (retro) transposon ORF homology profiles.
+
 ### Requirements
 
 ```bash
@@ -11,6 +15,7 @@ conda install repeatmodeler
 #conda install repeatmasker
 #conda install rmblast
 conda install -c bioconda transposonpsi
+conda install -c bioconda ltr_retriever
 
 # After installing RepeatMasker, run configure. Bioconda does not do this.
 cd /home/USER_ID/miniconda3/envs/general_tools/share/RepeatMasker/
