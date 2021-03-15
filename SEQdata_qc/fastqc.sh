@@ -12,6 +12,8 @@ STRAIN=$(echo $INFILE | rev | cut -d "/" -f3 | rev)
 DIRECTION=$(echo $INFILE | rev | cut -d "/" -f2 | rev)
 READS=$(echo $INFILE | rev | cut -d "/" -f1 | rev)
 
+OutDir=$2
+
 CUR_PATH=$PWD
 WORK_DIR=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 
@@ -20,13 +22,19 @@ cd $WORK_DIR
 
 cp $CUR_PATH/$INFILE .
 
-fastqc --nogroup $READS
+fastqc $READS
 
 unzip *.zip
 
 #mkdir -p $CUR_PATH/$DATA_TYPE/$READ_TYPE/$ORGANISM/$STRAIN/$DIRECTION/
 
-cp -r $WORK_DIR/*fastqc $CUR_PATH/$DATA_TYPE/$READ_TYPE/$ORGANISM/$STRAIN/$DIRECTION/.
+if [ $2 ]; then
+  OUTDIR=$CUR_PATH/$2
+  mkdir -p $OUTDIR
+  cp -r $WORK_DIR/*fastqc $OUTDIR
+else
+    cp -r $WORK_DIR/*fastqc $CUR_PATH/$DATA_TYPE/$READ_TYPE/$ORGANISM/$STRAIN/$DIRECTION/.
+fi
 
 rm -r $WORK_DIR
 
