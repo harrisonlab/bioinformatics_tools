@@ -47,6 +47,7 @@ conda install pilon
 conda activate dbg_assemblers_py27
 # Flye (requires python2.7)
 conda install flye
+conda update flye #Latest v2.8.3
 ```
 
 ## Typical run
