@@ -2,7 +2,7 @@
 #SBATCH -J canu
 #SBATCH --partition=long
 #SBATCH --mem-per-cpu=16G
-#SBATCH --cpus-per-task=24
+#SBATCH --cpus-per-task=12
 
 # Assemble PacBio data using Canu
 
@@ -17,10 +17,11 @@ echo "$Usage"
 FastqIn=$1
 Size=$2
 Prefix=$3
-OutDir=$4
+type=$4
+OutDir=$5
 AdditionalCommands=""
-if [ $5 ]; then
-  SpecFile=$5
+if [ $6 ]; then
+  SpecFile=$6
   AdditionalCommands="-s $SpecFile"
 fi
 echo  "Running Canu with the following inputs:"
@@ -30,7 +31,7 @@ echo "Prefix - $Prefix"
 echo "OutDir - $OutDir"
 
 CurPath=$PWD
-WorkDir="$TMPDIR"/canu
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 # ---------------
 # Step 2
@@ -42,15 +43,30 @@ cd $WorkDir
 Fastq=$(basename $FastqIn)
 cp $CurPath/$FastqIn $WorkDir/$Fastq
 
-canu \
+if [ $type == "nanopore" ]; then
+   canu \
   useGrid=false \
   $AdditionalCommands \
   -overlapper=mhap \
   -utgReAlign=true \
   -d $WorkDir/assembly \
   -p $Prefix genomeSize="$Size" \
-  -nanopore-raw $Fastq \
+  -nanopore $Fastq \
   2>&1 | tee canu_run_log.txt
+  elif [ $type == "pacbio" ]; then
+   canu \
+  useGrid=false \
+  $AdditionalCommands \
+  -overlapper=mhap \
+  -utgReAlign=true \
+  -d $WorkDir/assembly \
+  -p $Prefix genomeSize="$Size" \
+  -pacbio $Fastq \
+  2>&1 | tee canu_run_log.txt
+  else
+    echo "data type not supported"
+  fi
+
 
 mkdir -p $CurPath/$OutDir
 cp canu_run_log.txt $CurPath/$OutDir/.
