@@ -41,13 +41,19 @@ conda install racon
 conda create -n medaka -c conda-forge -c bioconda medaka
 # Nanopolish. Medaka is recommended.
 conda install nanopolish 
-# Pilon
-conda install pilon
 
-conda activate dbg_assemblers_py27
+
 # Flye (requires python2.7)
+conda activate dbg_assemblers_py27
 conda install flye
 conda update flye #Latest v2.8.3
+
+# Pilon. Latest versions of samtools and bowtie2 needed
+conda create -n samtools_v1.12 -c bioconda samtools
+conda activate samtools4pilon
+conda install -c bioconda bowtie2
+# Pilon lastest version is in /scratch/software
+#conda install pilon
 ```
 
 ## Typical run
