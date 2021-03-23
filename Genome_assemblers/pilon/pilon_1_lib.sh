@@ -83,11 +83,11 @@ for i in $(seq 1 $Iterations); do
   # ---------------
   # Run pilon to polish
   if [ $Ploidy == "haploid" ]; then
-    JavaDir=/scratch/software/pilon-1.23
-    java -Xmx$Mem -jar $JavaDir/pilon-1.23.jar --threads 16 --genome assembly.fa --changes --frags assembly.fa_aligned_sorted.bam --outdir .
+    JavaDir=/scratch/software/pilon-1.24
+    java -Xmx$Mem -jar $JavaDir/pilon-1.24.jar --threads 16 --genome assembly.fa --changes --frags assembly.fa_aligned_sorted.bam --outdir .
   elif [ $Ploidy == "diploid" ]; then
-     JavaDir=/scratch/software/pilon-1.23
-    java -Xmx$Mem -jar $JavaDir/pilon-1.23.jar --threads 16 --genome assembly.fa --changes --diploid --frags assembly.fa_aligned_sorted.bam --outdir .
+     JavaDir=/scratch/software/pilon-1.24
+    java -Xmx$Mem -jar $JavaDir/pilon-1.24.jar --threads 16 --genome assembly.fa --changes --diploid --frags assembly.fa_aligned_sorted.bam --outdir .
   else
   echo "ploidy not recognised"
   fi
