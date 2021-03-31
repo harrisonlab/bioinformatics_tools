@@ -23,6 +23,8 @@ fi
 CurPath=$PWD
 WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 
+mkdir -p $WorkDir
+
 F_Read=$(basename $R1)
 R_Read=$(basename $R2)
 
