@@ -55,11 +55,11 @@ cp $CurPath/$HybridFa hybrid.fa
 merge_wrapper.py \
   pacbio.fa \
   hybrid.fa \
-  --prefix pacbio_hybrid_merged \
+  -pre pacbio_hybrid_merged \
   -hco $AnchorOverlapCuttoff \
   -c $ExtensionOverlapCuttoff \
-  --length_cutoff $AnchorContigLength \
-  --length_minimum $MinAlignmentLength \
+  -l $AnchorContigLength \
+  -ml $MinAlignmentLength \
   > merge_report.txt
 
 rm pacbio.fa
