@@ -8,6 +8,7 @@ CurPath=$PWD
 InFile="$1"
 BaseName="$2"
 OutDir=$CurPath/"$3"
+version=$4
 
 Organism=$(echo $InFile | rev | cut -d "/" -f3 | rev)
 Strain=$(echo $InFile | rev | cut -d "/" -f2 | rev)
@@ -19,7 +20,14 @@ cd $WorkDir
 
 cp $CurPath/$InFile proteins.fa
 echo "Running effectorP for: $Organism - $Strain"
-EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+
+if [ $version == "v2" ]; then
+   EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+  elif [ $type == "v3" ]; then
+    /scratch/software/EffectorP-3.0/EffectorP-3.0-main/EffectorP.py -f -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+  else
+    echo "Version 2.0 or 3.0 required"
+  fi
 
 rm proteins.fa
 mkdir -p $OutDir
