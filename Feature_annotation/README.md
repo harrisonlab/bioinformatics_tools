@@ -192,7 +192,7 @@ From Augustus gene models - Effector identification using EffectorP
 
 ### Requirements
 ```
-# This line need to added to profile or used to execute EffectorP directly
+# This line need to added to profile or used to execute EffectorP version 2.0 directly
 PATH=${PATH}:/scratch/software/EffectorP-2.0/Scripts
 ```
 ```bash
@@ -201,11 +201,13 @@ for Proteome in $(ls path/to/final/final_genes_appended_renamed.pep.fasta); do
   Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
   BaseName="$Organism"_"$Strain"_EffectorP
   OutDir=analysis/effectorP/$Organism/$Strain
-  EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i $Proteome
-  mv "$BaseName".txt $OutDir
-  mv "$BaseName".fa $OutDir
-  #ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-  #sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir
+  Version=v2 # Version 2.0 or 3.0
+  OutDir=analysis/effectorP/$Version/$Organism/$Strain
+  #EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i $Proteome
+  #mv "$BaseName".txt $OutDir
+  #mv "$BaseName".fa $OutDir
+  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir $Version
 done
 ```
 
