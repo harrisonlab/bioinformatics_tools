@@ -96,7 +96,7 @@ elif [ $SigP_Version == signalp-4.1 ]; then
   OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
   elif [ $SigP_Version == signalp-5.0 ]; then
   echo "Running using SignalP version: $SigP_Version"
-  signalp -org euk -format short -fasta "proteins.fa" -verbose -prefix "$OutFile"
+  $SigP_Version -org euk -format short -fasta "proteins.fa" -verbose -prefix "$OutFile"
   echo '----------------------------------------------------------------------' >> "$OutFile"_summary.signalp5
   PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/sigP_5.0_parser.py --inp_sigP "$OutFile"_summary.signalp5 --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
