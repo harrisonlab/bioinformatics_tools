@@ -21,13 +21,13 @@ cd $WorkDir
 cp $CurPath/$InFile proteins.fa
 echo "Running effectorP for: $Organism - $Strain"
 
-if [ $version == "v2" ]; then
-   EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
-  elif [ $type == "v3" ]; then
-    /scratch/software/EffectorP-3.0/EffectorP-3.0-main/EffectorP.py -f -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
-  else
-    echo "Version 2.0 or 3.0 required"
-  fi
+if [ $version == "2.0" ]; then
+  /data/scratch/gomeza/prog/EffectorP/EffectorP_2.0/Scripts/EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+elif [ $version == "3.0" ]; then
+  EffectorP.py -f -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+else
+ echo "Version 2.0 or 3.0"
+fi
 
 rm proteins.fa
 mkdir -p $OutDir
