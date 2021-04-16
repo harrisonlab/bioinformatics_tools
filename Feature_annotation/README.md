@@ -128,7 +128,8 @@ for Strain in Strain1 Strain2 Strain3; do # Add your strains name
 done
 ```
 
- The batch files of predicted secreted proteins needed to be combined into a single file for each strain. This was done with the following commands:
+
+The batch files of predicted secreted proteins needed to be combined into a single file for each strain. This was done with the following commands:
 
  ```bash
 for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
@@ -188,13 +189,17 @@ done
 
 ## 4. EffectorP
 
-From Augustus gene models - Effector identification using EffectorP version 2.0
+From Augustus gene models - Effector identification using EffectorP
 
 ### Requirements
 ```
 # This line need to added to profile or used to execute EffectorP version 2.0 directly
-PATH=${PATH}:/scratch/software/EffectorP-2.0/Scripts
+PATH=${PATH}:/scratch/software/EffectorP-3.0/EffectorP-3.0-main
+# For version 2.0 (not needed)
+PATH=${PATH}:/scratch/software/EffectorP-2.0/Scripts 
 ```
+
+### Typical run
 
 ```bash
 for Proteome in $(ls path/to/final/final_genes_appended_renamed.pep.fasta); do
@@ -248,6 +253,8 @@ done
 ## 5. Identification of MIMP-flanking genes
 
 Miniature impala (mimp) sequeces are found in promotor regions of SIX genes in fusarium.
+
+### Typical run
 
 ```bash
   for Assembly in $(ls path/to/*_contigs_unmasked.fa); do
