@@ -131,40 +131,41 @@ done
  The batch files of predicted secreted proteins needed to be combined into a single file for each strain. This was done with the following commands:
 
  ```bash
- for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
-	for SplitDir in $(ls -d gene_pred/final_genes_split/*/$Strain); do
-		Strain=$(echo $SplitDir | rev |cut -d '/' -f1 | rev)
-		Organism=$(echo $SplitDir | rev |cut -d '/' -f2 | rev)
-		InStringAA=''
-		InStringNeg=''
-		InStringTab=''
-		InStringTxt=''
-		SigpDir=final_genes_signalp-4.1
-		for GRP in $(ls -l $SplitDir/*_final_preds_*.fa | rev | cut -d '_' -f1 | rev | sort -n); do
-			InStringAA="$InStringAA gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.aa";
-			InStringNeg="$InStringNeg gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp_neg.aa";
-			InStringTab="$InStringTab gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.tab";
-			InStringTxt="$InStringTxt gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.txt";
-		done
-		cat $InStringAA > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.aa
-		cat $InStringNeg > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_neg_sp.aa
-		tail -n +2 -q $InStringTab > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.tab
-		cat $InStringTxt > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.txt
-	done
+for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
+  for SplitDir in $(ls -d gene_pred/final_genes_split/*/$Strain); do
+    Strain=$(echo $SplitDir | rev |cut -d '/' -f1 | rev)
+    Organism=$(echo $SplitDir | rev |cut -d '/' -f2 | rev)
+    InStringAA=''
+    InStringNeg=''
+    InStringTab=''
+    InStringTxt=''
+    SigpDir=final_genes_signalp-4.1
+    for GRP in $(ls -l $SplitDir/*_final_preds_*.fa | rev | cut -d '_' -f1 | rev | sort -n); do
+      InStringAA="$InStringAA gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.aa";
+      InStringNeg="$InStringNeg gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp_neg.aa";
+      InStringTab="$InStringTab gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.tab";
+      InStringTxt="$InStringTxt gene_pred/$SigpDir/$Organism/$Strain/split/"$Organism"_"$Strain"_final_preds_$GRP""_sp.txt";
+    done
+    cat $InStringAA > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.aa
+    cat $InStringNeg > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_neg_sp.aa
+    tail -n +2 -q $InStringTab > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.tab
+    cat $InStringTxt > gene_pred/$SigpDir/$Organism/$Strain/"$Strain"_final_sp.txt
+  done
 done
- ```
+```
+
 Some proteins that are incorporated into the cell membrane require secretion. Therefore proteins with a transmembrane domain are not likely to represent cytoplasmic or apoplastic effectors.
 
 Proteins containing a transmembrane domain were identified:
 
  ```bash
 for Strain in Strain1 Strain2 Strain3; do  # Add your strains name
- 	for Proteome in $(ls gene_pred/codingquary/*/$Strain/final/final_genes_combined.pep.fasta); do
- 		Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
- 		Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
- 		ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
- 		qsub $ProgDir/TMHMM.sh $Proteome
- 	done
+  for Proteome in $(ls gene_pred/codingquary/*/$Strain/final/final_genes_combined.pep.fasta); do
+    Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
+    Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+    sbacth $ProgDir/TMHMM.sh $Proteome
+  done
 done
  ```
 
@@ -185,52 +186,63 @@ for File in $(ls gene_pred/trans_mem/$Organism/$Strain/*_TM_genes_neg.txt); do
 done
 ```
 
-
 ## 4. EffectorP
 
-From Augustus gene models - Effector identification using EffectorP
+From Augustus gene models - Effector identification using EffectorP version 2.0
 
 ### Requirements
 ```
 # This line need to added to profile or used to execute EffectorP version 2.0 directly
 PATH=${PATH}:/scratch/software/EffectorP-2.0/Scripts
 ```
+
 ```bash
 for Proteome in $(ls path/to/final/final_genes_appended_renamed.pep.fasta); do
   Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
   Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
   BaseName="$Organism"_"$Strain"_EffectorP
-  OutDir=analysis/effectorP/$Organism/$Strain
-  Version=v2 # Version 2.0 or 3.0
-  OutDir=analysis/effectorP/$Version/$Organism/$Strain
-  #EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i $Proteome
-  #mv "$BaseName".txt $OutDir
-  #mv "$BaseName".fa $OutDir
+  Version=2.0 # Version 2.0 or 3.0
+  OutDir=analysis/effectorP_"$Version"/$Version/$Organism/$Strain
   ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
   sbatch $ProgDir/pred_effectorP.sh $Proteome $BaseName $OutDir $Version
 done
 ```
 
-
 ```bash
-for File in $(ls analysis/effectorP/*/*/*_EffectorP.txt); do
-  Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
-  Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
-  echo "$Organism - $Strain"
-  Headers=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_headers.txt/g')
-  cat $File | grep 'Effector' | cut -f1 > $Headers
-  Secretome=$(ls gene_pred/final_genes_signalp-4.1/$Organism/$Strain/*_final_sp_no_trans_mem.aa)
-  OutFile=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted.aa/g')
-  ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-  $ProgDir/extract_from_fasta.py --fasta $Secretome --headers $Headers > $OutFile
-  OutFileHeaders=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted_headers.txt/g')
-  cat $OutFile | grep '>' | tr -d '>' > $OutFileHeaders
-  cat $OutFileHeaders | wc -l
-  Gff=$(ls gene_pred/codingquarry_cuff_final/F.venenatum/WT_minion/final/final_genes_appended_renamed.gff3)
-  EffectorP_Gff=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted.gff/g')
-  $ProgDir/extract_gff_for_sigP_hits.pl $OutFileHeaders $Gff effectorP ID > $EffectorP_Gff
-  cat $EffectorP_Gff | grep -w 'gene' | wc -l
-done > tmp.txt
+# List of effectors
+  for File in $(ls analysis/effectorP*/*/*/*_EffectorP.txt); do
+    Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
+    Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
+    Effversion=$(echo $File | rev | cut -f4 -d '/' | rev)
+    echo "$Organism - $Strain"
+      if [ $Effversion == "effectorP_2.0" ]; then 
+      Headers=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_headers.txt/g')
+      cat $File | grep 'Effector' | cut -f1 > $Headers
+      else 
+      CitHeaders=$(echo "$File" | sed 's/_EffectorP.txt/_Cytoplasmic_Effectors_headers.txt/g')
+      cat $File | grep 'Cytoplasmic effector\|/' | cut -f1 > $CitHeaders
+      ApHeaders=$(echo "$File" | sed 's/_EffectorP.txt/_Apoplastic_Effectors_headers.txt/g')
+      cat $File | grep 'Apoplastic effector\|/' | cut -f1 > $ApHeaders
+      fi
+  done
+
+# Extract secreted effectors 
+  for File in $(ls analysis/effectorP*/*/*/*_EffectorP.txt); do
+    Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
+    Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
+    echo "$Organism - $Strain"
+    Secretome=$(ls gene_pred/final_genes_signalp-4.1/$Organism/$Strain/*_final_sp_no_trans_mem.aa)
+    OutFile=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted.aa/g')
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+    $ProgDir/extract_from_fasta.py --fasta $Secretome --headers $Headers > $OutFile
+    OutFileHeaders=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted_headers.txt/g')
+    cat $OutFile | grep '>' | tr -d '>' > $OutFileHeaders
+    cat $OutFileHeaders | wc -l
+    Gff=$(ls gene_pred/$Organism/$Strain/final_genes_appended_renamed.gff3)
+    EffectorP_Gff=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted.gff/g')
+    $ProgDir/extract_gff_for_sigP_hits.pl $OutFileHeaders $Gff effectorP ID > $EffectorP_Gff
+    cat $EffectorP_Gff | grep -w 'gene' | wc -l
+  done > tmp.txt
 ```
 
 ## 5. Identification of MIMP-flanking genes
