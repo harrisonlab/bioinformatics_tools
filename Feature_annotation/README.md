@@ -237,6 +237,7 @@ done
     Organism=$(echo $File | rev | cut -f3 -d '/' | rev)
     echo "$Organism - $Strain"
     Secretome=$(ls gene_pred/final_genes_signalp-4.1/$Organism/$Strain/*_final_sp_no_trans_mem.aa)
+    Headers=$(ls analysis/effectorP*/*/*/*_EffectorP_headers.txt)
     OutFile=$(echo "$File" | sed 's/_EffectorP.txt/_EffectorP_secreted.aa/g')
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
     $ProgDir/extract_from_fasta.py --fasta $Secretome --headers $Headers > $OutFile
