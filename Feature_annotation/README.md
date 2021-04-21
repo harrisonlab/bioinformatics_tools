@@ -231,6 +231,9 @@ done
       fi
   done
 
+# sed can be used to remove first line and any info after gene id
+# cat *_EffectorP_headers.txt| sed -i s/\ //g | sed '1d' > Clean_EffectorP_headers.txt 
+
 # Extract secreted effectors 
   for File in $(ls analysis/effectorP*/*/*/*_EffectorP.txt); do
     Strain=$(echo $File | rev | cut -f2 -d '/' | rev)
