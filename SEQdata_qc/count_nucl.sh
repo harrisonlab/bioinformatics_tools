@@ -31,19 +31,19 @@ WorkDir=$PWD/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 
-cp $CurDir/$1 $WorkDir
-cp $CurDir/$2 $WorkDir
+cp $CurDir/$1 $WorkDir/seqreads1.fastq.gz
+cp $CurDir/$2 $WorkDir/seqreads2.fastq.gz
 
-gunzip $Read_F
-gunzip $Read_R
+gunzip $WorkDir/seqreads1.fastq.gz
+gunzip $WorkDir/seqreads2.fastq.gz
 
 # ---------------
 # Step 3
 # Calculate estimated genome coverage
 # ---------------
 
-Sub1=*R1*.fq
-Sub2=*R2*.fq
+Sub1=seqreads1.fastq
+Sub2=seqreads2.fastq
 
 /data/scratch/gomeza/prog/count_nucl.pl -i $Sub1 -i $Sub2 -g $3 > estimated_coverage.log
 
