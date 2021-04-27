@@ -72,3 +72,22 @@ done
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
     sbatch $ProgDir/porechop.sh $RawReads $OutDir 
 ```
+
+
+### Coverage analysis
+
+```bash
+  for Bam in $(ls alignment/bwa/vs_*/$Organism/$Strain/*sorted.bam); do
+    Strain=$(echo $Bam | rev | cut -f2 -d '/' | rev)
+    Organism=$(echo $Bam | rev | cut -f3 -d '/' | rev)
+    echo "$Organism - $Strain"
+    OutDir=$(dirname $Bam)
+    samtools depth -aa $Bam > $OutDir/${Organism}_${Strain}_vs_*_depth.tsv
+    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
+    $ProgDir/cov_by_window.py --cov $OutDir/${Organism}_${Strain}_vs_*_depth.tsv > $OutDir/${Organism}_${Strain}_vs_*_depth_10kb.tsv
+    sed -i "s/$/\t$Strain/g" $OutDir/${Organism}_${Strain}_vs_*_depth_10kb.tsv
+  done
+  OutDir=analysis/genome_alignment/bwa/vs_*_Ref/grouped
+  mkdir -p $OutDir
+  cat alignment/bwa/vs_*/$Organism/$Strain/*_*_vs_*_depth_10kb.tsv > analysis/genome_alignment/bwa/vs_*_Ref/grouped/vs_*_grouped_depth.tsv
+```
