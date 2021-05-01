@@ -202,3 +202,211 @@ done
 ```
 
 srun --partition short --mem-per-cpu 6G --cpus-per-task 60 --pty bash
+
+
+
+```bash
+srun --partition himem --mem 10G --cpus-per-task 10 --pty bash
+
+cat  /archives/2020_niabemr_nanopore/S3D6/20201215_1453_X1_FAO27987_9702022c/fastq_pass/*.fastq | gzip > raw_data/S3D6_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-2/20201215_1645_X1_FAO27987_b2861159/fastq_pass/*.fastq | gzip > raw_data/S3D6-2_pass.fastq.gz
+
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode01/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode01_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode02/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode02_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode03/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode03_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode04/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode04_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode05/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode05_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode06/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode06_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode07/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode07_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode08/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode08_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode09/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode09_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode10/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode10_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode11/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode11_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/barcode12/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/barcode12_pass.fastq.gz
+cat  /archives/2020_niabemr_nanopore/S3D6-BC11_BC12_No_Selection/20201217_1441_X2_FAO27999_57821556/fastq_pass/unclassified/*.fastq | gzip > raw_data/S3D6-BC11_BC12_No_Selection/unclassified_pass.fastq.gz
+
+
+cat  /archives/2020_niabemr_nanopore/S3_D6_readfish1/20201216_1220_X1_FAO27987_4cc4da2e/fastq_pass/*.fastq | gzip > raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz
+```
+```bash
+# Run fastqc
+RawData=$(ls raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz)
+OutDir=qc_data/S3_D6_readfish1
+echo $RawData;
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
+sbatch $ProgDir/fastqc2.sh $RawData $OutDir
+
+```
+
+## minimap2
+
+Reads were aligned to Fus2 and FoL genomes
+
+```bash
+for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/F.oxysporum_fsp_cepae/Fus2_canu_new/edited_contigs_repmask/Fus2_canu_contigs_unmasked.fa); do
+Read=raw_data/S3D6-BC11_BC12_No_Selection/barcode12_pass.fastq.gz
+OutDir=genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
+sbatch -p long $ProgDir/minimap2.sh $Reference $Read $OutDir
+done
+```
+
+
+echo $(zcat S3D6_pass.fastq.gz|wc -l)/4|bc
+125373
+
+echo $(zcat S3D6-2_pass.fastq.gz|wc -l)/4|bc
+11003176
+
+echo $(zcat S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz|wc -l)/4|bc
+9764274
+
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode01_pass.fastq.gz|wc -l)/4|bc
+9
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode02_pass.fastq.gz|wc -l)/4|bc
+10
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode03_pass.fastq.gz|wc -l)/4|bc
+43
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode04_pass.fastq.gz|wc -l)/4|bc
+9
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode05_pass.fastq.gz|wc -l)/4|bc
+8
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode06_pass.fastq.gz|wc -l)/4|bc
+26
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode07_pass.fastq.gz|wc -l)/4|bc
+14
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode08_pass.fastq.gz|wc -l)/4|bc
+11
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode09_pass.fastq.gz|wc -l)/4|bc
+15
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode10_pass.fastq.gz|wc -l)/4|bc
+2
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode11_pass.fastq.gz|wc -l)/4|bc
+910153
+echo $(zcat S3D6-BC11_BC12_No_Selection/barcode12_pass.fastq.gz|wc -l)/4|bc
+1322587
+echo $(zcat S3D6-BC11_BC12_No_Selection/unclassified_pass.fastq.gz|wc -l)/4|bc
+29044
+
+
+
+# -F 260 options for primary aligned mapped reads
+samtools view -c genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+125637
+#mapped reads
+samtools view -c -F 4 genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+632
+samtools view -c -f 4 genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+125005
+samtools view -c -F 260 genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+421
+samtools view -F 0x904 -c genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+368
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6-2/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+33320
+samtools view -c -F 260 genome_alignment/minimap2/S3D6-2/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+23911
+
+samtools view -c -F 4 genome_alignment/minimap2/S3_D6_readfish/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+29483
+samtools view -c -F 260 genome_alignment/minimap2/S3_D6_readfish/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+20298
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6_NoSelection/barcode11/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+4528
+samtools view -c -F 260 genome_alignment/minimap2/S3D6_NoSelection/barcode11/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+2851
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+
+samtools view -c -F 260 genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+4228
+
+samtools view -c -F 260 genome_alignment/minimap2/S3D6_NoSelection/unclassified/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam
+103
+
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6/vs_Fus2/sorted.bam 
+
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned.bam -bga > genome_alignment/minimap2/S3D6/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' output_aln.bam
+
+
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6/vs_Fus2/sorted.bam -bga > genome_alignment/minimap2/S3D6/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' genome_alignment/minimap2/S3D6/vs_Fus2/output_aln.bam
+39287
+
+
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6-2/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned_sorted.bam -bga > genome_alignment/minimap2/S3D6-2/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' genome_alignment/minimap2/S3D6-2/vs_Fus2/output_aln.bam
+
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3_D6_readfish/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned_sorted.bam -bga > genome_alignment/minimap2/S3_D6_readfish/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' genome_alignment/minimap2/S3_D6_readfish/vs_Fus2/output_aln.bam
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6_NoSelection/barcode11/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned_sorted.bam -bga > genome_alignment/minimap2/S3D6_NoSelection/barcode11/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' genome_alignment/minimap2/S3D6_NoSelection/barcode11/vs_Fus2/output_aln.bam
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned_sorted.bam -bga > genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/output_aln.bam
+awk '{s+=$4}END{print s}' genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/output_aln.bam
+
+bedtools genomecov -ibam genome_alignment/minimap2/S3D6_NoSelection/barcode12/vs_Fus2/Fus2_canu_contigs_unmasked.fa_aligned_sorted.bam -bg > output_aln.bg
+awk '{ s+=($3-$2) } END { print s }' output_aln.bg
+
+# Estimate coverage long read data
+for RawData in $(ls -d raw_data/S3D6-2_pass.fastq.gz); do
+echo $RawData
+GenomeSize=53 #Estimated genome size
+OutDir=$(dirname $RawData)
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/SEQdata_qc
+sbatch $ProgDir/count_nucl_single.sh $RawData $GenomeSize $OutDir
+done
+```
+
+cat raw_data/S3D6-BC11_BC12_No_Selection/barcode12_pass.fastq.gz | gunzip -fc > 05.fastq
+/data/scratch/gomeza/prog/count_nucl.pl -i 05.fastq -g 53 > 05.cov
+
+
+
+## minimap2
+
+Reads were aligned to Fus2 and FoL genomes
+
+```bash
+for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/F.oxysporum_fsp_mathioli/Stocks4/filtered_contigs/Stocks4_contigs_unmasked.fa); do
+Read=raw_data/S3D6_pass.fastq.gz
+OutDir=genome_alignment/minimap2/S3D6/vs_FoM
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
+sbatch -p long $ProgDir/minimap2.sh $Reference $Read $OutDir
+done
+```
+
+```bash
+for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/F.oxysporum_fsp_lycopersici/4287_chromosomal/ensembl_repmask/4287_chromosomal_contigs_unmasked.fa); do
+Read=raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz
+OutDir=genome_alignment/minimap2/S3_D6_readfish/vs_FoL
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
+sbatch -p long $ProgDir/minimap2.sh $Reference $Read $OutDir
+done
+```
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+samtools view -c -F 260 genome_alignment/minimap2/S3D6/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+samtools view -c -F 4 genome_alignment/minimap2/S3D6-2/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+samtools view -c -F 260 genome_alignment/minimap2/S3D6-2/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+samtools view -c -F 4 genome_alignment/minimap2/S3_D6_readfish/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+samtools view -c -F 260 genome_alignment/minimap2/S3_D6_readfish/vs_FoL/4287_chromosomal_contigs_unmasked.fa_aligned_sorted.bam
+
+
+python /data/scratch/gomeza/prog/LongQC/longQC.py sampleqc -x ont-rapid -o out_dir S3D6-BC11_BC12_No_Selection/barcode01_pass.fastq.gz
+
+NanoFilt --logfile log.txt -l 90 -q 10 04.fastq >  highQuality-reads.fastq
