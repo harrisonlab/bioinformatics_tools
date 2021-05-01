@@ -73,8 +73,26 @@ done
     sbatch $ProgDir/porechop.sh $RawReads $OutDir 
 ```
 
+## Other commands
 
-### Coverage analysis
+```bash
+    # Count reads in fastq files
+    echo $(zcat file.fq.gz|wc -l)/4|bc
+    # Length per read
+    python fastq_lenght.py file.fastq 
+    # Read length occurrence
+    awk '{if(NR%4==2) print length($1)}' file.fastq | sort -n | uniq -c > read_length.txt
+    # or 
+    zcat file.fastq.gz | awk '{if(NR%4==2) print length($1)}' | sort -n | uniq -c > read_length.txt
+```
+```r
+    # Plot read occurrence
+    reads<-read.csv(file="read_length.txt", sep="", header=FALSE)
+    plot (reads$V2,reads$V1,type="l",xlab="read length",ylab="occurences",col="blue")
+```
+
+
+## Coverage analysis
 
 ```bash
   for Bam in $(ls alignment/bwa/vs_*/$Organism/$Strain/*sorted.bam); do
