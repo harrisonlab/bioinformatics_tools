@@ -12,7 +12,7 @@ OutDir=$5
 
 CWD=$PWD
 
-WorkDir="$TMPDIR"
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 
 cp -r $Assembly $F_reads $R_reads $WorkDir
