@@ -41,7 +41,7 @@ echo "Contigs of this size will be used as anchors for merging - $AnchorContigLe
 # ---------------
 
 CurPath=$PWD
-WorkDir="$TMPDIR"/quickmerge
+WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 cp $CurPath/$PacbioFa pacbio.fa
