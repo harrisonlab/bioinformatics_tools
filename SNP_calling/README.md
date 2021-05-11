@@ -6,6 +6,7 @@
 conda activate SNP_calling
 
 conda install picard
+conda update picard
 
 conda install perl-vcftools-vcf
 conda install vcftools
