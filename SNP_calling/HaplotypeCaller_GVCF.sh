@@ -51,8 +51,9 @@ picard CreateSequenceDictionary R=Reference.fasta O=Reference.dict
  /scratch/software/gatk4/gatk-4.2.0.0/gatk HaplotypeCaller -ERC GVCF \
      -ploidy 1 \
      -I Alignment.bam \
-     -O "$Preix"_SNP_calls.g.vcf \
+     -O "$Prefix"_SNP_calls.g.vcf \
      -R Reference.fasta
 
-cp $WorkDir/"$Prefix"_SNP_calls.g.vcf $OutDir
+mkdir -p $CurDir/$OutDir
+cp -r $WorkDir/* $CurDir/$OutDir/.
 rm -r $WorkDir
