@@ -45,10 +45,10 @@ else
   exit
 fi
 
-#echo "Filtering contigs smaller than 500bp"
-#mkdir -p $WorkDir/filtered_contigs
-#FilterDir=/home/armita/git_repos/emr_repos/tools/seq_tools/assemblers/abyss
-#$FilterDir/filter_abyss_contigs.py $WorkDir/scaffolds.fasta 500 > $WorkDir/filtered_contigs/contigs_min_500bp.fasta
+echo "Filtering contigs smaller than 500bp"
+mkdir -p $WorkDir/filtered_contigs
+FilterDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Assembly_qc
+$FilterDir/filter_contigs.py $WorkDir/scaffolds.fasta 500 > $WorkDir/filtered_contigs/contigs_min_500bp.fasta
 
 
 rm $WorkDir/$F_Read
