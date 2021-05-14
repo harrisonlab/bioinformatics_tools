@@ -25,7 +25,7 @@ Usage="sbatch rep_modeling.sh <assembled_contigs.fa> [<output_directory>]"
 InFile=$1
 Organism=$(echo $InFile | rev | cut -d "/" -f4 | rev)
 Strain=$(echo $InFile | rev | cut -d "/" -f3 | rev)
-Assembly=$(echo $InFile | rev | cut -d "/" -f2 | rev)
+Assembly=$(echo $InFile | rev | cut -d "/" -f5 | rev)
 
 CurPath=$PWD
 WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
