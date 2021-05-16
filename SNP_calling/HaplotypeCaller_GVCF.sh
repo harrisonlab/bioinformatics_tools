@@ -26,7 +26,7 @@ echo "Aligment file - $AlignmentIn"
 echo "OutDir - $OutDir"
 
 CurPath=$PWD
-WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
+WorkDir=$CurPath/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 
@@ -48,12 +48,12 @@ picard CreateSequenceDictionary R=Reference.fasta O=Reference.dict
 # Run HaplotypeCaller
 # ---------------
 
- /scratch/software/gatk4/gatk-4.2.0.0/gatk HaplotypeCaller -ERC GVCF \
+ /scratch/software/gatk4/gatk-4.2.0.0/gatk --java-options "-Xmx4g" HaplotypeCaller -ERC GVCF \
      -ploidy 1 \
      -I Alignment.bam \
      -O "$Prefix"_SNP_calls.g.vcf \
      -R Reference.fasta
 
-mkdir -p $CurDir/$OutDir
-cp -r $WorkDir/* $CurDir/$OutDir/.
+mkdir -p $CurPath/$OutDir
+cp -r $WorkDir/*.g.vcf $CurPath/$OutDir/.
 rm -r $WorkDir
