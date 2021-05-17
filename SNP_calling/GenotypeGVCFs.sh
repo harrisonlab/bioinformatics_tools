@@ -14,7 +14,8 @@ filename=$(basename "$Reference")
 output="${filename%.*}_genotyped.vcf.gz"
 #output2=$input/"${filename%.*}.vcf"
 
-/scratch/software/gatk4/gatk-4.2.0.0/gatk GenotypeGVCFs \
+/scratch/software/gatk4/gatk-4.2.0.0/gatk --java-options "-Xmx4g" GenotypeGVCFs \
+	-ploidy 1 \
 	-R $Reference \
 	-V $Input_vcf \
 	-O $OutDir/$output	
