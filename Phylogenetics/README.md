@@ -150,24 +150,19 @@ Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised 
 ### Randomized Axelerated Maximum Likelihood
 
 ```bash
-# Edit header name keeping BUSCO name and isolate name
+# Edit header name keeping BUSCO name and isolate name using sed
 cd analysis/popgen/busco_phylogeny/trimmed_alignments
-sed -i 's/_contigs_.*//g' *_appended_aligned_trimmed.fasta
+# e.g.
+sed -i 's/:contig_.*//g' *_appended_aligned_trimmed.fasta
 sed -i 's/:LD.*//g' *_appended_aligned_trimmed.fasta
-sed -i 's/N.ditissima_//g' *_appended_aligned_trimmed.fasta
+sed -i 's/:NODE.*//g' *_appended_aligned_trimmed.fasta
 ```
 
 ```bash
 screen -a
-# This will run in the short queue for testing
+# sleep option will submit a job every 10s to the short queue
     for Alignment in $(ls analysis/popgen/busco_phylogeny/trimmed_alignments/*aligned_trimmed.fasta); do
-        Jobs=$(squeue -u ${USER} --noheader --array | wc -l)
-        while [ $Jobs -gt 5 ]; do
-        sleep 5m
-        printf "."
-        Jobs=$(squeue -u ${USER} --noheader --array | wc -l)
-        done
-        printf "\n"
+        sleep 10s
         Prefix=$(basename $Alignment | cut -f1 -d '_')
         OutDir=analysis/popgen/busco_phylogeny/RAxML/$Prefix
         ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Phylogenetics
