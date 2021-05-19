@@ -5,7 +5,6 @@
 #SBATCH --cpus-per-task=16
 
 
-WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}
 Assembly=$1
 OutDir=$2
 AcceptedHits=$3
@@ -18,6 +17,7 @@ echo "$AcceptedHits"
 echo "$GeneModelName"
 echo "$CurDir"
 
+WorkDir=$CurDir/${SLURM_JOB_USER}_${SLURM_JOBID}
 mkdir -p $WorkDir
 cd $WorkDir
 
