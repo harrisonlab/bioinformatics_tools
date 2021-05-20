@@ -134,6 +134,15 @@ For analyses involving cross-species comparisons involving highly diverged seque
 
 ## Trim poor alignments
 
+```bash
+# Edit header name keeping BUSCO name and isolate name using sed
+cd analysis_VP/popgen/busco_phylogeny/alignments
+# e.g.
+sed -i 's/:contig.*//g' *_appended_aligned.fasta
+sed -i 's/:LD.*//g' *_appended_aligned.fasta
+sed -i 's/:NODE.*//g' *_appended_aligned.fasta
+```
+
 Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised for ML tree reconstruction
 
 ```bash
@@ -147,15 +156,6 @@ Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised 
 ```
 
 ## Randomized Axelerated Maximum Likelihood
-
-```bash
-# Edit header name keeping BUSCO name and isolate name using sed
-cd analysis/popgen/busco_phylogeny/trimmed_alignments
-# e.g.
-sed -i 's/:contig_.*//g' *_appended_aligned_trimmed.fasta
-sed -i 's/:LD.*//g' *_appended_aligned_trimmed.fasta
-sed -i 's/:NODE.*//g' *_appended_aligned_trimmed.fasta
-```
 
 ```bash
 screen -a
