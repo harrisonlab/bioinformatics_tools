@@ -14,9 +14,11 @@ conda install -c bioconda mafft
 conda install -c bioconda trimal
 # Randomized Axelerated Maximum Likelihood. Version=8.2.12
 conda install -c bioconda raxml
+# Process phylogenetic trees. Version=1.6.4
+conda install newick_utils
 ```
 
-### Find single copy busco genes
+## Find single copy busco genes
 
 Create a list of all BUSCO IDs
 
@@ -83,9 +85,6 @@ printf "" > analysis/popgen/busco_phylogeny/single_hits.txt
 done
 ```
 
-
-
-
 ```bash
 # Check for multiple hits and remove
 less analysis/popgen/busco_phylogeny/single_hits.txt | sort -k2 -n
@@ -109,7 +108,7 @@ fi
 done
 ```
 
-### Gene alignments
+## Gene alignments
 
 ```bash
 # Submit alignment for single copy busco genes with a hit in each organism
@@ -121,7 +120,7 @@ squeue $ProgDir/mafft.sh
 cd $CurDir
 ```
 
-### Nucleotide diversity (optional)
+## Nucleotide diversity (optional)
 
 For closely related organisms, identify genes with high nucleotide diversity (Pi) and average number of pairwise differences, medium number of segregating sites (avoid alignments with low homology and lots of phylogenetically uninformative singletons).
 
@@ -133,7 +132,7 @@ For analyses involving cross-species comparisons involving highly diverged seque
     python $ProgDir/calculate_nucleotide_diversity.py "*aligned.fasta"
 ```
 
-### Trim poor alignments
+## Trim poor alignments
 
 Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised for ML tree reconstruction
 
@@ -147,7 +146,7 @@ Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised 
   done
 ```
 
-### Randomized Axelerated Maximum Likelihood
+## Randomized Axelerated Maximum Likelihood
 
 ```bash
 # Edit header name keeping BUSCO name and isolate name using sed
@@ -170,46 +169,53 @@ screen -a
     done
 ```
 
-### Astral
+## Astral
 
 Run Astral to build a consensus phylogeny from a collective set of "best phylogenies" from each BUSCO locus.
-
-* Note - "Recent versions of ASTRAL output a branch support value even without bootstrapping. Our analyses have revealed that this form of support is more reliable than bootstrapping (under the conditions we explored). Nevertheless, you may want to run bootstrapping as well."
-
-Tutorial tips:
-https://github.com/smirarab/ASTRAL/blob/master/astral-tutorial.md#running-with-unresolved-gene-trees
-
+Note - "Recent versions of ASTRAL output a branch support value even without bootstrapping. Our analyses have revealed that this form of support is more reliable than bootstrapping (under the conditions we explored). Nevertheless, you may want to run bootstrapping as well."
+Tutorial tips: https://github.com/smirarab/ASTRAL/blob/master/astral-tutorial-template.md
 
 ```bash
+screen -a 
+# Edit if necessary. This will run on compute10
+srun --partition long --mem-per-cpu 10G --cpus-per-task 24 --pty bash 
+
 OutDir=analysis/popgen/busco_phylogeny/ASTRAL
 mkdir -p $OutDir
 
-# cat analysis/popgen/busco_phylogeny/RAxML/*/RAxML_bestTree.* > $OutDir/Pcac_phylogeny.appended.tre
-cat analysis/popgen/busco_phylogeny/RAxML/*/RAxML_bestTree.*  | sed -r "s/CTG.\w+:/:/g" > $OutDir/Nd_phylogeny.appended.tre
+#Concatenate best trees
+Name=Name4yourPhylogeny
+#cat analysis_VP/popgen/busco_phylogeny/RAxML/*/RAxML_bestTree.*  | sed -r "s/CTG.\w+:/:/g" > $OutDir/Nd_phylogeny.appended2.tre
+cat analysis/popgen/busco_phylogeny/RAxML/*/RAxML_bestTree.*  > $OutDir/"$Name"_phylogeny.appended.tre
 
-/home/armita/prog/newick_utilities/newick_utils/src/nw_ed $OutDir/Nd_phylogeny.appended.tre 'i & b<=10' o > $OutDir/Nd_phylogeny.appended.trimmed.tre
+# Contract low support brances (below 10% bootsrap support)
+nw_ed $OutDir/"$Name"_phylogeny.appended.tre 'i & b<=10' o > $OutDir/"$Name"_phylogeny.appended.trimmed.tre
 
 # Calculate combined tree
 ProgDir=/scratch/software/ASTRAL/ASTRAL-5.7.1/Astral
-java -Xmx1000M -jar $ProgDir/astral.5.7.1.jar -i $OutDir/Nd_phylogeny.appended.tre -o $OutDir/Nd_phylogeny.consensus.tre | tee 2> $OutDir/Nd_phylogeny.consensus.log
-java -Xmx1000M -jar $ProgDir/astral.5.7.1.jar -q $OutDir/Nd_phylogeny.consensus.tre -i $OutDir/Nd_phylogeny.appended.tre -o $OutDir/Nd_phylogeny.consensus.scored.tre 2> $OutDir/Nd_phylogeny.consensus.scored.log
+java -jar $ProgDir/astral.5.7.1.jar -i $OutDir/"$Name"_phylogeny.appended.tre -o $OutDir/"$Name"_phylogeny.consensus.tre | tee 2> $OutDir/"$Name"_phylogeny.consensus.log
+# Score the resulting tree
+java -jar $ProgDir/astral.5.7.1.jar -q $OutDir/"$Name"_phylogeny.consensus.tre -i $OutDir/"$Name"_phylogeny.appended.tre -o $OutDir/"$Name"_phylogeny.consensus.scored.tre 2> $OutDir/"$Name"_phylogeny.consensus.scored.log
 ```
 
-GGtree was used to make a plot.
+Manual edition of the final consensus tree is needed 
 
-* Note- Tips can be found here: https://bioconnector.org/r-ggtree.html
+```
+Step 1: Download consensus tree to local machine
 
-* Note- Tips can be found here: https://bioconnector.org/r-ggtree.html
+Step 2: Import into geneious and export again in newick format to get around polytomy branches having no branch length.
 
-The consensus tree was downloaded to my local machine
-
-* Note - I had to import into geneious and export again in newick format to get around polytomy branches having no branch length.
-* Terminal branch lengths are meanlingless from ASTRAL and should all be set to an arbitrary value. This will be done by geneious (set to 1), but it also introduces a branch length of 2 for one isolate that needs to be corrected with sed
-
+Step 3: Terminal branch lengths are meanlingless from ASTRAL and should all be set to an arbitrary value. This will be done by geneious (set to 1), but it also introduces a branch length of 2 for one isolate that needs to be corrected with sed
+```
 ```bash
 cat Alt_phylogeny.consensus.scored.geneious.tre | sed 's/:2/:1/g' > Alt_phylogeny.consensus.scored.geneious2.tre
 ```
 
+## Plot best scored tree
+
+GGtree was used to make a plot. Tutorial tips: https://bioconnector.org/r-ggtree.html
+
+R version > 4.0
 
 ```r
 setwd("/data/scratch/gomeza/")
@@ -222,6 +228,10 @@ library(ggplot2)
 library(ggtree)
 library(phangorn)
 library(treeio)
+
+
+
+
 
 tree <- read.tree("/Users/armita/Downloads/Aalt/ASTRAL/expanded/Alt_phylogeny.consensus.scored.geneious2.tre")
 
