@@ -193,7 +193,7 @@ nw_ed $OutDir/"$Name"_phylogeny.appended.tre 'i & b<=10' o > $OutDir/"$Name"_phy
 
 # Calculate combined tree
 ProgDir=/scratch/software/ASTRAL/ASTRAL-5.7.1/Astral
-java -jar $ProgDir/astral.5.7.1.jar -i $OutDir/"$Name"_phylogeny.appended.tre -o $OutDir/"$Name"_phylogeny.consensus.tre | tee 2> $OutDir/"$Name"_phylogeny.consensus.log
+java -jar $ProgDir/astral.5.7.1.jar -i $OutDir/"$Name"_phylogeny.appended.tre -o $OutDir/"$Name"_phylogeny.consensus.tre 2> $OutDir/"$Name"_phylogeny.consensus.log
 # Score the resulting tree
 java -jar $ProgDir/astral.5.7.1.jar -q $OutDir/"$Name"_phylogeny.consensus.tre -i $OutDir/"$Name"_phylogeny.appended.tre -o $OutDir/"$Name"_phylogeny.consensus.scored.tre 2> $OutDir/"$Name"_phylogeny.consensus.scored.log
 ```
