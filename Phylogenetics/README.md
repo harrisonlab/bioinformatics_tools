@@ -135,7 +135,7 @@ For analyses involving cross-species comparisons involving highly diverged seque
 ## Trim poor alignments
 
 ```bash
-# Edit header name keeping BUSCO name and isolate name using sed
+# Edit header name keeping BUSCO name and isolate name using sed. Sample ID should contain at least 1 letter.
 cd analysis_VP/popgen/busco_phylogeny/alignments
 # e.g.
 sed -i 's/:contig.*//g' *_appended_aligned.fasta
@@ -159,8 +159,9 @@ Trimming sequence alignments using Trim-Al. Note - automated1 mode is optimised 
 
 ```bash
 screen -a
-# sleep option will submit a job every 10s to the short queue
+# IMPORTANT!!! Do not submit 3000 jobs at the same time. Use a job array or delay the submussion for a few seconds.
     for Alignment in $(ls analysis/popgen/busco_phylogeny/trimmed_alignments/*aligned_trimmed.fasta); do
+        #sleep option will submit a job every 10s to the short queue
         sleep 10s
         Prefix=$(basename $Alignment | cut -f1 -d '_')
         OutDir=analysis/popgen/busco_phylogeny/RAxML/$Prefix
@@ -205,12 +206,18 @@ Step 1: Download consensus tree to local machine
 
 Step 2: Import into geneious and export again in newick format to get around polytomy branches having no branch length.
 
-Step 3: Terminal branch lengths are meanlingless from ASTRAL and should all be set to an arbitrary value. This will be done by geneious (set to 1), but it also introduces a branch length of 2 for one isolate that needs to be corrected with sed
+Step 3 (Probably optional): Terminal branch lengths are meanlingless from ASTRAL and should all be set to an arbitrary value. This will be done by geneious (set to 1), but it also introduces a branch length of 2 for one isolate that needs to be corrected with sed
 ```
 ```bash
-cat Alt_phylogeny.consensus.scored.geneious.tre | sed 's/:2/:1/g' > Alt_phylogeny.consensus.scored.geneious2.tre
+cat phylogeny.consensus.scored.geneious.tre | sed 's/:2/:1/g' > phylogeny.consensus.scored.geneious2.tre
 ```
 
+
+
+
+
+
+# Work in progress
 ## Plot best scored tree
 
 GGtree was used to make a plot. Tutorial tips: https://bioconnector.org/r-ggtree.html
