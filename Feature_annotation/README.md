@@ -68,14 +68,14 @@ makeblastdb -in $dbFasta -input_type fasta -dbtype $dbType -title $Prefix.db -pa
 
 
 ```bash
-for Proteome in $(ls gene_pred/N.ditissima/R0905_test/final/final_genes_appended_renamed.pep.fasta); do
+for Proteome in $(ls gene_pred/codingquarry/F.venenatum/WT_minion/final/final_genes_appended_renamed.pep.fasta); do
 Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)
 Organism=$(echo $Proteome | rev | cut -f4 -d '/' | rev)
-OutDir=gene_pred/swissprot/$Organism/$Strain
+OutDir=gene_pred/swissprot_test/$Organism/$Strain
 SwissDbDir=../dbUniprot/swissprot_2020_June
 SwissDbName=uniprot_sprot
 ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
-sbatch $ProgDir/sub_swissprot.sh $Proteome $OutDir $SwissDbDir $SwissDbName
+sbatch -p long $ProgDir/sub_swissprot.sh $Proteome $OutDir $SwissDbDir $SwissDbName
 done
 ```
 
