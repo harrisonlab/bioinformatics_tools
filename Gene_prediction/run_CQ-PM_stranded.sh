@@ -32,7 +32,7 @@ i=0
     for FILE in CQ_Proteins.fa-*
     do
         #If signalP is not in your path, change the line below to specify its location
-        signalp -fasta $FILE > CQ_Proteins_out_$i
+        signalp-5.0 -fasta $FILE > CQ_Proteins_out_$i
         rm $FILE
         i=$(($i+1))
     done
