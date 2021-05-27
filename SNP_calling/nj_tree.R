@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 
+
 #Print a bootstrapped (100x) Newick tree based on input FASTA alignment.
 #First argument (required): input FASTA alignment file
 
