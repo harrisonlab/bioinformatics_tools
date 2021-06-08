@@ -60,4 +60,4 @@ else
 	exit 1
 fi
 mv ${filename%.vcf}_filtered.recode.vcf ${filename%.vcf}_filtered.vcf
-rm *temp*.vcf
+#rm *temp*.vcf
