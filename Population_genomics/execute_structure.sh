@@ -17,14 +17,18 @@ input=$1
 ploidy=$2
 k=$3
 n=$4
-temp_dir="$TMPDIR"
-cdir=$PWD
+OutDir=$5
+#temp_dir="$TMPDIR"
+#cdir=$PWD
 
 #Copies the structure folder to the current directory to allow parallel runs
 struct=/home/gomeza/prog/structure
 
 filename=$(basename "$input")
 outfile="${filename%.*}"
+
+CurPath=$PWD
+temp_dir=$CurPath/${SLURM_JOB_USER}_${SLURM_JOBID}
 
 ### Prep
 mkdir -p $temp_dir
@@ -38,11 +42,10 @@ cd $temp_dir/structure_$k\_$n
 #input file name
 sed -i 's,^\(#define INFILE \).*,\1'"$input"',' mainparams
 #output
-#sed -i 's,^\(#define OUTFILE \).*,\1'"$cdir/$outfile"',' mainparams
+sed -i 's,^\(#define OUTFILE \).*,\1'"$OutDir/$outfile"',' mainparams
 #ploidy
 sed -i 's,^\(#define PLOIDY \).*,\1'"$ploidy"',' mainparams
 #number of loci.
-#If fields size exceeds the limit, gawk needs to be used. It is installed in blacklace01 and blacklace11.
 a=`gawk '{print $NF}' $input | head -1 | sed 's/SNP_//'`
 sed -i 's,^\(#define NUMLOCI \).*,\1'"$a"',' mainparams
 #number of inds
@@ -57,4 +60,4 @@ do
     $temp_dir/structure_$k\_$n/structure -K $k -o ${outfile}_k${k}_${i}
 done
 
-cp -r $temp_dir/structure_$k\_$n $cdir
+cp -r $temp_dir/structure_$k\_$n $OutDir
