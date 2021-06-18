@@ -151,23 +151,36 @@ done
 done
 done
 
-for Strain in 55 55_tgac_filtered 125_ncbi A13_ncbi A23_ncbi A28_ncbi CB3_ncbi PG_ncbi Fus2_canu_new A1-2 D2 HB6 HB17; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*cepa*/$Strain/*/*_unmasked.fa); do
+# Fo cepae
+for Strain in 55 55_tgac_filtered 125_ncbi A13_ncbi A23_ncbi A28_ncbi CB3_ncbi PG_ncbi Fus2_canu_new; do
+for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
+echo $Reference
 Read=raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz
-OutDir=genome_alignment/minimap2/S3_D6_readfish/FoC/vs_"$Strain"
+R1=$(echo $Read | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $R1
+Read2=raw_data/S3D6_pass.fastq.gz
+R2=$(echo $Read2 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $R2
+Read3=raw_data/S3D6-2_pass.fastq.gz
+R3=$(echo $Read3 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $R3
 ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
+OutDir=genome_alignment/minimap2/$R1/FoC/vs_"$Strain"
 sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
+OutDir2=genome_alignment/minimap2/$R2/FoF/vs_"$Strain"
+sbatch -p short $ProgDir/minimap2.sh $Reference $Read2 $OutDir2
+OutDir3=genome_alignment/minimap2/$R3/FoF/vs_"$Strain"
+sbatch -p short $ProgDir/minimap2.sh $Reference $Read3 $OutDir3
+for bar in barcode01 barcode02 barcode03 barcode04 barcode05 barcode06 barcode07 barcode08 barcode09 barcode10 barcode11 barcode12; do
+Read4=raw_data/S3D6-BC11_BC12_No_Selection/"$bar"_pass.fastq.gz
+R4=$(echo $Read4 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $R4
+OutDir4=genome_alignment/minimap2/$R4/FoF/vs_"$Strain"
+sbatch -p short $ProgDir/minimap2.sh $Reference $Read4 $OutDir4
+done
 done
 done
 
-for Strain in fo47 fo47_tgac_filtered; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/ncbi*/*_unmasked.fa); do
-Read=raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz
-OutDir=genome_alignment/minimap2/S3_D6_readfish/Fo/vs_"$Strain"
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
 
 
 # F.oxysporum fsp fragariae
@@ -422,6 +435,9 @@ rm tmp.txt
 
 kraken2-build --download-taxonomy --db Foxysporum
 kraken2-build --build --db Foxysporum
+c
+srun --partition long --mem-per-cpu 10G --cpus-per-task 10 --pty bash
+
 
 ```bash
 
@@ -476,6 +492,50 @@ downloadRefSeq.pl --seqencesOutDirectory download/refseq --targetBranches fungi 
 
 
 
+
+```bash
+for Read1 in $(ls raw_data/S3_D6_readfish1/S3_D6_readfish_pass.fastq.gz); do
+Out=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $Out
+Database=Foxysporum
+OutDir=analysis/Kraken/$Out
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+sbatch $ProgDir/kraken_long_reads.sh $Read1 $Database $OutDir
+done
+
+for Read1 in $(ls raw_data/S3D6-2_pass.fastq.gz); do
+Out=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $Out
+Database=Foxysporum
+OutDir=analysis/Kraken/$Out
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+sbatch $ProgDir/kraken_long_reads.sh $Read1 $Database $OutDir
+done
+
+for Read1 in $(ls raw_data/S3D6_pass.fastq.gz); do
+Out=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $Out
+Database=Foxysporum
+OutDir=analysis/Kraken/$Out
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+sbatch $ProgDir/kraken_long_reads.sh $Read1 $Database $OutDir
+done
+
+for bar in barcode01 barcode02 barcode03 barcode04 barcode05 barcode06 barcode07 barcode08 barcode09 barcode10 barcode11 barcode12; do
+Read1=raw_data/S3D6-BC11_BC12_No_Selection/"$bar"_pass.fastq.gz
+Out=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_pass.fastq.gz//g')
+echo $Out
+Database=Foxysporum
+OutDir=analysis/Kraken/S3D6-BC11_BC12_No_Selection/$Out
+ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+sbatch $ProgDir/kraken_long_reads.sh $Read1 $Database $OutDir
+done
+
+
+
+```
+
+perl buildDB.pl --DB databases/FoxysporumDB --FASTAs database4kraken --taxonomy database4kraken/Foxysporum/taxonomy
 
 
 ## minimap2
