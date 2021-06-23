@@ -511,18 +511,6 @@ awk '{if(NR%4==2) print length($1)}' out.fq | sort -n | uniq -c > read_length2.t
 reads<-read.csv(file="read_length2.txt", sep="", header=FALSE)
 plot (reads$V2,reads$V1,type="l",xlab="read length",ylab="occurences",col="blue")
 
-/scratch/software/seqkit/seqkit seq -m 1000 raw_data/S3_D6_readfish1/S3D6_readfish.fastq > filtered.fq
-echo $(cat filtered.fq|wc -l)/4|bc
-
-
-for Read1 in $(ls filtered.fq.gz ); do
-Out=$(echo $Read1 | rev | cut -f1 -d '/' | rev)
-echo $Out
-Database=Foxysporum
-OutDir=analysis/Kraken/$Out
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
-sbatch $ProgDir/kraken_long_reads.sh $Read1 $Database $OutDir
-done
 
 
 awk '{if(NR%4==2) print length($1)}' classifiedseqs.fq | sort -n | uniq -c > classified_read_length.txt
@@ -562,127 +550,7 @@ sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
 done
 
 
-```bash
 
-# Fo
-for Strain in fo47 fo47_tgac_filtered; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/ncb*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/Fo/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-# Fo cepae
-for Strain in 55 55_tgac_filtered 125_ncbi A13_ncbi A23_ncbi A28_ncbi CB3_ncbi PG_ncbi Fus2_canu_new; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/ed*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoC/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-# F.oxysporum fsp fragariae
-for Strain in 15-074 Straw465; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoF/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-# Fo lactucae
-for Strain in AJ516 AJ520; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoL/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-# Fo lycopersici
-for Strain in 4287_chromosomal 4287_v2; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoLy/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-
-# Fo mathioli
-for Strain in Stocks4; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoM/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-# F.oxysporum narcissi
-for Strain in FON129 FON_63 FON77 FON81 FON89 N139_ncbi; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoN/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-
-# F.oxysporum fsp pisi
-for Strain in F81 FOP1 FOP1-EMR FOP2 FOP5 PG18 PG3; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoP/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
-
-
-# F.oxysporum fsp statice
-for Strain in Stat10; do
-for Reference in $(ls ../oldhome/groups/harrisonlab/project_files/fusarium/repeat_masked/*/$Strain/*/*_contigs_unmasked.fa); do
-echo $Reference
-Read=filtered.fq.gz
-R1=S3D6_readfish_filtered
-echo $R1
-ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-OutDir=genome_alignment/minimap2/$R1/FoS/vs_"$Strain"
-sbatch -p short $ProgDir/minimap2.sh $Reference $Read $OutDir
-done
-done
 
 for Reads in $(ls genome_alignment/minimap2/S3D6_readfish_filtered/*/*/*_contigs_unmasked.fa_aligned_sorted.bam ); do
 Org=$(echo $Reads | rev | cut -f3 -d '/' | rev)
