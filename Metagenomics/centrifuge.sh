@@ -2,7 +2,7 @@
 #SBATCH -J centrifuge
 #SBATCH --partition=himem
 #SBATCH --mem-per-cpu=20G
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=16
 
 #Classification of DNA sequences using centrifuge
 
@@ -46,7 +46,7 @@ fi
 
 if [ $4 ]; then
 centrifuge -p 4 \
--x /data/scratch/gomeza/prog/centrifuge/$Database \
+-x $Database \
 -t -1 $Reads -2 $ReadMate \
 --phred33 \
 --report-file centrifuge_report.tsv \
@@ -70,7 +70,7 @@ fi
 
 echo "Creating Kraken-style report for visualisation"
 centrifuge-kreport \
--x  /data/scratch/gomeza/prog/centrifuge/$Database \
+-x  $Database \
 centrifuge_results.txt > centrifuge_krakened.txt
 
 # --min-score <integer> option set minimum score for reads to be counted
