@@ -103,29 +103,32 @@ Plate 2
 
 
 ```bash
-    for fastq in $(ls qc_dna/paired/Slugbot/*/*/*R1_001_trim.fq.gz); do
-        sampleID=$(echo $fastq | rev | cut -f1 -d '/' | rev | sed 's/_S.*//g')
-        echo $sampleID
-        OutDir=analysis/Centrifuge/Slugbot/$sampleID
-        mkdir -p $OutDir
+    for fastq in $(ls qc_dna/paired/Slugbot/16S-ASLUG07/*/*R1_001_trim.fq.gz); do
+    sampleID=$(echo $fastq | rev | cut -f1 -d '/' | rev | sed 's/_S.*//g')
+    echo $sampleID
+    OutDir=analysis/Centrifuge/Slugbot/$sampleID
+    mkdir -p $OutDir
         for Read1 in $(ls qc_dna/paired/Slugbot/*/*/"$sampleID"_*R1_001_trim.fq.gz); do
-        Read2=qc_dna/paired/Slugbot/*/R/"$sampleID"_*R2_001_trim.fq.gz
-        echo $Read1
-        echo $Read2
-        #Sample=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_S37_L001_R1_001.fastq.gz//g')
-        #echo $Sample
-        Database=../../../scratch/public_data/nt-centrifuge_12jan2021/nt
-        ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
-        sbatch -p long $ProgDir/centrifuge.sh $Database $OutDir $Read1 $Read2
+            Read2=qc_dna/paired/Slugbot/*/R/"$sampleID"_*R2_001_trim.fq.gz
+            echo $Read1
+            echo $Read2
+            #Sample=$(echo $Read1 | rev | cut -f1 -d '/' | rev | sed 's/_S37_L001_R1_001.fastq.gz//g')
+            #echo $Sample
+            Database=../../../scratch/public_data/nt-centrifuge_12jan2021/nt
+            ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
+            sbatch -p himem $ProgDir/centrifuge.sh $Database $OutDir $Read1 $Read2
         done
     done
 
     for kraken in $(ls analysis/Centrifuge/Slugbot/*/centrifuge_krakened.txt); do
         ID=$(echo $kraken | rev | cut -f2 -d '/' | rev )
         echo $ID
-        cat $kraken | awk '$4 == "S" { print $0 }' | head -1 > analysis/Centrifuge/Slugbot/"$ID"_stats.txt
+        echo $ID > "$ID".txt
+        cat $kraken | awk '$4 == "S" { print $0 }' | head -1 > analysis/Centrifuge/Slugbot/stat_"$ID".txt
+        paste analysis/Centrifuge/Slugbot/stat_"$ID".txt "$ID".txt > analysis/Centrifuge/Slugbot/"$ID"_stats.txt
+        rm analysis/Centrifuge/Slugbot/stat_"$ID".txt
+        rm "$ID".txt
     done
-
 
     cat analysis/Centrifuge/Slugbot/*_stats.txt > analysis/Centrifuge/Slugbot/Slug_top_hits.txt
 ```
