@@ -30,6 +30,16 @@ kraken2-build --download-taxonomy --db fungiDB
 kraken2-build --add-to-library input-fungal-sequences.fna --db fungiDB
 kraken2-build --build --db fungiDB/
 ```
+
+```bash
+# Build nt database
+screen -a
+srun --partition long --mem-per-cpu 6G --cpus-per-task 80 --pty bash
+kraken2-build --download-taxonomy --db nt_db
+kraken2-build --download-library nt --db nt_db
+kraken2-build --build --db nt_db
+```
+
 ### Run centrifuge
 
 
@@ -166,4 +176,12 @@ OutDir=analysis/Kraken/$Sample
 ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics
 sbatch $ProgDir/kraken.sh $Read1 $Read2 $Database $OutDir
 done
+```
+
+```bash
+Read1=qc_dna/paired/Slugbot/COI-AA03/F/COI-AA03_S5_L001_R1_001_trim.fq.gz
+Read2=qc_dna/paired/Slugbot/COI-AA03/R/COI-AA03_S5_L001_R2_001_trim.fq.gz
+kraken=analysis/Centrifuge/Slugbot/COI-AA03/centrifuge_krakened.txt 
+python /home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics/extract_kraken_reads.py -k $kraken -s1 $Read1 -s2 $Read2 -o COI-AA03_F_extracted.fq -o2 COI-AA03_R_extracted.fq -t 6540 --include-children -r report.txt
+python /home/gomeza/git_repos/scripts/bioinformatics_tools/Metagenomics/extract_kraken_reads.py -k classifiedseqs.fq -s ../../../raw_data/S3D6-2_filtered.fq.gz -o out.reads.fq -t 5507 
 ```
