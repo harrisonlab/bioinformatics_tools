@@ -85,7 +85,7 @@ for line in blast_tbl_lines:
     if gene_id not in gene_id_set:
         id_col = split_line[1]
         id_col_split = id_col.split("|")
-        db_id = id_col_split[1]
+        db_id = id_col_split[0]
         gene_id_set.add(gene_id)
         split_line.extend(fasta_dict[db_id])
         print ("\t".join(split_line))
