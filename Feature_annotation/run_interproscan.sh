@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #SBATCH -J interproscan
-#SBATCH --partition=short
-#SBATCH --mem-per-cpu=4G
-#SBATCH --cpus-per-task=8
+#SBATCH --partition=long
+#SBATCH --mem-per-cpu=10G
+#SBATCH --cpus-per-task=10
 
 # run_interproscan.sh
 # The current version of interproscan only works with Java version 11
@@ -23,7 +23,7 @@ cd $WORK_DIR
 cp $CUR_PATH/$IN_FILE $IN_NAME
 sed -i -r 's/\*/X/g' $IN_NAME
 
-/data/scratch/gomeza/prog/Interproscan/interproscan-5.44-79.0/interproscan.sh -goterms -iprlookup -pa -i $IN_NAME
+/scratch/software/interproscan-5.52-86.0/interproscan.sh -goterms -iprlookup -pa -i $IN_FILE
 
 OUT_DIR=$CUR_PATH/gene_pred/interproscan/$ORGANISM/$STRAIN/raw
 mkdir -p $OUT_DIR
@@ -31,4 +31,4 @@ cp *.gff3 $OUT_DIR/.
 cp *.tsv $OUT_DIR/.
 cp *.xml $OUT_DIR/.
 
-rm -r $WORK_DIR
+#rm -r $WORK_DIR
