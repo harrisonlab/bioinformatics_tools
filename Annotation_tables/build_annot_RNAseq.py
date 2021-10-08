@@ -10,8 +10,9 @@ sequence and functional information for annotated gene models and RxLRs.
 # Import variables & load input files
 # -----------------------------------------------------
 
+
 import argparse
-from sets import Set
+#from sets import Set
 from collections import defaultdict
 from operator import itemgetter
 import numpy as np
@@ -529,5 +530,5 @@ for line in transcript_lines:
     outline.append(interpro_col)
     outline.extend(TFs_cols)
     outline.extend(antismash_cols)
-    print "\t".join(outline)
+    print ("\t".join(outline))
     # print DEG_out
