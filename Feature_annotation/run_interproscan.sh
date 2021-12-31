@@ -23,7 +23,7 @@ cd $WORK_DIR
 cp $CUR_PATH/$IN_FILE $IN_NAME
 sed -i -r 's/\*/X/g' $IN_NAME
 
-/scratch/software/interproscan-5.52-86.0/interproscan.sh -goterms -iprlookup -pa -i $IN_FILE
+/scratch/software/interproscan-5.52-86.0/interproscan.sh -appl CDD,COILS,Gene3D,HAMAP,MobiDBLite,PANTHER,Pfam,PIRSF,PRINTS,SFLD,SMART,SUPERFAMILY,TIGRFAM -goterms -iprlookup -pa -i $IN_NAME
 
 OUT_DIR=$CUR_PATH/gene_pred/interproscan/$ORGANISM/$STRAIN/raw
 mkdir -p $OUT_DIR
