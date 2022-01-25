@@ -11,7 +11,7 @@ result: .txt file same name as input name plus "_lenghts.txt"
 ######################################################################################
 
 if len(sys.argv) != 2:
-    print syntax
+    print (syntax)
     sys.exit()
 
 ######################################################################################
@@ -33,4 +33,4 @@ outfile.write(name + '\t' + str(len(seq)) + '\n')
 fastq_file.close()
 outfile.close()
 
-print '\n' + '\t' + 'File: ' + prefix + '_' + 'lenghts.txt has been created...'
+print ('\n' + '\t' + 'File: ' + prefix + '_' + 'lenghts.txt has been created...')
