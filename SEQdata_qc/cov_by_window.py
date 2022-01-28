@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 '''
 Provide a measure of mean coverage in a sliding window of a specified size
