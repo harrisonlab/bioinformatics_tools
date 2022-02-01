@@ -25,7 +25,7 @@ cp $CurDir/$Assembly assembly.fa
 cp $CurDir/$AcceptedHits alignedRNA.bam
 
 
-
+# Genemark compatible with debian
 braker.pl \
   --GENEMARK_PATH=/scratch/software/gmes_linux_64_4.68_13oct2021/gmes_linux_64_4 \
   --BAMTOOLS_PATH=/home/gomeza/miniconda3/envs/gene_pred/bin \
