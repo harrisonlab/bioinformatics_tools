@@ -1,11 +1,12 @@
-#!/usr/bin/python
+#!/home/gomeza/miniconda3/envs/perly_env/bin/python
 
 '''
 '''
 
 import sys,argparse
 from collections import defaultdict
-from sets import Set
+#from sets import Set
+my_set = set()
 
 #-----------------------------------------------------
 # Step 1
@@ -29,8 +30,8 @@ contig = ""
 cds_boudnries = []
 split_line = []
 outlines = []
-gene_set = Set()
-duplicated_set = Set()
+gene_set = set()
+duplicated_set = set()
 gene_dict = defaultdict(list)
 for line in inp_lines:
     line = line.strip("\n")
@@ -71,10 +72,10 @@ if key in gene_set:
 gene_set.add(key)
 
 # print "\n".join(gene_set)
-print "Identifiied the following duplicated transcripts:"
-print "\n".join(duplicated_set)
-print "NOTE - if any of these represent the first transcript of a gene (.t1) then an entire gene may be duplicated"
-print "if so the gene feature will need to be stripped out of the gff file seperately."
+print ("Identifiied the following duplicated transcripts:")
+print ("\n".join(duplicated_set))
+print ("NOTE - if any of these represent the first transcript of a gene (.t1) then an entire gene may be duplicated")
+print ("if so the gene feature will need to be stripped out of the gff file seperately.")
 
 
 outlines = []

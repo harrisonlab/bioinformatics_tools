@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/gomeza/miniconda3/envs/perly_env/bin/python
 
 '''
 Script to rename genes in gff files. Genes are renamed from g1 based on the order
@@ -7,7 +7,8 @@ of appearence.
 
 import sys,argparse
 from collections import defaultdict
-from sets import Set
+#from sets import Set
+my_set = set()
 
 #-----------------------------------------------------
 # Step 1
@@ -38,7 +39,7 @@ conversion_dict = defaultdict(list)
 for line in inp_lines:
     line = line.strip("\n")
     if line.startswith("#"):
-        print line
+        print (line)
         continue
     split_line = line.split()
     # Col9 = split_line[8]
@@ -69,7 +70,7 @@ for contig in sorted(contig_list, key = lambda x: (int(x.split('_')[1]))):
 
 split_line = []
 outlines = []
-gene_set = Set([])
+gene_set = set([])
 gene_dict = defaultdict(list)
 i = int(0)
 conversion_lines = []
@@ -89,7 +90,7 @@ for line in gff_lines:
         conversion_lines.append("\t".join([gene_id, "-", new_id]) + "\n")
     Col9 = Col9.replace(gene_id, new_id)
     split_line[8] = Col9
-    print "\t".join(split_line)
+    print ("\t".join(split_line))
 
 if logfile:
     f = open(logfile,"w")
