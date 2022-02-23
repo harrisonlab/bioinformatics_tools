@@ -23,7 +23,7 @@ conda install salmon
             FileR=$(ls $RNADir/R/*trim.fq.gz | head -n $num | tail -n1)
             echo $FileF
             echo $FileR
-            Ref=/data/scratch/gomeza/prog/bbmap/ribokmers.fa.gz # Cortesy of G.Deakin
+            Ref=/data/scratch/gomeza/prog/bbmap/ribokmers.fa.gz # By courtesy of G.Deakin
             ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/RNAseq_analysis
             echo $StrainPath
             Strain=$(sed 's/.*\///' <<< $StrainPath)
