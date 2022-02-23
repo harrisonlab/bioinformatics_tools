@@ -187,6 +187,30 @@ for File in $(ls gene_pred/trans_mem/$Organism/$Strain/*_TM_genes_neg.txt); do
 done
 ```
 
+## 3.2 SignalP version 6
+
+### Requirements
+
+```bash
+# Instalation (optional)
+conda create sigP_py39 # Create conda env
+mamba install pytorch torchvision cudatoolkit=10.2 -c pytorch # Install PyTorch
+cd /data/scratch/gomeza/prog/signalp
+tar -xvf signalp-6.0g.fast.tar.gz 
+pip install signalp-6-package # Install on /home/$Username
+SIGNALP_DIR=$(python3 -c "import signalp; import os; print(os.path.dirname(signalp.__file__))" ) # Locate instalation path
+cp -r signalp-6-package/models/* $SIGNALP_DIR/model_weights/ # Copy model files (2Gb or 8Gb depending of the model used. Be careful, this goes to /home....)
+
+# Add path to profile
+/home/gomeza/miniconda3/envs/sigP_py39/bin
+```
+
+### Typical run
+
+```bash
+On going
+```
+
 ## 4. EffectorP
 
 From Augustus gene models - Effector identification using EffectorP
