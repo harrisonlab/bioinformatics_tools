@@ -306,6 +306,7 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
 	$ProgDir/gff2fasta.pl $Assembly $FinalDir/final_genes_CodingQuary.gff3 $FinalDir/final_genes_CodingQuary
 
   # Create fasta files from each gene feature in the Braker gff3
+  # If any "Possible precedence issue with control flow operator" error, change "or" for "||" operator
 	cp $BrakerGff $FinalDir/final_genes_Braker.gff3
   $ProgDir/gff2fasta.pl $Assembly $FinalDir/final_genes_Braker.gff3 $FinalDir/final_genes_Braker
 
