@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J effectorP
-#SBATCH --partition=medium
+#SBATCH --partition=long
 #SBATCH --mem-per-cpu=4G
 #SBATCH --cpus-per-task=8
 
@@ -24,7 +24,7 @@ echo "Running effectorP for: $Organism - $Strain"
 if [ $version == "2.0" ]; then
   /data/scratch/gomeza/prog/EffectorP/EffectorP_2.0/Scripts/EffectorP.py -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
 elif [ $version == "3.0" ]; then
-  EffectorP.py -f -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
+  python /data/scratch/gomeza/prog/EffectorP/EffectorP_3.0.0-beta/EffectorP.py -f -o "$BaseName".txt -E "$BaseName".fa -i proteins.fa
 else
  echo "Version 2.0 or 3.0"
 fi
