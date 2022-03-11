@@ -24,7 +24,7 @@ if [ -z $SigP_Version ]; then
 elif [ $SigP_Version == signalp-3.0 ]; then
   WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_3"
 elif [ $SigP_Version == signalp-4.1 ]; then
-  WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_4"
+  WorkDir=$CurPath/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_4"
 elif [ $SigP_Version == signalp-5.0 ]; then
   WorkDir=$TMPDIR/${SLURM_JOB_USER}_${SLURM_JOBID}/"${Strain}_${InName}_5"
 fi
@@ -89,9 +89,9 @@ elif [ $SigP_Version == signalp-3.0 ]; then
   OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
 elif [ $SigP_Version == signalp-4.1 ]; then
   echo "Running using SignalP version: $SigP_Version"
-  $SigP_Version -t euk -f summary -c 70 "proteins.fa" > "$OutFile"_sp.txt
+  /home/agomez/scratch/apps/prog/signalp-4.1/$SigP_Version -t euk -f summary -c 70 "proteins.fa" > "$OutFile"_sp.txt
   echo '----------------------------------------------------------------------' >> "$OutFile"_sp.txt
-  PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  PathToAnnotateSigP=/home/agomez/scratch/apps/scripts/Feature_annotation
   $PathToAnnotateSigP/sigP_4.1_parser.py --inp_sigP "$OutFile"_sp.txt --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
   OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
   elif [ $SigP_Version == signalp-5.0 ]; then

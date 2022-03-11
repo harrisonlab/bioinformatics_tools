@@ -1,4 +1,4 @@
-#!/home/gomeza/miniconda3/envs/gene_pred/bin/python
+#!/mnt/shared/scratch/agomez/apps/conda/envs/annotation/bin/python
 
 '''
 This tool splits a fasta file with many accessions down into a number of

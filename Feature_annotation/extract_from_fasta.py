@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/mnt/shared/scratch/agomez/apps/conda/bin/python
 
 '''
 This tool exracts fasta accessions from a set of headers passed in a text file.
