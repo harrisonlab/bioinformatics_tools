@@ -10,12 +10,13 @@
 ### Requirements
 
 ```bash
-conda activate qc_tools
-conda install fastqc
-conda install ea-utils
+conda activate SEQdata_qc
+mamba install fastqc
+mamba install ea-utils
+mamba install bbmap
 # Porechop is installed in /scratch/software/. Add this line to your profile.
-PATH=${PATH}:/scratch/software/Porechop-0.2.3
-. ~/.profile # Refresh profile
+# PATH=${PATH}:/scratch/software/Porechop-0.2.3
+# . ~/.profile # Refresh profile
 ```
 
 ### Typical run
@@ -108,4 +109,26 @@ done
   OutDir=analysis/genome_alignment/bwa/vs_*_Ref/grouped
   mkdir -p $OutDir
   cat alignment/bwa/vs_*/$Organism/$Strain/*_*_vs_*_depth_10kb.tsv > analysis/genome_alignment/bwa/vs_*_Ref/grouped/vs_*_grouped_depth.tsv
+```
+
+## BBDuk
+
+#### Typical run
+
+```bash
+    for RNADir in $(ls -d qc_rna/*/*); do
+    FileNum=$(ls $RNADir/F/*_1_trim.fq.gz | wc -l)
+        for num in $(seq 1 $FileNum); do
+            printf "\n"
+            FileF=$(ls $RNADir/F/*trim.fq.gz | head -n $num | tail -n1)
+            FileR=$(ls $RNADir/R/*trim.fq.gz | head -n $num | tail -n1)
+            echo $FileF
+            echo $FileR
+            Ref=/data/scratch/gomeza/prog/bbmap/ribokmers.fa.gz # By courtesy of G.Deakin
+            ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/RNAseq_analysis
+            echo $StrainPath
+            Strain=$(sed 's/.*\///' <<< $StrainPath)
+            sbatch -p himem $ProgDir/bbduk.sh $Ref "$StrainPath"/cleaned $FileF $FileR $ProgDir $Strain
+        done
+    done
 ```
