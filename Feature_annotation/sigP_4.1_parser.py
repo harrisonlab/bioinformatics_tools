@@ -1,4 +1,4 @@
-#!/home/gomeza/miniconda3/envs/perly_env/bin/python
+#!/mnt/shared/scratch/agomez/apps/conda/envs/annotation/bin/python
 
 '''
 This tool uses the output of signalP4.1 to extract SigP positive accessions from

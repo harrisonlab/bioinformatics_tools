@@ -25,18 +25,18 @@ cp $CurDir/$Assembly assembly.fa
 cp $CurDir/$AcceptedHits alignedRNA.bam
 
 
-# Genemark compatible with debian
+
 braker.pl \
-  --GENEMARK_PATH=/scratch/software/gmes_linux_64_4.68_13oct2021/gmes_linux_64_4 \
-  --BAMTOOLS_PATH=/home/gomeza/miniconda3/envs/gene_pred/bin \
+  --GENEMARK_PATH=/home/agomez/scratch/apps/prog/gmes_linux_64 \
   --overwrite \
   --fungus \
   --gff3 \
   --softmasking on \
   --species=$GeneModelName \
   --genome="assembly.fa" \
-  --bam="alignedRNA.bam"
-
+  --bam=alignedRNA.bam
+  
+#--BAMTOOLS_PATH=/home/gomeza/miniconda3/envs/gene_pred/bin \
 mkdir -p $CurDir/$OutDir
 cp -r braker/* $CurDir/$OutDir/.
 
