@@ -13,7 +13,8 @@ Spliced Transcripts Alignment to a Reference.
 ### Requirements
 
 ```bash
-conda install star
+conda activate general_tools
+mamba install star
 ```
 
 ### Typical run
@@ -32,9 +33,10 @@ conda install star
     Timepoint=$(echo $FileF | rev | cut -d '/' -f3 | rev)
     echo "$Timepoint"
     Sample_Name=$(echo $FileF | rev | cut -d '/' -f1 | rev | sed 's/_1_trim.fq.gz//g')
+    SAindex=11 # Typically between 10 and 15, e.g. for 45Mb genome use 11
     OutDir=alignment/star/$Organism/$Strain/$Timepoint/$Sample_Name
     ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Genome_aligners
-    sbatch $ProgDir/star.sh $Assembly $FileF $FileR $OutDir
+    sbatch $ProgDir/star.sh $Assembly $FileF $FileR $OutDir $SAindex
   done
 done
 ```
@@ -54,16 +56,11 @@ If multiple RNAseq samples are used, alignment outputs can be concatenated using
 
 ## Bowtie
 
-
-
 ### Requirements
 
 ```bash
 conda activate general_tools
-conda install bowtie2
-# or
-# Add path to profile
-PATH=${PATH}:/scratch/software/bowtie2/bowtie2-2.3.5.1-linux-x86_64
+mamba install bowtie2
 ```
 
 ### Typical run
@@ -120,10 +117,7 @@ PATH=${PATH}:/scratch/software/bowtie2/bowtie2-2.3.5.1-linux-x86_64
 
 ```bash
 conda activate general_tools
-conda install bwa
-# or
-# Add path to profile
-PATH=${PATH}:/scratch/software/bowtie2/bowtie2-2.3.5.1-linux-x86_64
+mamba install bwa
 ```
 ### Typical run
 
