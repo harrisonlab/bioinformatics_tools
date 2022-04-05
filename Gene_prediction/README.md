@@ -176,7 +176,7 @@ mamba install codingquarry
 nano ~/.bash_profile # Edit profile
 export QUARRY_PATH="/mnt/shared/scratch/"USER_ID"/apps/conda/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles" # Add to profile and save
 
-# 3rd - Edit CufflinksGTF_to_CodingQuarryGFF3.py python shebang to run on py27 (e.g. /mnt/shared/scratch/agomez/apps/conda/envs/python_py27/bin/python2.7)
+# 3rd - Edit python shebangs of CufflinksGTF_to_CodingQuarryGFF3.py and Quarry scripts to run on py27 (e.g. /mnt/shared/scratch/agomez/apps/conda/envs/python_py27/bin/python2.7)
 
 # 4th - run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts included in codingquarry are used to run CQ pathogen mode using signalp 4.1. 
 # The script in this folder was edited to use signalp5 installed on /home/agomez/scratch/apps/prog/signalp-5.0b
