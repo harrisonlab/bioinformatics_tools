@@ -31,7 +31,7 @@ CufflinksGTF_to_CodingQuarryGFF3.py $GTF > transcripts.gff3
 cp $Assembly assembly.fa
 
 
-/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction/run_CQ-PM_stranded.sh assembly.fa transcripts.gff3 $Threads 2>&1 | tee codingquaryPM_log.txt
+/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction/run_CQ-PM_stranded.sh assembly.fa transcripts.gff3 $Threads 2>&1 | tee codingquaryPM_log.txt
 
 mkdir -p $OutDir/out
 mv codingquaryPM_log.txt $OutDir
