@@ -14,13 +14,13 @@ echo "Running the standard CodingQuarry predictions..."
 CodingQuarry -f $1 -t $2 -p 8
 
 echo "Translating and quality filtering the coding sequence..."
-python $QUARRY_PATH/scripts/fastaTranslate.py out/Predicted_CDS.fa | sed 's/*$//g' > CQ_Proteins.fa
-python $QUARRY_PATH/scripts/gene_errors_Xs.py CQ_Proteins.fa CQPMtmp.fa
+python2.7 $QUARRY_PATH/scripts/fastaTranslate.py out/Predicted_CDS.fa | sed 's/*$//g' > CQ_Proteins.fa
+python2.7 $QUARRY_PATH/scripts/gene_errors_Xs.py CQ_Proteins.fa CQPMtmp.fa
 mv CQPMtmp.fa CQ_Proteins.fa
 
 echo "Running signalP..."
 #Split the protein file up into smaller chunks
-python $QUARRY_PATH/scripts/split_fasta.py CQ_Proteins.fa 200
+python2.7 $QUARRY_PATH/scripts/split_fasta.py CQ_Proteins.fa 200
 
 #Add ".fasta" to every file. 
     for file in CQ_Proteins.fa-*
