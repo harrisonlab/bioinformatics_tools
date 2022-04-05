@@ -11,7 +11,7 @@
 #This version requires signalp 5
 
 echo "Running the standard CodingQuarry predictions..."
-CodingQuarry -f $1 -t $2 -p 4
+CodingQuarry -f $1 -t $2 -p 8
 
 echo "Translating and quality filtering the coding sequence..."
 python $QUARRY_PATH/scripts/fastaTranslate.py out/Predicted_CDS.fa | sed 's/*$//g' > CQ_Proteins.fa
@@ -32,7 +32,7 @@ i=0
     for FILE in CQ_Proteins.fa-*
     do
         #If signalP is not in your path, change the line below to specify its location
-        signalp-5.0 -fasta $FILE > CQ_Proteins_out_$i
+        /home/agomez/scratch/apps/prog/signalp-5.0b/bin/signalp-5.0 -fasta $FILE > CQ_Proteins_out_$i
         rm $FILE
         i=$(($i+1))
     done

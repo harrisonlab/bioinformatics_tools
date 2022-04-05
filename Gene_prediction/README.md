@@ -167,20 +167,19 @@ CodingQuarry in pathogen mode is used to predict aditional genes and added to br
 ### Requirements
 
 ```bash
-# Conda installation
-
+# 1st - Conda installation
 # CodingQuarry requires a conda environment with python 2.7
-# e.g. conda create --name gene_pred_py27 python=2.7
-conda install codingquarry
+# e.g. conda create --name python_py27 python=2.7
+mamba install codingquarry
 
-# The environmental variable QUARRY_PATH is set in your profile (needed for CodingQuarry)
-nano ~/.profile # Edit profile
-export QUARRY_PATH="/home/"USER_ID"/miniconda3/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles/QuarryFiles" # Add to profile and save
+# 2nd - The environmental variable QUARRY_PATH is set in your profile (needed for CodingQuarry)
+nano ~/.bash_profile # Edit profile
+export QUARRY_PATH="/mnt/shared/scratch/"USER_ID"/apps/conda/envs/"USER_ENV_py27"/opt/codingquarry-2.0/QuarryFiles" # Add to profile and save
 
-# SignalP is needed. Add this path to your profile or 
-PATH=${PATH}:/data/scratch/gomeza/prog/signalp/signalp-5.0b/bin # Add to profile and save
+# 3rd - Edit CufflinksGTF_to_CodingQuarryGFF3.py python shebang to run on py27 (e.g. /mnt/shared/scratch/agomez/apps/conda/envs/python_py27/bin/python2.7)
 
-. ~/.profile # Refresh your profile
+# 4th - run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts included in codingquarry are used to run CQ pathogen mode using signalp 4.1. 
+# The script in this folder was edited to use signalp5 installed on /home/agomez/scratch/apps/prog/signalp-5.0b
 ```
 
 ### Typical run
