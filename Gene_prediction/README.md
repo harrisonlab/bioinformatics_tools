@@ -209,7 +209,8 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
   # Install the required libraries (if any) using cpanm
   # mamba install perl-app-cpanminus
   # mamba install perl-bioperl
-  # cpanm Bio::Perl
+  # cpanm --force Bio::DB::GenBank 
+  # cpanm --force Bio::Perl
 
   BrakerGff=$(ls path/to/braker/gene/models/augustus.hints.gff3)
 	Strain=$(echo $BrakerGff| rev | cut -d '/' -f2 | rev)
