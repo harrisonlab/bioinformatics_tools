@@ -1,4 +1,4 @@
-#!/home/gomeza/miniconda3/envs/perly_env/bin/perl
+#!/mnt/shared/scratch/agomez/apps/conda/envs/perly_env/bin/perl
 use strict;
 use warnings;
 

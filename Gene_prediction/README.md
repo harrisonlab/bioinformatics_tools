@@ -103,7 +103,7 @@ cp /home/gomeza/miniconda3/envs/gene_pred/bin/filterGenesIn_mRNAname.pl /home/US
     AcceptedHits=path/to/your/spliced/aligments/files/*_aligmentAligned.sortedByCoord.out.bam # STAR output, see Genome_aligners folder
     #AcceptedHits=alignment/concatenated.bam # Concatenatented alignment files can be used
     GeneModelName="$Organism"_"$Strain"_braker 
-    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    ProgDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction
     sbatch $ProgDir/braker_fungi.sh $Assembly $OutDir $AcceptedHits $GeneModelName
   done
 ```
@@ -140,7 +140,7 @@ PATH=${PATH}:/projects/oldhome/armita/prog/cufflinks/cufflinks-2.2.1.Linux_x86_6
     OutDir=gene_pred/cufflinks/$Organism/$Strain/concatenated_prelim
     mkdir -p $OutDir
     AcceptedHits=path/to/your/spliced/aligments/files.bam
-    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    ProgDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction
     sbatch $ProgDir/cufflinks.sh $AcceptedHits $OutDir
   done
 ```
@@ -155,7 +155,7 @@ PATH=${PATH}:/projects/oldhome/armita/prog/cufflinks/cufflinks-2.2.1.Linux_x86_6
     OutDir=gene_pred/stringtie/$Organism/$Strain/concatenated_prelim
     mkdir -p $OutDir
     AcceptedHits=path/to/your/spliced/aligments/files.bam
-    ProgDir=/home/gomeza/git_repos/emr_repos/tools/seq_tools/RNAseq
+    ProgDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction
     qbatch $ProgDir/stringties.sh $AcceptedHits $OutDir
    done
 ```
@@ -194,7 +194,7 @@ Note: run_CQ-PM_stranded.sh and run_CQ-PM_unstranded.sh scripts are included in 
     OutDir=gene_pred/codingquary/$Organism/$Strain/
     mkdir -p $OutDir
     GTF=path/to/RNAseq/alignment/assembly/*.gtf # GFT file from stringtie/cufflinks output. See Genome-guided_assemblers scripts
-    ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+    ProgDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction
     sbatch $ProgDir/codingquarry.sh $Assembly $GTF $OutDir
   done
 ```
@@ -207,6 +207,7 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
 ```bash
   # The following perl scripts requires the installation of some libraries. Run these commands in a perly environment.
   # Install the required libraries (if any) using cpanm
+  # mamba install perl-app-cpanminus
   # cpanm Bio::Perl
 
   BrakerGff=$(ls path/to/braker/gene/models/augustus.hints.gff3)
@@ -229,7 +230,7 @@ Additional transcripts predicted by CodingQuarry are added to the final gene mod
 	bedtools intersect -v -a $PGNGff -b $BrakerGff | grep 'gene'| cut -f2 -d'=' | cut -f1 -d';' >> $AddGenesList
   
   # Creat Gff file with the additional transcripts
-	ProgDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Gene_prediction
+	ProgDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Gene_prediction
 	$ProgDir/gene_list_to_gff.pl $AddGenesList $CodingQuaryGff CodingQuarry_v2.0 ID CodingQuary > $AddGenesGff
 	$ProgDir/gene_list_to_gff.pl $AddGenesList $PGNGff PGNCodingQuarry_v2.0 ID CodingQuary >> $AddGenesGff
 	
