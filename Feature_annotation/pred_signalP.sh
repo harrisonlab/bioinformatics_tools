@@ -91,14 +91,14 @@ elif [ $SigP_Version == signalp-4.1 ]; then
   echo "Running using SignalP version: $SigP_Version"
   /home/agomez/scratch/apps/prog/signalp-4.1/$SigP_Version -t euk -f summary -c 70 "proteins.fa" > "$OutFile"_sp.txt
   echo '----------------------------------------------------------------------' >> "$OutFile"_sp.txt
-  PathToAnnotateSigP=/home/agomez/scratch/apps/scripts/Feature_annotation
+  PathToAnnotateSigP=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/sigP_4.1_parser.py --inp_sigP "$OutFile"_sp.txt --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
   OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
   elif [ $SigP_Version == signalp-5.0 ]; then
   echo "Running using SignalP version: $SigP_Version"
   $SigP_Version -org euk -format short -fasta "proteins.fa" -verbose -prefix "$OutFile"
   echo '----------------------------------------------------------------------' >> "$OutFile"_summary.signalp5
-  PathToAnnotateSigP=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+  PathToAnnotateSigP=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Feature_annotation
   $PathToAnnotateSigP/sigP_5.0_parser.py --inp_sigP "$OutFile"_summary.signalp5 --out_tab "$OutFile"_sp.tab --out_fasta "$OutFile"_sp.aa --out_neg "$OutFile"_sp_neg.aa --inp_fasta "proteins.fa"
   OutDir=$CurPath/gene_pred/"${Source}_${SigP_Version}"/$Organism/$Strain/split
 else
