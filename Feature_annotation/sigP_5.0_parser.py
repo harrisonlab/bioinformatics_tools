@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/mnt/shared/scratch/agomez/apps/conda/envs/annotation/bin/python
 
 '''
 This tool uses the output of signalP4.1 to extract SigP positive accessions from
@@ -8,7 +8,8 @@ hmm scores for signal peptides.
 
 import sys,argparse
 import re
-from sets import Set
+#from sets import Set
+my_set = set()
 
 #-----------------------------------------------------
 # Step 1
