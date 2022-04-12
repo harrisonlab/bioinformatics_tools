@@ -1,4 +1,4 @@
-#!/home/gomeza/miniconda3/envs/perly_env/bin/python
+#!/mnt/shared/scratch/agomez/apps/conda/envs/perly_env/bin/python
 
 '''
 Script to rename genes in gff files. Genes are renamed from g1 based on the order

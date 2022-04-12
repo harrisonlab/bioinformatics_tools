@@ -1,4 +1,4 @@
-#!/home/gomeza/miniconda3/envs/Python/bin/python
+#!/mnt/shared/scratch/agomez/apps/conda/bin/python3
 
 '''
 This tools will split or remove contigs from an assembly based upon instructions
