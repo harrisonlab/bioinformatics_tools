@@ -2,7 +2,7 @@
 
 # Load libraries
 
-library("optparse")
+library(optparse)
 library(reshape2)
 library(doRNG)
 library(doParallel)
