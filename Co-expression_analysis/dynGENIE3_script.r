@@ -1,4 +1,4 @@
-#!/mnt/shared/scratch/agomez/apps/conda/envs/perly_env/bin/Rscript
+#!/mnt/shared/scratch/agomez/apps/conda/envs/Rstudio/bin/Rscript
 
 # Load libraries
 
