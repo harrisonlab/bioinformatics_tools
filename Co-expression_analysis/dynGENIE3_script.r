@@ -64,3 +64,10 @@ K <- "all"
 ntrees <- 500
 # Run the method with these settings
 resall <- dynGENIE3(TS.data,time.points, regulators=TF, tree.method=tree.method, K=K, ntrees=ntrees,alpha=decay)
+
+# Save a table with the network
+Rfile <- paste(outdir, "dynGENIE3_network.RData", sep = "/")
+save(resall, file = Rfile)
+
+table <- paste(outdir, "dynGENIE3_network.txt", sep = "/")
+write.table(as.data.frame(resall), file = table, row.names = FALSE, col.names = TRUE)
