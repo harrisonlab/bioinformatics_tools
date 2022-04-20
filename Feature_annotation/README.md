@@ -315,6 +315,14 @@ Miniature impala (mimp) sequeces are found in promotor regions of SIX genes in f
 Carbohydrte active enzymes were identified from the CAZy database
 
 ```bash
+conda activate annotation
+mamba install hmmer
+# Prepare database
+wget -r https://bcb.unl.edu/dbCAN2/download/
+hmmpress scratch/apps/dbCAN/bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V10.txt 
+```
+
+```bash
 for Strain in Strain1 Strain2; do # List of isolates
   for Proteome in $(ls path/to/pep/fasta/final_genes_combined.pep.fasta); do
     Strain=$(echo $Proteome | rev | cut -f3 -d '/' | rev)

@@ -7,7 +7,7 @@ Organism=$(echo $InFile | rev | cut -d "/" -f4 | rev)
 Strain=$(echo $InFile | rev | cut -d "/" -f3 | rev)
 InName=$(basename $InFile)
 
-InterproDir=/home/gomeza/git_repos/scripts/bioinformatics_tools/Feature_annotation
+InterproDir=/home/agomez/scratch/apps/git_repos/bioinformatics_tools/Feature_annotation
 
 SplitDir=gene_pred/interproscan/$Organism/$Strain
 mkdir -p $SplitDir
