@@ -69,10 +69,7 @@ resall <- dynGENIE3(TS.data,time.points, regulators=TF, tree.method=tree.method,
 Rfile <- paste(outdir, "dynGENIE3_network.RData", sep = "/")
 save(resall, file = Rfile)
 
-table <- paste(outdir, "dynGENIE3_network.txt", sep = "/")
-write.table(as.data.frame(resall), file = table, row.names = FALSE, col.names = TRUE)
-
 # Get the predicted ranked regulatory links. Minimum threshold 0.1
 link.list <- get.link.list(resall$weight.matrix, threshold=0.1)
 ranked <- paste(outdir, "dynGENIE3_ranked.txt", sep = "/")
-write.table(link.list, file=ranked, row.names = FALSE, col.names = TRUE)
+write.table(as.data.frame(link.list), file=ranked, row.names = FALSE, col.names = TRUE)
