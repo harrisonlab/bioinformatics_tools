@@ -6,6 +6,8 @@
 
 3. Porechop: Adapter removal in Oxford Nanopore reads
 
+4. BBduk: Decontamination Using Kmers
+
 
 ### Requirements
 
@@ -14,9 +16,7 @@ conda activate SEQdata_qc
 mamba install fastqc
 mamba install ea-utils
 mamba install bbmap
-# Porechop is installed in /scratch/software/. Add this line to your profile.
-# PATH=${PATH}:/scratch/software/Porechop-0.2.3
-# . ~/.profile # Refresh profile
+mamba install porechop
 ```
 
 ### Typical run
