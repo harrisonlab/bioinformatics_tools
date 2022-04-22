@@ -71,5 +71,5 @@ save(resall, file = Rfile)
 
 # Get the predicted ranked regulatory links. Minimum threshold 0.1
 link.list <- get.link.list(resall$weight.matrix, threshold=0.1)
-ranked <- paste(outdir, "dynGENIE3_ranked.txt", sep = "/")
-write.table(as.data.frame(link.list), file=ranked, row.names = FALSE, col.names = TRUE)
+ranked <- paste("dynGENIE3_ranked.txt", sep = "/")
+write.table(link.list, file=ranked, row.names = FALSE, col.names = TRUE)
