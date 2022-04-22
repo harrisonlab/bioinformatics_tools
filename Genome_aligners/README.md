@@ -137,3 +137,20 @@ for Reads in $(ls -d path/to/reads/$Organism/$Strain)
   done
 done
 ```
+
+## Qualimap
+
+### Requirements
+
+```bash
+conda activate SEQdata_qc
+mamba install qualimap
+```
+### Typical run
+```bash
+  for Alignment in $(ls -d path/to/alignment/bam); do
+    OutDir=$(dirname $Alignment)
+    ProgDir=/home/agomez/scratch/apps/scripts/bioinformatics_tools/SEQdata_qc
+    sbatch $ProgDir/qualimap.sh $Alignmnet $OutDir
+  done
+```
